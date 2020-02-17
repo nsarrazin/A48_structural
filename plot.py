@@ -26,3 +26,5 @@ plt.ylabel("Chord-wise direction [m]")
 plt.title("Aerodynamic loading over the aileron")
 plt.tight_layout()
 plt.show()
+
+print('test')
