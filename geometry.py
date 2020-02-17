@@ -20,7 +20,6 @@ class Geometry:
         self.h_st = kwargs.get("h_st")
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
-        #TODO: add the rest of the geometry inputs
         pass
 
     @property
