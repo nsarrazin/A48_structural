@@ -29,17 +29,17 @@ class Geometry:
         beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
         l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
 
-        Iyy1 =  
-        # Iyy2 =
+        Iyy1 = 
+        Iyy2 =
         Iyy3 = self.h*(self.t_sp**3)/12.
-        # Iyy4 = 
+        Iyy4 = (self.h/2.)**3*np.pi*t_sk 
 
 
 
         return 
     @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
-    #the z coordinate of the centorid is given w.r.t to the left side of the airfoil
+    #the z coordinate of the centroid is given w.r.t to the left side of the airfoil
     #1 is top skin
     #2 is bottom skin
     #3 is the spar
