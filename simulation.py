@@ -6,4 +6,5 @@ class Simulation:
 
 
     def run(self):
+        print("hello")
         pass
