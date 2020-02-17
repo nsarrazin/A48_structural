@@ -1,4 +1,5 @@
 import numpy as np
+# test whether it works by Matthijs
 
 class Geometry:
     def __init__(self, **kwargs):
