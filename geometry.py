@@ -29,7 +29,7 @@ class Geometry:
         beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
         l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
 
-        # Iyy1 =  
+        Iyy1 =  
         # Iyy2 =
         Iyy3 = self.h*(self.t_sp**3)/12.
         # Iyy4 = 
@@ -48,6 +48,7 @@ class Geometry:
 
     def centroid(self):
         beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
+        l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
 
         z1 = (self.c_a-self.h/2.)/2. + self.h/2
         z2 = (self.c_a-self.h/2.)/2. + self.h/2
