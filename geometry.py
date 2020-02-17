@@ -30,8 +30,29 @@ class Geometry:
         return self.c_a + self.x_a
 
     @property
+    #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
+    #the z coordinate of the centorid is given w.r.t to the left side of the airfoil
+    
     def centroid(self):
-        return
+        z1 = (self.c_a-self.h/2.)/2. + self.h/2
+        z2 = (self.c_a-self.h/2.)/2. + self.h/2
+        z3 = self.h/2 - (4./3.)*self.h/(2*np.pi)
+        z4 = self.h/2
+
+        y1 = self.h/4.
+        y2 = self.h/4.*3.
+        y3 = self.h/2.
+        y4 = self.h/2.
+
+        A1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)*self.t_sk
+        A2 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)*self.t_sk
+        A3 = np.pi*self.h*self.t_sk
+        A4 = self.h*self.t_sp
+
+        c_y = (y1*A1+y2*A2+y3*A3+y4*A4)/(A1+A2+A3+A4)
+        c_z = (z1*A1+z2*A2+z3*A3+z4*A4)/(A1+A2+A3+A4)
+        return c_y, c_z
+
 
     @property
     def shearcenter(self):
@@ -42,4 +63,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.MMoI)
+    #print(geo.MMoI)
+    print(geo.centroid)
