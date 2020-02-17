@@ -21,3 +21,26 @@ d_3 = 1.245E-2 # vertical displacement hinge 3 [m]
 
 max_defl = 30 # maximum upward deflecection [deg]
 load = 49.2E3 # Load in actuator 2 [N]
+
+parameters_geometry = {"c_a" : c_a,
+                       "l_a" : l_a,
+
+                       "x_1" : x_1,
+                       "x_2" : x_2,
+                       "x_3" : x_3, 
+                       "x_a" : x_a,
+
+                       "h"   : h,
+                       "t_sk": t_sk,
+                       "t_sp": t_sp,
+
+                       "t_st": t_st,
+                       "h_st": h_st,
+                       "w_st": w_st,
+                       "n_st": n_st}
+
+
+parameters_case = {"d_1" : d_1,
+                   "d_3" : d_3,
+                   "defl": max_defl,
+                   "load": load}
