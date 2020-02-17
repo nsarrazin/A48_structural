@@ -17,7 +17,7 @@ w_st = 1.7E-2 # width of stiffener [m]
 n_st = 11 # number of stiffeners [-]
 
 d_1 = 0.389E-2 # vertical displacement hinge 1 [m]
-d_3 = 1.245E-2 # vertical displacement hinge 2 [m]
+d_3 = 1.245E-2 # vertical displacement hinge 3 [m]
 
 max_defl = 30 # maximum upward deflecection [deg]
 load = 49.2E3 # Load in actuator 2 [N]
