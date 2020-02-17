@@ -1,4 +1,3 @@
-import numpy as np
 from data.consts import parameters_geometry
 
 class Geometry:
