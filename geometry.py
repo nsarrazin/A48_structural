@@ -2,6 +2,7 @@ import numpy as np
 
 class Geometry:
     def __init__(self, **kwargs):
+        d1 = kwargs["d1"] # do the same for other vars
         pass
 
     @property
