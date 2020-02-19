@@ -100,6 +100,19 @@ class interpolation:
             result = result + ((x_intergrate[i+1] - x_intergrate[i])/2) * (self.q_intergration_fixed_x(x_intergrate[i]) + self.q_intergration_fixed_x(x_intergrate[i+1]))
         return result
 
+    def trapezoidalrule(self, y, x):
+        """
+        :param y: scalar; array to integrate
+        :param x: scalar; array with the x-values associated with the y-values
+        :return: scalar; value of the integral
+        """
+        result = 0
+        for i, xi in enumerate(x):
+            if i == (len(y) - 1):
+                break
+            result += (x[i+1] - x[i]) * ((y[i] + y[i+1])/2)
+        return result
+
 
 
 ## Testing implementations
