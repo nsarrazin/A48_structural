@@ -43,7 +43,7 @@ class interpolation:
         return row, column
 
     def bilinear_interpolation(self, x, z):
-        # Gives the value at point (x, z) using bilinear interpolation
+        # Gives the value of q at point (x, z) using bilinear interpolation
         row, column = self.index_search(x, z)
         # If point (x,z) is lies on the right boundary
         if row == 80 or column == 40:
@@ -88,9 +88,10 @@ class interpolation:
         return result
 
     def q_intergrate_double(self, x_begin, x_end, dx):
-        # Integrating the: integrated values along the chord, along the x-axis
+        # Integrates the: integrated values along the chord, along the x-axis
         # Thus double integral first along z then along x
-        # The trapezoidal rule is used
+        # The first integration is done using q_integration_fixed_x
+        # The second integration is doen using the trapezoidal rule, see below
         x_intergrate = np.arange(x_begin, (x_end+dx), dx)
         result = 0
         for i, xi in enumerate(x_intergrate):
@@ -102,9 +103,9 @@ class interpolation:
 
 
 ## Testing implementation
-test = interpolation()
-x_test = np.linspace(0, 1.611, 82)
-z_test = np.linspace(0, -0.505, 162)
+# test = interpolation()
+# x_test = np.linspace(0, 1.611, 82)
+# z_test = np.linspace(0, -0.505, 162)
 
 ## Uncomment for full 2D plot
 # u = np.zeros((len(z_test), len(x_test)))
@@ -145,6 +146,6 @@ z_test = np.linspace(0, -0.505, 162)
 # print("Difference                      :", abs(trapz_result-result))
 
 ## Uncomment to test double integral
-result = test.q_intergrate_double(1, 1.5, 0.01)
-print(result)
+# result = test.q_intergrate_double(1, 1.5, 0.01)
+# print(result)
 
