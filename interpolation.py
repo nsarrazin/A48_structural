@@ -43,6 +43,7 @@ class interpolation:
         return row, column
 
     def bilinear_interpolation(self, x, z):
+        # Gives the value at point (x, z) using bilinear interpolation
         row, column = self.index_search(x, z)
         # If point (x,z) is lies on the right boundary
         if row == 80 or column == 40:
@@ -64,6 +65,7 @@ class interpolation:
         return (a[0] + a[1]*x + a[2]*z + a[3]*x*z), a
 
     def q_intergration_fixed_x(self, x_fixed):
+        # Intergrates the curve at a fixed x location along the chord (z-direction) using an analytical solution to the bilinear integration
         z_integration = np.zeros(80)
         for i, zi in enumerate(self.z):
             if i == 80:
@@ -84,6 +86,20 @@ class interpolation:
             result = result + (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 ))
 
         return result
+
+    def q_intergrate_double_along_x(self, x_begin, x_end, dx):
+        # Integrating the: integrated values along the chord, along the x-axis
+        # Thus double integral first along z then along x
+        # The trapezoidal rule is used
+        x_intergrate = np.arange(x_begin, (x_end+dx), dx)
+        result = 0
+        for i, xi in enumerate(x_intergrate):
+            if i == (len(x_intergrate) - 1):
+                break
+            result = result + ((x_intergrate[i+1] - x_intergrate[i])/2) * (self.q_intergration_fixed_x(x_intergrate[i]) + self.q_intergration_fixed_x(x_intergrate[i+1]))
+        return result
+
+
 
 ## Testing implementation
 test = interpolation()
@@ -127,3 +143,8 @@ z_test = np.linspace(0, -0.505, 162)
 # print("Numpy trapezoidal implementation:", trapz_result)
 # print("Own analytical implementation   :", result)
 # print("Difference                      :", abs(trapz_result-result))
+
+## Uncomment to test double integral
+result = test.q_intergrate_double_along_x(1, 1.5, 0.01)
+print(result)
+
