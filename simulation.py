@@ -1,11 +1,12 @@
 import numpy as np
+from geometry import Geometry
+from matrix import LoadCase
+
 
 class Simulation:
-    def __init__(self):
-        pass
-
-
-    def run(self):
-        print("hello")
-        print("hi")
+    def __init__(self, **kwargs):
+        self.geo = Geometry(**kwargs)
+        self.case = LoadCase(parent, **kwargs)
+        
+    def run():
         pass
