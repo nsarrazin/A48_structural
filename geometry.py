@@ -143,7 +143,7 @@ class Geometry:
         yst8 = (7*self.strint-np.pi*self.h/4.)*np.sin(beta)
         yst9 = (8*self.strint-np.pi*self.h/4.)*np.sin(beta)
         yst10 = (9*self.strint-np.pi*self.h/4.)*np.sin(beta)
-        yst11 = self.h - self.h/2.*np.sin(theta2)
+        yst11 = self.h/2. + self.h/2.*np.sin(theta2)
 
         A1 = self.l1*self.t_sk
         A2 = self.l1*self.t_sk
@@ -216,3 +216,5 @@ if __name__ == "__main__": # is called when you run the script
 
     plt.plot(geo.crosssection[0],geo.crosssection[1],'x')
     plt.show()
+
+    print(geo.centroid)
