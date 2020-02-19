@@ -21,7 +21,21 @@ class Geometry:
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
         pass
+    
 
+    @property
+
+    def beta(self):
+        beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
+    
+        return beta
+
+    @property
+
+    def l1(self):
+        l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
+
+        return l1
 
     @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
@@ -33,21 +47,21 @@ class Geometry:
     #st is stringer
 
     def centroid(self):
-        beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
-        l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
+        beta = self.beta
+        l1 = self.l1
 
         z1 = (self.c_a-self.h/2.)/2. + self.h/2
         z2 = (self.c_a-self.h/2.)/2. + self.h/2
-        z3 = self.h/2 - (4./3.)*self.h/(2*np.pi)
+        z3 = self.h/2 - 2*(self.h/2.)/(np.pi)
         z4 = self.h/2
 
         zst1 = self.h/2
-        zst2 = self.h/2 + np.cos(beta)/4.*l1
-        zst3 = self.h/2 + np.cos(beta)/2.*l1
-        zst4 = self.h/2 + np.cos(beta)/4.*l1*3.
-        zst5 = self.h/2 + np.cos(beta)/4.*l1*3.
-        zst6 = self.h/2 + np.cos(beta)/2.*l1
-        zst7 = self.h/2 + np.cos(beta)/4.*l1
+        zst2 = self.h/2 + 1./4.*(self.c_a-self.h/2.)
+        zst3 = self.h/2 + 1./2.*(self.c_a-self.h/2.)
+        zst4 = self.h/2 + 3./4.*(self.c_a-self.h/2.)
+        zst5 = self.h/2 + 3./4.*(self.c_a-self.h/2.)
+        zst6 = self.h/2 + 1./2.*(self.c_a-self.h/2.)
+        zst7 = self.h/2 + 1./4.*(self.c_a-self.h/2.)
         zst8 = self.h/2.
         zst9 = self.h/4.
         zst10 = 0
@@ -70,10 +84,10 @@ class Geometry:
         yst10 = 1./2.*self.h
         yst11 = 1./4.*self.h
 
-        A1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)*self.t_sk
-        A2 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)*self.t_sk
-        A3 = np.pi*self.h*self.t_sk
-        A4 = self.h*self.t_sp
+        A1 = self.l1*self.t_sk
+        A2 = self.l1*self.t_sk
+        A3 = self.h*self.t_sp
+        A4 =  np.pi*self.h/2.*self.t_sk
         Ast = (self.w_st-self.t_st+self.h_st)*self.t_st
 
         c_y = (y1*A1+y2*A2+y3*A3+y4*A4+(yst1+yst2+yst3+yst4+yst5+yst6+yst7+yst8+yst9+yst10+yst11)*Ast)/(A1+A2+A3+A4+11*Ast)
@@ -139,5 +153,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.MMoI)
+    print(geo.centroid)
 
