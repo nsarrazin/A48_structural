@@ -52,16 +52,16 @@ class Geometry:
 
         z1 = (self.c_a-self.h/2.)/2. + self.h/2
         z2 = (self.c_a-self.h/2.)/2. + self.h/2
-        z3 = self.h/2 - 2*(self.h/2.)/(np.pi)
-        z4 = self.h/2
+        z3 = self.h/2.
+        z4 = self.h/2. - 2*(self.h/2.)/(np.pi)
 
-        zst1 = self.h/2
-        zst2 = self.h/2 + 1./4.*(self.c_a-self.h/2.)
-        zst3 = self.h/2 + 1./2.*(self.c_a-self.h/2.)
-        zst4 = self.h/2 + 3./4.*(self.c_a-self.h/2.)
-        zst5 = self.h/2 + 3./4.*(self.c_a-self.h/2.)
-        zst6 = self.h/2 + 1./2.*(self.c_a-self.h/2.)
-        zst7 = self.h/2 + 1./4.*(self.c_a-self.h/2.)
+        zst1 = self.h/2.
+        zst2 = self.h/2. + 1./4.*(self.c_a-self.h/2.)
+        zst3 = self.h/2. + 1./2.*(self.c_a-self.h/2.)
+        zst4 = self.h/2. + 3./4.*(self.c_a-self.h/2.)
+        zst5 = self.h/2. + 3./4.*(self.c_a-self.h/2.)
+        zst6 = self.h/2. + 1./2.*(self.c_a-self.h/2.)
+        zst7 = self.h/2. + 1./4.*(self.c_a-self.h/2.)
         zst8 = self.h/2.
         zst9 = self.h/4.
         zst10 = 0
