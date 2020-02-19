@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """
-Technique   : bilinear interpolation
+Technique   : Bilinear interpolation
 Author      : Group A48, AE year 2020
 Date        : February 2020
 """
