@@ -102,7 +102,7 @@ class interpolation:
 
 
 
-## Testing implementation
+## Testing implementations
 # test = interpolation()
 # x_test = np.linspace(0, 1.611, 82)
 # z_test = np.linspace(0, -0.505, 162)
