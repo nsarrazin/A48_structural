@@ -165,10 +165,11 @@ class Geometry:
 
 
     def MMoI(self):
-        beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
-        l1 = np.sqrt((self.c_a-self.h/2.)**2 + (self.h/2.)**2)
+        beta = self.beta
+        l1 = self.l1
 
-        Iyy12 = self.t_sk*(l1*2)**3*(np.cos(beta))**2/12. + 2*l1*self.t_sk*(self.centroid[1]-(self.h/2+l1*np.cos(beta)))**2
+        Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. +  l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
+        Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. +  l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy3 = self.h*(self.t_sp**3)/12. + self.h*self.t_sp*(self.centroid[1]-self.h/2.)**2
         Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-self.h/2.)**2
         Iyyst1 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/2.)**2
@@ -184,7 +185,8 @@ class Geometry:
         Iyyst11 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/4.)**2
         
 
-        Izz12 = self.t_sk*(l1*2)**3*(np.sin(beta))**2/12.
+        Izz1 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.)**2
+        Izz2 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.*3.)**2
         Izz3 = self.t_sp*(self.h**3)/12. + self.h*self.t_sp*(self.centroid[0]-self.h/2.)**2
         Izz4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[0]-self.h/2.)**2
         Izzst1 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0])**2
@@ -199,8 +201,8 @@ class Geometry:
         Izzst10 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h/2.)**2
         Izzst11 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h/4.)**2
 
-        Iyy = Iyy12 + Iyy3 + Iyy4 + Iyyst1 + Iyyst2 + Iyyst3 + Iyyst4 + Iyyst5 + Iyyst6 + Iyyst7 + Iyyst8 + Iyyst9 + Iyyst10 + Iyyst11
-        Izz = Izz12 + Izz3 + Izz4 + Izzst1 + Izzst2 + Izzst3 + Izzst4 + Izzst5 + Izzst6 + Izzst7 + Izzst8 + Izzst9 + Izzst10 + Izzst11
+        Iyy = Iyy1 + Iyy2 + Iyy3 + Iyy4 + Iyyst1 + Iyyst2 + Iyyst3 + Iyyst4 + Iyyst5 + Iyyst6 + Iyyst7 + Iyyst8 + Iyyst9 + Iyyst10 + Iyyst11
+        Izz = Izz1 + Izz2 + Izz3 + Izz4 + Izzst1 + Izzst2 + Izzst3 + Izzst4 + Izzst5 + Izzst6 + Izzst7 + Izzst8 + Izzst9 + Izzst10 + Izzst11
 
         return Iyy, Izz
 
@@ -217,4 +219,4 @@ if __name__ == "__main__": # is called when you run the script
     plt.plot(geo.crosssection[0],geo.crosssection[1],'x')
     plt.show()
 
-    print(geo.centroid)
+    print(geo.MMoI)
