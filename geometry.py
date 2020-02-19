@@ -38,6 +38,31 @@ class Geometry:
         return l1
 
     @property
+    def ltotal(self):
+        ltotal = np.pi*self.h/2 + 2*self.l1
+
+        return ltotal
+    
+    @property
+    def strint(self):
+        strint = self.ltotal/11.
+
+        return strint
+
+    @property
+    def ltop(self):
+        ltop = 1./2.*np.pi*self.h/2. + self.l1
+
+        return ltop
+    
+    @property
+
+    def strint2(self):
+        strint2 = self.ltop/5.5
+
+        return strint2
+
+    @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
     #the z coordinate of the centroid is given w.r.t to the left side of the airfoil
     #1 is top skin
@@ -45,6 +70,7 @@ class Geometry:
     #3 is the spar
     #4 is the circular skin
     #st is stringer
+    #first stringer located on leading edge
 
     def centroid(self):
         beta = self.beta
@@ -55,27 +81,29 @@ class Geometry:
         z3 = self.h/2.
         z4 = self.h/2. - 2*(self.h/2.)/(np.pi)
 
-        zst1 = self.h/2.
-        zst2 = self.h/2. + 1./4.*(self.c_a-self.h/2.)
-        zst3 = self.h/2. + 1./2.*(self.c_a-self.h/2.)
-        zst4 = self.h/2. + 3./4.*(self.c_a-self.h/2.)
-        zst5 = self.h/2. + 3./4.*(self.c_a-self.h/2.)
-        zst6 = self.h/2. + 1./2.*(self.c_a-self.h/2.)
-        zst7 = self.h/2. + 1./4.*(self.c_a-self.h/2.)
-        zst8 = self.h/2.
-        zst9 = self.h/4.
-        zst10 = 0
-        zst11 = self.h/4.
+        theta2 = self.strint/(self.h/2.)
+
+        zst1 = 0
+        zst2 = self.h/2. - self.h/2.*np.cos(theta2)
+        zst3 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst4 = (3*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst5 = (4*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst6 = (5*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst7 = (5*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst8 = (4*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst9 = (3*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst10 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst11 = self.h/2. - self.h/2.*np.cos(theta2)
 
         y1 = self.h/4.
         y2 = self.h/4.*3.
         y3 = self.h/2.
         y4 = self.h/2.
 
-        yst1 = 0
-        yst2 = np.sin(beta)/4.*l1
-        yst3 = np.sin(beta)/2.*l1
-        yst4 = np.sin(beta)/4.*l1*3.
+        yst1 = self.h/2.
+        yst2 = 0
+        yst3 = 0
+        yst4 = 0
         yst5 = np.sin(beta)/4.*l1*5.
         yst6 = np.sin(beta)/4.*l1*6.
         yst7 = np.sin(beta)/4.*l1*7.
@@ -153,5 +181,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.centroid)
+    print(geo.strint, geo.strint2)
 
