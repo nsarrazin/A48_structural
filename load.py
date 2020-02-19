@@ -15,6 +15,8 @@ class LoadCase:
         self.a_z = np.cos(self.theta)
         self.a_m = self.geo.h/2 * (np.sin(theta)- np.cos(theta))
 
+        # self.y_sc, self.z_sc = self.geo.shearcenter
+        self.y_sc, self.z_sc = 0, 0
     def V_y(self, x):
         np.array([-step(x, self.geo.x_1)**0,
                   0,
@@ -28,20 +30,72 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  # wip
+                  # int(q(x)) + P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
                   ])
         pass
 
-    def V_z(self, x):
+    def V_z(self,x):
+        np.array([0,
+                 -step(x,self.geo.x_1)**0,
+                 0,
+                 -step(x,self.geo.x_2)**0,
+                 0,
+                 -step(x,self.geo.x_3)**0,
+                 self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**0,
+                 0,
+                 0,
+                 0,
+                 0,
+                 0,
+                 self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**0])
         pass
 
     def M_y(self, x):
+        np.array([0,
+                  -step(x,self.geo.x_1)**1,
+                  0,
+                  -step(x,self.geo.x_2)**1,
+                  0,
+                  -step(x,self.geo.x_3)**1,
+                  self.a_z*step(x,sleg.geo.x_2-self.geo.x_a/2)**1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**1])
         pass
 
     def M_z(self, x):
+        np.array([-step(x,self.geo.x_1)**1,
+                  0,
+                  -step(x,self.geo.x_2)**1,
+                  0,
+                  -step(x,self.geo.x_3)**1,
+                  0,
+                  self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  #int(int(q(x))) + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1])
         pass
 
     def T(self, x):
+        np.array([-self.z_sc*step(x,self.geo.x_1)**0,
+                  0,
+                  -self.z_sc*step(x,self.geo.x_2)**0,
+                  0,
+                  -self.z_sc*step(x,self.geo.x_3)**0,
+                  0,
+                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.ge0.x_a/2)**0-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  #int(tau(x))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0])
         pass
 
     def v_y(self, x):
