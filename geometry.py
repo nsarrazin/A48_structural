@@ -66,6 +66,9 @@ class Geometry:
 
     @property
     def crosssection(self):
+        beta = self.beta
+        theta2 = self.strint/(self.h/2.)
+
         zst1 = 0
         zst2 = self.h/2. - self.h/2.*np.cos(theta2)
         zst3 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
@@ -78,6 +81,19 @@ class Geometry:
         zst10 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
         zst11 = self.h/2. - self.h/2.*np.cos(theta2)
 
+        yst1 = self.h/2.
+        yst2 = self.h/2. - self.h/2.*np.sin(theta2)
+        yst3 = (2*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst4 = (3*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst5 = (4*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst6 = (5*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst7 = (6*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst8 = (7*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst9 = (8*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst10 = (9*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst11 = self.h/2. + self.h/2.*np.sin(theta2)
+
+        return ([zst1,zst2,zst3,zst4,zst5,zst6,zst7,zst8,zst9,zst10,zst11],[yst1,yst2,yst3,yst4,yst5,yst6,yst7,yst8,yst9,yst10,yst11])
 
     @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
@@ -91,7 +107,7 @@ class Geometry:
 
     def centroid(self):
         beta = self.beta
-        l1 = self.l1
+        #l1 = self.l1
 
         z1 = (self.c_a-self.h/2.)/2. + self.h/2.
         z2 = (self.c_a-self.h/2.)/2. + self.h/2.
@@ -198,5 +214,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.centroid)
-
+    plt.plot(geo.crosssection[0],geo.crosssection[1],'x')
+    plt.show()
