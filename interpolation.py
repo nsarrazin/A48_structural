@@ -102,8 +102,8 @@ class interpolation:
 
     def trapezoidalrule(self, y, x):
         """
-        :param y: scalar; array to integrate
-        :param x: scalar; array with the x-values associated with the y-values
+        :param y: array; array to integrate
+        :param x: array; array with the x-values associated with the y-values
         :return: scalar; value of the integral
         """
         result = 0
