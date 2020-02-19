@@ -210,7 +210,7 @@ class Geometry:
         l = self.c_a - self.h/2
         alpha = np.arctan2(self.h/2,l)
         d = l/np.cos(alpha)
-        d_z =(self.t_sk*self.h*self.h*d*d*(1/3-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4)-2*self.t_sk*self.h*self.h)/(4*self.MMoI(1))
+        d_z =(self.t_sk*self.h*self.h*d*d*(1/3-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4-2*self.t_sk*self.h*self.h+(4*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4))/(4*self.MMoI(1))
         return
 
 
