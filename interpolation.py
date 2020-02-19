@@ -87,7 +87,7 @@ class interpolation:
 
         return result
 
-    def q_intergrate_double_along_x(self, x_begin, x_end, dx):
+    def q_intergrate_double(self, x_begin, x_end, dx):
         # Integrating the: integrated values along the chord, along the x-axis
         # Thus double integral first along z then along x
         # The trapezoidal rule is used
@@ -145,6 +145,6 @@ z_test = np.linspace(0, -0.505, 162)
 # print("Difference                      :", abs(trapz_result-result))
 
 ## Uncomment to test double integral
-result = test.q_intergrate_double_along_x(1, 1.5, 0.01)
+result = test.q_intergrate_double(1, 1.5, 0.01)
 print(result)
 
