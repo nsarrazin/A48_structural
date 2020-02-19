@@ -79,7 +79,8 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  #int(int(q(x))) + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1])
+                  #int(int(q(x))) + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1,
+                  ])
         pass
 
     def T(self, x):
@@ -95,14 +96,56 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  #int(tau(x))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0])
+                  #int(tau(x))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0,
+                  ])
         pass
 
     def v_y(self, x):
+        np.array([0,
+                  -1/6*step(x,self.geo.x_1)**3,
+                  0,
+                  -1/6*step(x,self.geo.x_2)**3,
+                  0,
+                  -1/6*step(x,self.geo.x_3)**3,
+                  self.a_z/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,
+                  0,
+                  0,
+                  x,
+                  1,
+                  0,
+                  self.P*self.a_z/6*step(x,self.geo.x_2+self.geo.x_a/2)**3])
         pass
 
     def v_z(self, x):
+        np.array([-1/6*step(x,self.geo.x_1)**3,
+            	  0,
+                  -1/6*step(x,self.geo.x_2)**3,
+                  0,
+                  -1/6*step(x,self.geo.x_3)**3,
+                  0,
+                  self.a_y/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,
+                  x,
+                  1,
+                  0,
+                  0,
+                  0,
+                  #int(int(int(int(q(x)))))+self.P*self.a_y/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
+                  ])
         pass
 
     def theta(self, x):
+        np.array([-self.z_sc*step(x,self.geo.x_1)**1,
+                  0,
+                  -self.z_sc*step(x,self.geo.x_2)**1,
+                  0,
+                  -self.z_sc*step(x,self.geo.x_3)**1,
+                  0,
+                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**1-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  #int(int(tau(x)))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
+                  ])
         pass
