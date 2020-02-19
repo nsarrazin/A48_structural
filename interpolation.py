@@ -1,11 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 ## Technique : bilinear interpolation
 ## NOT FINISHED
 
 class interpolation:
     def __init__(self):
-        self.F = np.genfromtxt("aerodynamicloadf100.dat", delimiter=",")
+        self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")
         self.x = np.zeros(41)
         self.z = np.zeros(81)
 
@@ -30,23 +31,36 @@ class interpolation:
                 row = i
             else:
                 break
-        for i, xi in enumerate(self.x):
-            if abs(x) >= abs(xi):
-                column = i
+        for j, xj in enumerate(self.x):
+            if x >= xj:
+                column = j
             else:
                 break
         return row, column
 
-    ## TO IMPLEMENT:
-    ## The actual method :)
-
+    def bilinear_interpolation(self, x, z):
+        row, column = self.index_search(x, z)
+        A = np.matrix([[1, self.x[column]  , self.z[row]  , (self.x[column]*self.z[row])],
+                       [1, self.x[column]  , self.z[row+1], (self.x[column]*self.z[row+1])],
+                       [1, self.x[column+1], self.z[row]  , (self.x[column+1]*self.z[row])],
+                       [1, self.x[column+1], self.z[row+1], (self.x[column+1]*self.z[row+1])]])
+        f = np.array([self.F[row, column], self.F[(row+1), column], self.F[row, (column+1)], self.F[(row+1), (column+1)]])
+        a = np.linalg.solve(A, f)
+        return a[0] + a[1]*x + a[2]*z + a[3]*x*z
 
 
 
 ## Testing implementation
 test = interpolation()
-print(test.x[0:5])
-print(test.z[0:5])
+x_test = np.linspace(0, 1.6, 82)
+z_test = np.linspace(0, 0.504, 162)
+u = np.zeros((len(z_test), len(x_test)))
 
-row, column = test.index_search(0.03, -1.3E-4)
-print(row, column)
+
+for row, zi in enumerate(u):
+    for column, xi in enumerate(zi):
+        u[row,column] = test.bilinear_interpolation(x_test[column], z_test[row])
+
+
+plt.imshow(u)
+plt.show()
