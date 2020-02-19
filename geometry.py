@@ -118,16 +118,16 @@ class Geometry:
         y4 = self.h/2.
 
         yst1 = self.h/2.
-        yst2 = 0
-        yst3 = 0
-        yst4 = 0
-        yst5 = np.sin(beta)/4.*l1*5.
-        yst6 = np.sin(beta)/4.*l1*6.
-        yst7 = np.sin(beta)/4.*l1*7.
-        yst8 = self.h
-        yst9 = 3./4.*self.h
-        yst10 = 1./2.*self.h
-        yst11 = 1./4.*self.h
+        yst2 = self.h/2. - self.h/2.*np.sin(theta2)
+        yst3 = (2*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst4 = (3*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst5 = (4*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst6 = (5*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst7 = (6*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst8 = (7*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst9 = (8*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst10 = (9*self.strint-np.pi*self.h/4.)*np.sin(beta)
+        yst11 = self.h - self.h/2.*np.sin(theta2)
 
         A1 = self.l1*self.t_sk
         A2 = self.l1*self.t_sk
