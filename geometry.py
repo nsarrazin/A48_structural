@@ -63,15 +63,6 @@ class Geometry:
 
         return strint2
 
-    @property
-    #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
-    #the z coordinate of the centroid is given w.r.t to the left side of the airfoil
-    #1 is top skin
-    #2 is bottom skin
-    #3 is the spar
-    #4 is the circular skin
-    #st is stringer
-    #first stringer located on leading edge
 
     @property
     def crosssection(self):
@@ -87,7 +78,16 @@ class Geometry:
         zst10 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
         zst11 = self.h/2. - self.h/2.*np.cos(theta2)
 
-        
+
+    @property
+    #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
+    #the z coordinate of the centroid is given w.r.t to the left side of the airfoil
+    #1 is top skin
+    #2 is bottom skin
+    #3 is the spar
+    #4 is the circular skin
+    #st is stringer
+    #first stringer located on leading edge
 
     def centroid(self):
         beta = self.beta
