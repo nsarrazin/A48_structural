@@ -7,7 +7,7 @@ Author      : Group A48, AE year 2020
 Date        : February 2020
 """
 
-class interpolation:
+class Interpolation:
     def __init__(self):
         # Generating the x, z, F arrays
         self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")
