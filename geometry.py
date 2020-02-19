@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from data.consts import parameters_geometry
 
 class Geometry:
@@ -71,6 +72,22 @@ class Geometry:
     #4 is the circular skin
     #st is stringer
     #first stringer located on leading edge
+
+    @property
+    def crosssection(self):
+        zst1 = 0
+        zst2 = self.h/2. - self.h/2.*np.cos(theta2)
+        zst3 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst4 = (3*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst5 = (4*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst6 = (5*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst7 = (5*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst8 = (4*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst9 = (3*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst10 = (2*self.strint-np.pi*self.h/4.)*np.cos(beta) + self.h/2.
+        zst11 = self.h/2. - self.h/2.*np.cos(theta2)
+
+        
 
     def centroid(self):
         beta = self.beta
@@ -181,5 +198,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.strint, geo.strint2)
+    print(geo.centroid)
 
