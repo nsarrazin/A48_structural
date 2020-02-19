@@ -56,11 +56,9 @@ x_test = np.linspace(0, 1.6, 82)
 z_test = np.linspace(0, 0.504, 162)
 u = np.zeros((len(z_test), len(x_test)))
 
-
 for row, zi in enumerate(u):
     for column, xi in enumerate(zi):
         u[row,column] = test.bilinear_interpolation(x_test[column], z_test[row])
-
 
 plt.imshow(u)
 plt.show()
