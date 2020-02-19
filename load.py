@@ -4,6 +4,7 @@ from helpers import step
 class LoadCase:
     def __init__(self, parent, **kwargs):
         self.geo = parent.geo
+        self.interp = parent.interp
 
         self.d_1 = kwargs.get("d_1")
         self.d_3 = kwargs.get("d_3")
