@@ -40,25 +40,51 @@ class interpolation:
 
     def bilinear_interpolation(self, x, z):
         row, column = self.index_search(x, z)
-        A = np.matrix([[1, self.x[column]  , self.z[row]  , (self.x[column]*self.z[row])],
-                       [1, self.x[column]  , self.z[row+1], (self.x[column]*self.z[row+1])],
-                       [1, self.x[column+1], self.z[row]  , (self.x[column+1]*self.z[row])],
-                       [1, self.x[column+1], self.z[row+1], (self.x[column+1]*self.z[row+1])]])
-        f = np.array([self.F[row, column], self.F[(row+1), column], self.F[row, (column+1)], self.F[(row+1), (column+1)]])
-        a = np.linalg.solve(A, f)
+        if row == 80 or column == 40:
+            A = np.matrix([[1, self.x[column-1], self.z[row-1], (self.x[column-1] * self.z[row-1])],
+                           [1, self.x[column-1], self.z[row], (self.x[column-1] * self.z[row])],
+                           [1, self.x[column], self.z[row-1], (self.x[column] * self.z[row-1])],
+                           [1, self.x[column], self.z[row], (self.x[column] * self.z[row])]])
+            f = np.array([self.F[row-1, column-1], self.F[row, column-1], self.F[row-1, column],
+                          self.F[row, column]])
+            a = np.linalg.solve(A, f)
+        else:
+            A = np.matrix([[1, self.x[column]  , self.z[row]  , (self.x[column]*self.z[row])],
+                           [1, self.x[column]  , self.z[row+1], (self.x[column]*self.z[row+1])],
+                           [1, self.x[column+1], self.z[row]  , (self.x[column+1]*self.z[row])],
+                           [1, self.x[column+1], self.z[row+1], (self.x[column+1]*self.z[row+1])]])
+            f = np.array([self.F[row, column], self.F[(row+1), column], self.F[row, (column+1)], self.F[(row+1), (column+1)]])
+            a = np.linalg.solve(A, f)
         return a[0] + a[1]*x + a[2]*z + a[3]*x*z
+
 
 
 
 ## Testing implementation
 test = interpolation()
-x_test = np.linspace(0, 1.6, 82)
-z_test = np.linspace(0, 0.504, 162)
-u = np.zeros((len(z_test), len(x_test)))
+x_test = np.linspace(0, 1.611, 82)
+z_test = np.linspace(0, -0.505, 162)
 
+## Uncomment for full 2D plot
+u = np.zeros((len(z_test), len(x_test)))
 for row, zi in enumerate(u):
     for column, xi in enumerate(zi):
         u[row,column] = test.bilinear_interpolation(x_test[column], z_test[row])
-
 plt.imshow(u)
+plt.show()
+
+## Uncomment for x-direction crossection
+u_cross = np.zeros(len(x_test))
+for i, ui in enumerate(u_cross):
+    u_cross[i] = test.bilinear_interpolation(x_test[i], test.z[40])
+plt.plot(test.x, test.F[40, :], "-")
+plt.plot(x_test, u_cross, "-" )
+plt.show()
+
+## Uncomment for z-direction crossection
+u_cross = np.zeros(len(z_test))
+for i, ui in enumerate(u_cross):
+    u_cross[i] = test.bilinear_interpolation(test.x[21], z_test[i])
+plt.plot(test.z, test.F[:, 21], "-")
+plt.plot(z_test, u_cross, "-" )
 plt.show()
