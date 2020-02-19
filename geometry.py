@@ -50,8 +50,8 @@ class Geometry:
         beta = self.beta
         l1 = self.l1
 
-        z1 = (self.c_a-self.h/2.)/2. + self.h/2
-        z2 = (self.c_a-self.h/2.)/2. + self.h/2
+        z1 = (self.c_a-self.h/2.)/2. + self.h/2.
+        z2 = (self.c_a-self.h/2.)/2. + self.h/2.
         z3 = self.h/2.
         z4 = self.h/2. - 2*(self.h/2.)/(np.pi)
 
@@ -76,9 +76,9 @@ class Geometry:
         yst2 = np.sin(beta)/4.*l1
         yst3 = np.sin(beta)/2.*l1
         yst4 = np.sin(beta)/4.*l1*3.
-        yst5 = np.sin(beta)/4.*l1*5
-        yst6 = np.sin(beta)/4.*l1*6
-        yst7 = np.sin(beta)/4.*l1*7
+        yst5 = np.sin(beta)/4.*l1*5.
+        yst6 = np.sin(beta)/4.*l1*6.
+        yst7 = np.sin(beta)/4.*l1*7.
         yst8 = self.h
         yst9 = 3./4.*self.h
         yst10 = 1./2.*self.h
