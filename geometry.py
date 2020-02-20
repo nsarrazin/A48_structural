@@ -26,7 +26,8 @@ class Geometry:
         print(self.c_a) # we can access things now
         print(self.x_a)
 
-        return self.c_a + self.x_a
+        # return self.c_a + self.x_a
+        return ( , )
 
     @property
     def centroid(self):
@@ -34,8 +35,11 @@ class Geometry:
 
     @property
     def shearcenter(self):
-        return
+        return (, )
 
+    @property
+    def J(self):
+        return 
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
