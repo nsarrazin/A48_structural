@@ -120,12 +120,11 @@ class Interpolation:
         """
         :param y: array; array to integrate
         :param x: array; array with the x-values associated with the y-values
-        :return: array; value of the integral on each interval + the value of the previous interval
-        -> return[i] corresponds to the area of interval i + the area of interval (i-1)
+        :return: array; value of the integral on each x location + the value of the previous x location
         """
         if len(y) == len(x):
             result = np.zeros(len(x))
-            result[0] = y[0]
+            result[0] = 0
             for i, xi in enumerate(x):
                 if i == (len(y) - 1):
                     break
