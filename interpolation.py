@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from data.consts import N
 
 """
 Technique   : Bi-linear interpolation
@@ -136,60 +137,76 @@ class Interpolation:
             result = None
         return result
 
+    def integrate_q(self, x, ord=2):
+        xs = np.linspace(0, x, N)
+        ys = np.array([self.q_intergration_fixed_x(x) for x in xs])
+        
+        for i in range(ord):
+            ys = self.trapezoidalrule(ys, xs)
+
+        return ys
 
 
-## Testing implementations
-test = interpolation()
-# x_test = np.linspace(0, 1.611, 82)
-# z_test = np.linspace(0, -0.505, 162)
 
-y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-x = np.linspace(0, 10, 11)
-plt.plot(x, y)
-plt.show()
-plt.plot(x, test.trapezoidalrule(y, x))
-plt.show()
-print(test.trapezoidalrule(y, x))
+if __name__ == "__main__":
+        
+    ## Testing implementations
+    test = Interpolation()
+    # x_test = np.linspace(0, 1.611, 82)
+    # z_test = np.linspace(0, -0.505, 162)
 
-## Uncomment for full 2D plot
-# u = np.zeros((len(z_test), len(x_test)))
-# for row, zi in enumerate(u):
-#     for column, xi in enumerate(zi):
-#         func, a = test.bilinear_interpolation(x_test[column], z_test[row])
-#         u[row,column] = func
-# plt.imshow(u)
-# plt.show()
+    # y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    # x = np.linspace(0, 10, 11)
+    # plt.plot(x, y)
+    # plt.show()
+    # plt.plot(x, test.trapezoidalrule(y, x))
+    # plt.show()
+    # print(test.trapezoidalrule(y, x))
 
-## Uncomment for x-direction crossection
-# u_cross = np.zeros(len(x_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(x_test[i], test.z[40])
-#     u_cross[i] = func
-# plt.plot(test.x, test.F[40, :], "-")
-# plt.plot(x_test, u_cross, "-" )
-# plt.show()
+    for i in range(0, 4):
+        plt.plot(test.integrate_q(1.611, ord=i), label=i)
+    plt.legend()
+    plt.show()
 
-## Uncomment for z-direction crossection
-# u_cross = np.zeros(len(z_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(test.x[21], z_test[i])
-#     u_cross[i] = func
-# plt.plot(test.z, test.F[:, 21], "-")
-# plt.plot(z_test, u_cross, "-" )
-# plt.show()
+    ## Uncomment for full 2D plot
+    # u = np.zeros((len(z_test), len(x_test)))
+    # for row, zi in enumerate(u):
+    #     for column, xi in enumerate(zi):
+    #         func, a = test.bilinear_interpolation(x_test[column], z_test[row])
+    #         u[row,column] = func
+    # plt.imshow(u)
+    # plt.show()
 
-## Uncomment to test integration
-# u_cross = np.zeros(len(z_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(test.x[20], z_test[i])
-#     u_cross[i] = func
-# trapz_result = np.trapz(u_cross, z_test)
-# result = test.q_intergration_fixed_x(test.x[20])
-# print("Numpy trapezoidal implementation:", trapz_result)
-# print("Own analytical implementation   :", result)
-# print("Difference                      :", abs(trapz_result-result))
+    ## Uncomment for x-direction crossection
+    # u_cross = np.zeros(len(x_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(x_test[i], test.z[40])
+    #     u_cross[i] = func
+    # plt.plot(test.x, test.F[40, :], "-")
+    # plt.plot(x_test, u_cross, "-" )
+    # plt.show()
 
-## Uncomment to test double integral
-# result = test.q_intergrate_double(1, 1.5, 0.01)
-# print(result)
+    ## Uncomment for z-direction crossection
+    # u_cross = np.zeros(len(z_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(test.x[21], z_test[i])
+    #     u_cross[i] = func
+    # plt.plot(test.z, test.F[:, 21], "-")
+    # plt.plot(z_test, u_cross, "-" )
+    # plt.show()
+
+    ## Uncomment to test integration
+    # u_cross = np.zeros(len(z_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(test.x[20], z_test[i])
+    #     u_cross[i] = func
+    # trapz_result = np.trapz(u_cross, z_test)
+    # result = test.q_intergration_fixed_x(test.x[20])
+    # print("Numpy trapezoidal implementation:", trapz_result)
+    # print("Own analytical implementation   :", result)
+    # print("Difference                      :", abs(trapz_result-result))
+
+    ## Uncomment to test double integral
+    # result = test.q_intergrate_double(1, 1.5, 0.01)
+    # print(result)
 
