@@ -119,12 +119,11 @@ class interpolation:
         """
         :param y: array; array to integrate
         :param x: array; array with the x-values associated with the y-values
-        :return: array; value of the integral on each interval + the value of the previous interval
-        -> return[i] corresponds to the area of interval i + the area of interval (i-1)
+        :return: array; value of the integral on each x location + the value of the previous x location
         """
         if len(y) == len(x):
             result = np.zeros(len(x))
-            result[0] = y[0]
+            result[0] = 0
             for i, xi in enumerate(x):
                 if i == (len(y) - 1):
                     break
@@ -142,14 +141,6 @@ class interpolation:
 test = interpolation()
 # x_test = np.linspace(0, 1.611, 82)
 # z_test = np.linspace(0, -0.505, 162)
-
-y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-x = np.linspace(0, 10, 11)
-plt.plot(x, y)
-plt.show()
-plt.plot(x, test.trapezoidalrule(y, x))
-plt.show()
-print(test.trapezoidalrule(y, x))
 
 ## Uncomment for full 2D plot
 # u = np.zeros((len(z_test), len(x_test)))
