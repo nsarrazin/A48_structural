@@ -145,6 +145,46 @@ class Interpolation:
 
         return ys
 
+    def tau(self, x_fixed, z_sc):
+        """
+        blabla this is tau #TODO: add documentation
+        """
+        z_integration = np.zeros(80)
+        for i, zi in enumerate(self.z):
+            if i == 80:
+                break
+            z_integration[i] = (self.z[i] + self.z[i+1])/2
+
+        a_list = []
+        for i, zi in enumerate(z_integration):
+            func, a = self.bilinear_interpolation(x_fixed, zi)
+            a_list.append(a)
+
+        result = 0
+        for i, zi in enumerate(self.z):
+            if i == 80:
+                break
+            z_begin = self.z[i]
+            z_end = self.z[i+1]
+
+            z_midpoint = z_integration[i]
+            print(z_midpoint)
+            val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - \
+                 ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 )) 
+
+            result += val * (z_midpoint - z_sc)
+
+        return result
+
+    def integrate_tau(self, x, z_sc, ord=2):
+        xs = np.linspace(0, x, N)
+        ys = np.array([self.tau(x, z_sc) for x in xs])
+        
+        for i in range(ord):
+            print(i)
+            ys = self.trapezoidalrule(ys, xs)
+
+        return ys
 
 
 if __name__ == "__main__":
@@ -162,8 +202,12 @@ if __name__ == "__main__":
     # plt.show()
     # print(test.trapezoidalrule(y, x))
 
+
+
     for i in range(0, 4):
-        plt.plot(test.integrate_q(1.611, ord=i), label=i)
+        # plt.plot(test.integrate_q(1.611, ord=i), label=i)
+
+        plt.plot(test.integrate_tau(1.611, -0.225-16.1E-2/2, ord=i), label=i)
     plt.legend()
     plt.show()
 
