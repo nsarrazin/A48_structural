@@ -153,7 +153,7 @@ class Geometry:
 
         c_y = (y1*A1+y2*A2+y3*A3+y4*A4+(yst1+yst2+yst3+yst4+yst5+yst6+yst7+yst8+yst9+yst10+yst11)*Ast)/(A1+A2+A3+A4+11*Ast)
         c_z = (z1*A1+z2*A2+z3*A3+z4*A4+(zst1+zst2+zst3+zst4+zst5+zst6+zst7+zst8+zst9+zst10+zst11)*Ast)/(A1+A2+A3+A4+11*Ast)
-        return c_y, c_z
+        return c_y, c_z, Ast
 
     @property
     # stringers only have a steiner term (assumption!)
@@ -210,11 +210,11 @@ class Geometry:
     @property
     def shearcenter(self):
         #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
-        l = self.c_a - self.h/2
-        alpha = np.arctan2(self.h/2,l)
+        l = self.c_a - self.h/2.
+        alpha = np.arctan2(self.h/2.,l)
         d = l/np.cos(alpha)
-        d_z =(self.t_sk*self.h*self.h*d*d*(1./3.-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4-2*self.t_sk*self.h*self.h+(4*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4))/(4*4.753851442684436e-06)
-        
+        #shear center distance calculated from the leading edge
+        d_z =((self.t_sk*self.h*self.h*d*d*(1./3.-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4.-2*self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4.))/(4.*4.753851442684436e-06))+self.h/2.
         return d_z
 
         #'Qz': -0.0004095185617891304, 'Qy': 0.0
@@ -224,5 +224,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.shearcenter)
+    print(geo.centroid)
    
