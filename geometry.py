@@ -176,7 +176,7 @@ class Geometry:
         Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy3 = self.h*(self.t_sp**3)/12. + self.h*self.t_sp*(self.centroid[1]-self.h/2.)**2
-        Iyy4 = 1.707458589362663*10**(-7) + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-(self.h/2. - 2*(self.h/2.)/(np.pi)))**2
+        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk - (np.pi*self.h/2.*self.t_sk)*(self.h/np.pi)**2 + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-(self.h/2. - 2*(self.h/2.)/(np.pi)))**2
         Iyyst1 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][0])**2
         Iyyst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][1])**2
         Iyyst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][2])**2
@@ -215,23 +215,22 @@ class Geometry:
     @property
     def shearcenter(self):
         #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
+
         l = self.c_a - self.h/2.
         alpha = np.arctan2(self.h/2.,l)
         d = l/np.cos(alpha)
         #shear center distance calculated from the leading edge
-<<<<<<< HEAD
-        dz1 =((self.t_sk*self.h*self.h*d*d*(1./3.-(d*np.cos(alpha))/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/2.-self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)))/(4.*self.MMoI[1]))+self.h/2.
-        B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        dz2 = B+self.h/2.
-        return dz1,dz2
-=======
         dz = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
         dz = -dz
         return dz
->>>>>>> 2b8d33b4f59cf98998bde75b12396a5929433b70
 
         #y_sc = 0
         #z_sc = -0.22554053758032344
+
+    @property
+    def torsionalstiffness(self):
+        
+
 
 
 if __name__ == "__main__": # is called when you run the script
