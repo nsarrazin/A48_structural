@@ -23,11 +23,8 @@ class Geometry:
 
     @property
     def MMoI(self):
-        print(self.c_a) # we can access things now
-        print(self.x_a)
-
         # return self.c_a + self.x_a
-        return ( , )
+        return (4.59435E-5, 4.75385E-6)
 
     @property
     def centroid(self):
@@ -35,11 +32,11 @@ class Geometry:
 
     @property
     def shearcenter(self):
-        return (, )
+        return (0, -0.22554+self.h/2)
 
     @property
     def J(self):
-        return 
+        return 0.0001753
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
