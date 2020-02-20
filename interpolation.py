@@ -168,7 +168,6 @@ class Interpolation:
             z_end = self.z[i+1]
 
             z_midpoint = z_integration[i]
-            print(z_midpoint)
             val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - \
                  ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 )) 
 
@@ -181,7 +180,6 @@ class Interpolation:
         ys = np.array([self.tau(x, z_sc) for x in xs])
         
         for i in range(ord):
-            print(i)
             ys = self.trapezoidalrule(ys, xs)
 
         return ys
