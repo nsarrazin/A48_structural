@@ -209,18 +209,18 @@ class Geometry:
 
     @property
     def shearcenter(self):
+        #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
         l = self.c_a - self.h/2
         alpha = np.arctan2(self.h/2,l)
         d = l/np.cos(alpha)
-        d_z =(self.t_sk*self.h*self.h*d*d*(1/3-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4-2*self.t_sk*self.h*self.h+(4*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4))/(4*self.MMoI(1))
-        return
+        d_z =(self.t_sk*self.h*self.h*d*d*(1/3-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4-2*self.t_sk*self.h*self.h+(4*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4))/(4*4.753851442684436e-06)
+        
+        return d_z
 
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    plt.plot(geo.crosssection[0],geo.crosssection[1],'x')
-    plt.show()
-
-    print(geo.MMoI)
+    print(geo.shearcenter)
+   
