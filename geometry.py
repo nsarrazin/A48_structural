@@ -229,7 +229,18 @@ class Geometry:
 
     @property
     def torsionalstiffness(self):
-        
+        A1 = 1./2.*np.pi*(self.h/2.)**2
+        A2  = (self.c_a-self.h/2.)*self.h/2.
+
+        tint1 = np.pi*self.h/2.*self.t_sk + self.t_sp*self.h
+        tint2 = 2.*self.t_sk*self.l1 +  self.t_sp*self.h
+
+        J1 = 4*(A1**2)*tint1
+        J2 = 4*(A2**2)*tint2
+
+        J = J1 + J2
+
+        return J
 
 
 
@@ -237,5 +248,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.MMoI)
+    print(geo.torsionalstiffness)
    
