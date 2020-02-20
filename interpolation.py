@@ -119,13 +119,23 @@ class interpolation:
         """
         :param y: array; array to integrate
         :param x: array; array with the x-values associated with the y-values
-        :return: scalar; value of the integral
+        :return: array; value of the integral on each interval + the value of the previous interval
+        -> return[i] corresponds to the area of interval i + the area of interval (i-1)
         """
-        result = 0
-        for i, xi in enumerate(x):
-            if i == (len(y) - 1):
-                break
-            result += (x[i+1] - x[i]) * ((y[i] + y[i+1])/2)
+        if len(y) == len(x):
+            result = np.zeros((len(x) - 1))
+            for i, xi in enumerate(x):
+                if i == (len(y) - 1):
+                    break
+                temp = (x[i+1] - x[i]) * ((y[i] + y[i+1])/2)
+                if i == 0:
+                    result[i] = temp
+                else:
+                    result[i] = result[i-1] + temp
+        else:
+            print("Trapezoidalrule: x and y do not have the same size", ", len(x) =", len(x), ", len(y) =", len(y))
+            print("Returning None")
+            result = None
         return result
 
 
