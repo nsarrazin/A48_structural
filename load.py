@@ -15,10 +15,10 @@ class LoadCase:
 
         self.a_y = np.sin(self.defl)
         self.a_z = np.cos(self.defl)
-        self.a_m = self.geo.h/2 * (np.sin(defl)- np.cos(defl))
-
-        # self.y_sc, self.z_sc = self.geo.shearcenter
-        self.y_sc, self.z_sc = 0, 0
+        self.a_m = self.geo.h/2 * (np.sin(self.defl)- np.cos(self.defl))
+        
+        _ , self.z_sc = self.geo.shearcenter
+        # _ , self.z_sc = 0, 0
     def V_y(self, x):
         np.array([-step(x, self.geo.x_1)**0,
                   0,
@@ -32,7 +32,7 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  # int(q(x)) + self.P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
+                  self.interp.integrate_q(x, ord=1)[-1]+self.P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
                   ])
         pass
 
@@ -59,7 +59,7 @@ class LoadCase:
                   -step(x,self.geo.x_2)**1,
                   0,
                   -step(x,self.geo.x_3)**1,
-                  self.a_z*step(x,sleg.geo.x_2-self.geo.x_a/2)**1,
+                  self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**1,
                   0,
                   0,
                   0,
@@ -81,7 +81,7 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  #int(int(q(x))) + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1,
+                  self.interp.integrate_q(x, ord=2)[-1] + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1
                   ])
         pass
 
@@ -97,8 +97,8 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  0,
-                  #int(tau(x))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0,
+                  0, # XXX: add z_sc
+                  self.interp.integrate_tau(x, z_sc=self.geo.h/2+self.z_sc, ord=1) + self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0,
                   ])
         pass
 
@@ -131,7 +131,7 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  #int(int(int(int(q(x)))))+self.P*self.a_y/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
+                  self.interp.integrate_q(x, ord=4) + self.P*self.a_y/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
                   ])*-1/(self.E*self.geo.MMoI[1])
         pass
 
@@ -148,7 +148,7 @@ class LoadCase:
                   0,
                   0,
                   1,
-                  #int(int(tau(x)))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
+                  self.interp.integrate_tau(x, z_sc=self.geo.h/2+self.z_sc, ord=2) + self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
                   ])*1/(self.G*self.geo.J)
         pass
 
@@ -174,7 +174,7 @@ class LoadCase:
                                                         + self.theta(self.geo.x_3)*self.z_sc, # x3 v_y`
                 -v_y(self.geo.x_3)*np.sin(-self.defl) + v_z(self.geo.x_3)*np.cos(-self.defl), # x3 v_z`
 
-                -v_y(self.geo.x_2 - self.geo.x_a/2)*np.sin(-self.defl) + v_z(self.geo.x_2 - self.geo.x_a/2)*np.cos(-self.defl) # actuator I v_z`
+                -v_y(self.geo.x_2 - self.geo.x_a/2)*np.sin(-self.defl) + v_z(self.geo.x_2 - self.geo.x_a/2)*np.cos(-self.defl), # actuator I v_z`
                 np.array([0,0,0,0,0,0,0,0,0,0,0,0,1])
                 ]
         
@@ -186,9 +186,4 @@ class LoadCase:
     
 
 if __name__ == "__main__":
-    a = np.array([0, 1, 2])
-    b = np.array([0, 2, 4])
-
-    print(np.vstack((a,b)))
-
-    print( np.array([0,0,0,0,0,1,0,0,0,1,0,0,1]).shape)
+    pass
