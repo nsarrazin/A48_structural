@@ -217,7 +217,8 @@ class Geometry:
         d_z =((self.t_sk*self.h*self.h*d*d*(1./3.-np.cos(alpha)/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/4.-2*self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)+(self.t_sk*self.h*self.h)/4.))/(4.*4.753851442684436e-06))+self.h/2.
         return d_z
 
-        #'Qz': -0.0004095185617891304, 'Qy': 0.0
+        #y_sc = 0
+        #z_sc = -0.22554053758032344
 
 
 if __name__ == "__main__": # is called when you run the script
