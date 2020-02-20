@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """
-Technique   : bilinear interpolation
+Technique   : Bi-linear interpolation
 Author      : Group A48, AE year 2020
 Date        : February 2020
 """
@@ -27,7 +27,12 @@ class Interpolation:
             self.x[i] = 0.5 * (((1.611 / 2) * (1 - np.cos(phi_i))) + ((1.611 / 2) * (1 - np.cos(phi_ii))))
 
     def index_search(self, x, z):
-        # Searches the beginning index of the square 4 point domain
+        """
+        Searches the first index of the square 4 point domain in which point (x, z) lies.
+        :param x: scalar; x-position of the point
+        :param z: scalar; z-position of the point
+        :return: 2 scalars; the row and column index (z, x index) of the first point in the square 4 point domain.
+        """
         row = 0
         column = 0
         for i, zi in enumerate(self.z):
@@ -43,7 +48,11 @@ class Interpolation:
         return row, column
 
     def bilinear_interpolation(self, x, z):
-        # Gives the value of q at point (x, z) using bilinear interpolation
+        """
+        :param x: scalar; x-position of the point
+        :param z: scalar; z-position of the point
+        :return: scalar, array; the value of q at (x, z) , the weight coefficients of the bi-linear interpolation
+        """
         row, column = self.index_search(x, z)
         # If point (x,z) is lies on the right boundary
         if row == 80 or column == 40:
@@ -65,7 +74,11 @@ class Interpolation:
         return (a[0] + a[1]*x + a[2]*z + a[3]*x*z), a
 
     def q_intergration_fixed_x(self, x_fixed):
-        # Intergrates the curve at a fixed x location along the chord (z-direction) using an analytical solution to the bilinear integration
+        """
+        Integrates the curve at a fixed x location along the chord (z-direction) using an analytical solution to the bilinear integration
+        :param x_fixed: scalar; fixed span-wise location (x-position)
+        :return: scalar; integrated value along the z-direction
+        """
         z_integration = np.zeros(80)
         for i, zi in enumerate(self.z):
             if i == 80:
@@ -88,10 +101,12 @@ class Interpolation:
         return result
 
     def q_intergrate_double(self, x_begin, x_end, dx):
-        # Integrates the: integrated values along the chord, along the x-axis
-        # Thus double integral first along z then along x
-        # The first integration is done using q_integration_fixed_x
-        # The second integration is doen using the trapezoidal rule, see below
+        """
+        :param x_begin: scalar; starting value of the integration (span-wise location)
+        :param x_end: scalar; ending value of the integration (span-wise location)
+        :param dx: scalar; integration step-size in x-direction
+        :return: scalar; integrated value of the integrated values along z, along x (double integral)
+        """
         x_intergrate = np.arange(x_begin, (x_end+dx), dx)
         result = 0
         for i, xi in enumerate(x_intergrate):
@@ -100,12 +115,41 @@ class Interpolation:
             result = result + ((x_intergrate[i+1] - x_intergrate[i])/2) * (self.q_intergration_fixed_x(x_intergrate[i]) + self.q_intergration_fixed_x(x_intergrate[i+1]))
         return result
 
+    def trapezoidalrule(self, y, x):
+        """
+        :param y: array; array to integrate
+        :param x: array; array with the x-values associated with the y-values
+        :return: array; value of the integral on each interval + the value of the previous interval
+        -> return[i] corresponds to the area of interval i + the area of interval (i-1)
+        """
+        if len(y) == len(x):
+            result = np.zeros(len(x))
+            result[0] = y[0]
+            for i, xi in enumerate(x):
+                if i == (len(y) - 1):
+                    break
+                temp = (x[i+1] - x[i]) * ((y[i] + y[i+1])/2)
+                result[i+1] = result[i] + temp
+        else:
+            print("Trapezoidalrule: x and y do not have the same size", ", len(x) =", len(x), ", len(y) =", len(y))
+            print("Returning None")
+            result = None
+        return result
+
 
 
 ## Testing implementations
-# test = interpolation()
+test = interpolation()
 # x_test = np.linspace(0, 1.611, 82)
 # z_test = np.linspace(0, -0.505, 162)
+
+y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+x = np.linspace(0, 10, 11)
+plt.plot(x, y)
+plt.show()
+plt.plot(x, test.trapezoidalrule(y, x))
+plt.show()
+print(test.trapezoidalrule(y, x))
 
 ## Uncomment for full 2D plot
 # u = np.zeros((len(z_test), len(x_test)))
