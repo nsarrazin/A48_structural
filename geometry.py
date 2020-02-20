@@ -219,16 +219,9 @@ class Geometry:
         alpha = np.arctan2(self.h/2.,l)
         d = l/np.cos(alpha)
         #shear center distance calculated from the leading edge
-<<<<<<< HEAD
-        dz1 =((self.t_sk*self.h*self.h*d*d*(1./3.-(d*np.cos(alpha))/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/2.-self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)))/(4.*self.MMoI[1]))+self.h/2.
-        B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        dz2 = B+self.h/2.
-        return dz1,dz2
-=======
-        dz = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        dz = -dz
+        B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])-(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(24.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
+        dz = -(B+self.h/2.)
         return dz
->>>>>>> 2b8d33b4f59cf98998bde75b12396a5929433b70
 
         #y_sc = 0
         #z_sc = -0.22554053758032344
@@ -238,5 +231,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.MMoI)
+    print(geo.shearcenter)
    
