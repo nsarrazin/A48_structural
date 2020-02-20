@@ -10,6 +10,8 @@ class LoadCase:
         self.d_3 = kwargs.get("d_3")
         self.theta = kwargs.get("defl")
         self.P = kwargs.get("load")
+        self.E = kwargs.get("e_mod")
+        self.G = kwargs.get("g_mod")
 
         self.a_y = np.sin(self.theta)
         self.a_z = np.cos(self.theta)
@@ -30,7 +32,7 @@ class LoadCase:
                   0,
                   0,
                   0,
-                  # int(q(x)) + P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
+                  # int(q(x)) + self.P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
                   ])
         pass
 
@@ -113,7 +115,7 @@ class LoadCase:
                   x,
                   1,
                   0,
-                  self.P*self.a_z/6*step(x,self.geo.x_2+self.geo.x_a/2)**3])
+                  self.P*self.a_z/6*step(x,self.geo.x_2+self.geo.x_a/2)**3])*-1/(self.E*self.geo.MMoI[0])
         pass
 
     def v_z(self, x):
@@ -130,7 +132,7 @@ class LoadCase:
                   0,
                   0,
                   #int(int(int(int(q(x)))))+self.P*self.a_y/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
-                  ])
+                  ])*-1/(self.E*self.geo.MMoI[1])
         pass
 
     def theta(self, x):
@@ -147,5 +149,5 @@ class LoadCase:
                   0,
                   1,
                   #int(int(tau(x)))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
-                  ])
+                  ])*1/(self.G*self.J)
         pass
