@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib as mpl
 
 import matplotlib.pyplot as plt
-from consts import *
 
 # from mpl_toolkits.mplot3d.axes3d import Axes3D
 mpl.rcParams['figure.dpi'] = 155
