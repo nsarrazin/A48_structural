@@ -8,14 +8,14 @@ class LoadCase:
 
         self.d_1 = kwargs.get("d_1")
         self.d_3 = kwargs.get("d_3")
-        self.theta = kwargs.get("defl")
+        self.defl = kwargs.get("defl") # theta
         self.P = kwargs.get("load")
         self.E = kwargs.get("e_mod")
         self.G = kwargs.get("g_mod")
 
-        self.a_y = np.sin(self.theta)
-        self.a_z = np.cos(self.theta)
-        self.a_m = self.geo.h/2 * (np.sin(theta)- np.cos(theta))
+        self.a_y = np.sin(self.defl)
+        self.a_z = np.cos(self.defl)
+        self.a_m = self.geo.h/2 * (np.sin(defl)- np.cos(defl))
 
         # self.y_sc, self.z_sc = self.geo.shearcenter
         self.y_sc, self.z_sc = 0, 0
@@ -26,7 +26,7 @@ class LoadCase:
                   0, 
                   -step(x, self.geo.x_3)**0,
                   0,
-                  self.a_y*step(x, self.geo.x_2-self.geo.x_a/2)**0
+                  self.a_y*step(x, self.geo.x_2-self.geo.x_a/2)**0,
                   0,
                   0,
                   0,
@@ -149,5 +149,46 @@ class LoadCase:
                   0,
                   1,
                   #int(int(tau(x)))+self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
-                  ])*1/(self.G*self.J)
+                  ])*1/(self.G*self.geo.J)
         pass
+
+    @property
+    def A(self):
+        rows = [V_y(self.geo.l_a),
+                V_z(self.geo.l_a),
+                M_y(self.geo.l_a),
+                M_z(self.geo.l_a),
+                T(self.geo.l_a),
+
+                v_y(self.geo.x_1)*np.cos(-self.defl) + v_z(self.geo.x_1)*np.sin(-self.defl) \
+                                                        + self.theta(self.geo.x_1)*self.z_sc, # x1 v_y`
+                -v_y(self.geo.x_1)*np.sin(-self.defl) + v_z(self.geo.x_1)*np.cos(-self.defl), # x1 v_z`
+
+
+                v_y(self.geo.x_2)*np.cos(-self.defl) + v_z(self.geo.x_2)*np.sin(-self.defl) \
+                                                        + self.theta(self.geo.x_2)*self.z_sc, # x2 v_y`
+                -v_y(self.geo.x_2)*np.sin(-self.defl) + v_z(self.geo.x_2)*np.cos(-self.defl), # x2 v_z`
+
+
+                v_y(self.geo.x_3)*np.cos(-self.defl) + v_z(self.geo.x_3)*np.sin(-self.defl) \
+                                                        + self.theta(self.geo.x_3)*self.z_sc, # x3 v_y`
+                -v_y(self.geo.x_3)*np.sin(-self.defl) + v_z(self.geo.x_3)*np.cos(-self.defl), # x3 v_z`
+
+                -v_y(self.geo.x_2 - self.geo.x_a/2)*np.sin(-self.defl) + v_z(self.geo.x_2 - self.geo.x_a/2)*np.cos(-self.defl) # actuator I v_z`
+                np.array([0,0,0,0,0,0,0,0,0,0,0,0,1])
+                ]
+        
+        return np.vstack(rows)
+
+    @property
+    def B(self):
+        return np.array([0,0,0,0,0,self.d_1,0,0,0,self.d_3,0,0,1])
+    
+
+if __name__ == "__main__":
+    a = np.array([0, 1, 2])
+    b = np.array([0, 2, 4])
+
+    print(np.vstack((a,b)))
+
+    print( np.array([0,0,0,0,0,1,0,0,0,1,0,0,1]).shape)
