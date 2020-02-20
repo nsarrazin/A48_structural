@@ -1,6 +1,9 @@
 c_a = 0.505 # chord length aileron [m]
 l_a = 1.611 # span of the aileron [m]
 
+E = 72.9E9 # elastic modulus [Pa]
+G = 27.1E9 # shear modulus [Pa]
+
 x_1 = 0.125 # x-location of hinge 1 [m]
 x_2 = 0.498 # x-location of hinge 2 [m]
 x_3 = 1.494 # x-location of hinge 3 [m]
@@ -43,4 +46,6 @@ parameters_geometry = {"c_a" : c_a,
 parameters_case = {"d_1" : d_1,
                    "d_3" : d_3,
                    "defl": max_defl,
-                   "load": load}
+                   "load": load,
+                   "E": e_mod,
+                   "G": g_mod}
