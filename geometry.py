@@ -28,6 +28,7 @@ class Geometry:
 
     def beta(self):
         beta = np.arctan2(self.h/2,(self.c_a-self.h/2))
+        #beta = np.arctan(self.h/2/(self.c_a-self.h/2.))
     
         return beta
 
@@ -168,43 +169,43 @@ class Geometry:
         beta = self.beta
         l1 = self.l1
 
-        Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. +  l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
-        Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. +  l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
+        Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
+        Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy3 = self.h*(self.t_sp**3)/12. + self.h*self.t_sp*(self.centroid[1]-self.h/2.)**2
-        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-self.h/2.)**2
-        Iyyst1 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/2.)**2
-        Iyyst2 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1/4.*np.cos(beta)))**2
-        Iyyst3 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1/2.*np.cos(beta)))**2
-        Iyyst4 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1*3/4.*np.cos(beta)))**2
-        Iyyst5 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1*3/4.*np.cos(beta)))**2
-        Iyyst6 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1/2.*np.cos(beta)))**2
-        Iyyst7 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-(self.h/2.+l1/4.*np.cos(beta)))**2
-        Iyyst8 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/2.)**2
-        Iyyst9 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/4.)**2
-        Iyyst10 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1])**2
-        Iyyst11 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[1]-self.h/4.)**2
+        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk # + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-self.h/2.)**2
+        Iyyst1 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.h/2.)**2
+        Iyyst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/4.*np.cos(beta)))**2
+        Iyyst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/2.*np.cos(beta)))**2
+        Iyyst4 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1*3/4.*np.cos(beta)))**2
+        Iyyst5 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1*3/4.*np.cos(beta)))**2
+        Iyyst6 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/2.*np.cos(beta)))**2
+        Iyyst7 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/4.*np.cos(beta)))**2
+        Iyyst8 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.h/2.)**2
+        Iyyst9 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.h/4.)**2
+        Iyyst10 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1])**2
+        Iyyst11 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.h/4.)**2
         
 
         Izz1 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.)**2
         Izz2 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.*3.)**2
         Izz3 = self.t_sp*(self.h**3)/12. + self.h*self.t_sp*(self.centroid[0]-self.h/2.)**2
-        Izz4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[0]-self.h/2.)**2
-        Izzst1 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0])**2
-        Izzst2 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1/4.*np.sin(beta)))**2
-        Izzst3 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1/2.*np.sin(beta)))**2
-        Izzst4 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1*3./4.*np.sin(beta)))**2
-        Izzst5 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1*5./4.*np.sin(beta)))**2
-        Izzst6 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1*3./2.*np.sin(beta)))**2
-        Izzst7 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-(l1*7./4.*np.sin(beta)))**2
-        Izzst8 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h)**2
-        Izzst9 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h*3./4.)**2
-        Izzst10 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h/2.)**2
-        Izzst11 = self.w_st-self.t_st+self.h_st*self.t_st * (self.centroid[0]-self.h/4.)**2
+        Izz4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk # + np.pi*self.t_sk*self.h/2.*(self.centroid[0]-self.h/2.)**2
+        Izzst1 = (self.w_st+self.h_st)*self.t_st* (self.centroid[0])**2
+        Izzst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1/4.*np.sin(beta)))**2
+        Izzst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1/2.*np.sin(beta)))**2
+        Izzst4 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1*3./4.*np.sin(beta)))**2
+        Izzst5 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1*5./4.*np.sin(beta)))**2
+        Izzst6 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1*3./2.*np.sin(beta)))**2
+        Izzst7 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1*7./4.*np.sin(beta)))**2
+        Izzst8 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-self.h)**2
+        Izzst9 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-self.h*3./4.)**2
+        Izzst10 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-self.h/2.)**2
+        Izzst11 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-self.h/4.)**2
 
-        Iyy = Iyy1 + Iyy2 + Iyy3 + Iyy4 + Iyyst1 + Iyyst2 + Iyyst3 + Iyyst4 + Iyyst5 + Iyyst6 + Iyyst7 + Iyyst8 + Iyyst9 + Iyyst10 + Iyyst11
-        Izz = Izz1 + Izz2 + Izz3 + Izz4 + Izzst1 + Izzst2 + Izzst3 + Izzst4 + Izzst5 + Izzst6 + Izzst7 + Izzst8 + Izzst9 + Izzst10 + Izzst11
+        Iyy = Iyy1 + Iyy2 + Iyy3 + Iyy4  + Iyyst1 + Iyyst2 + Iyyst3 + Iyyst4 + Iyyst5 + Iyyst6 + Iyyst7 + Iyyst8 + Iyyst9 + Iyyst10 + Iyyst11
+        Izz = Izz1 + Izz2 + Izz3 + Izz4  + Izzst1 + Izzst2 + Izzst3 + Izzst4 + Izzst5 + Izzst6 + Izzst7 + Izzst8 + Izzst9 + Izzst10 + Izzst11
 
-        return Iyy, Izz
+        return Iyy4, Izz4
 
 
     @property
@@ -225,5 +226,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.centroid)
+    print(geo.MMoI)
    
