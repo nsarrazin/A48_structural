@@ -150,7 +150,7 @@ class Geometry:
         A2 = self.l1*self.t_sk
         A3 = self.h*self.t_sp
         A4 =  np.pi*self.h/2.*self.t_sk
-        Ast = (self.w_st-self.t_st+self.h_st)*self.t_st
+        Ast = (self.w_st+self.h_st)*self.t_st
 
         c_y = (y1*A1+y2*A2+y3*A3+y4*A4+(yst1+yst2+yst3+yst4+yst5+yst6+yst7+yst8+yst9+yst10+yst11)*Ast)/(A1+A2+A3+A4+11*Ast)
         c_z = (z1*A1+z2*A2+z3*A3+z4*A4+(zst1+zst2+zst3+zst4+zst5+zst6+zst7+zst8+zst9+zst10+zst11)*Ast)/(A1+A2+A3+A4+11*Ast)
@@ -172,8 +172,8 @@ class Geometry:
         Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy3 = self.h*(self.t_sp**3)/12. + self.h*self.t_sp*(self.centroid[1]-self.h/2.)**2
-        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk # + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-self.h/2.)**2
-        Iyyst1 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.h/2.)**2
+        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-self.h/2.)**2
+        Iyyst1 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1])**2
         Iyyst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/4.*np.cos(beta)))**2
         Iyyst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1/2.*np.cos(beta)))**2
         Iyyst4 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-(self.h/2.+l1*3/4.*np.cos(beta)))**2
@@ -189,7 +189,7 @@ class Geometry:
         Izz1 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.)**2
         Izz2 = self.t_sk*(l1)**3*(np.sin(beta))**2/12. + l1*self.t_sk*(self.centroid[0]-self.h/4.*3.)**2
         Izz3 = self.t_sp*(self.h**3)/12. + self.h*self.t_sp*(self.centroid[0]-self.h/2.)**2
-        Izz4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk # + np.pi*self.t_sk*self.h/2.*(self.centroid[0]-self.h/2.)**2
+        Izz4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk + np.pi*self.t_sk*self.h/2.*(self.centroid[0]-self.h/2.)**2
         Izzst1 = (self.w_st+self.h_st)*self.t_st* (self.centroid[0])**2
         Izzst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1/4.*np.sin(beta)))**2
         Izzst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[0]-(l1/2.*np.sin(beta)))**2
@@ -205,7 +205,7 @@ class Geometry:
         Iyy = Iyy1 + Iyy2 + Iyy3 + Iyy4  + Iyyst1 + Iyyst2 + Iyyst3 + Iyyst4 + Iyyst5 + Iyyst6 + Iyyst7 + Iyyst8 + Iyyst9 + Iyyst10 + Iyyst11
         Izz = Izz1 + Izz2 + Izz3 + Izz4  + Izzst1 + Izzst2 + Izzst3 + Izzst4 + Izzst5 + Izzst6 + Izzst7 + Izzst8 + Izzst9 + Izzst10 + Izzst11
 
-        return Iyy4, Izz4
+        return Iyy, Izz
 
 
     @property
