@@ -123,15 +123,13 @@ class interpolation:
         -> return[i] corresponds to the area of interval i + the area of interval (i-1)
         """
         if len(y) == len(x):
-            result = np.zeros((len(x) - 1))
+            result = np.zeros(len(x))
+            result[0] = y[0]
             for i, xi in enumerate(x):
                 if i == (len(y) - 1):
                     break
                 temp = (x[i+1] - x[i]) * ((y[i] + y[i+1])/2)
-                if i == 0:
-                    result[i] = temp
-                else:
-                    result[i] = result[i-1] + temp
+                result[i+1] = result[i] + temp
         else:
             print("Trapezoidalrule: x and y do not have the same size", ", len(x) =", len(x), ", len(y) =", len(y))
             print("Returning None")
@@ -141,9 +139,17 @@ class interpolation:
 
 
 ## Testing implementations
-# test = interpolation()
+test = interpolation()
 # x_test = np.linspace(0, 1.611, 82)
 # z_test = np.linspace(0, -0.505, 162)
+
+y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+x = np.linspace(0, 10, 11)
+plt.plot(x, y)
+plt.show()
+plt.plot(x, test.trapezoidalrule(y, x))
+plt.show()
+print(test.trapezoidalrule(y, x))
 
 ## Uncomment for full 2D plot
 # u = np.zeros((len(z_test), len(x_test)))
