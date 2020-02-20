@@ -25,6 +25,8 @@ d_3 = 1.245E-2 # vertical displacement hinge 3 [m]
 max_defl = 30 # maximum upward deflecection [deg]
 load = 49.2E3 # Load in actuator 2 [N]
 
+N = 80 #steps for integration spanwise 
+
 parameters_geometry = {"c_a" : c_a,
                        "l_a" : l_a,
 
@@ -47,5 +49,5 @@ parameters_case = {"d_1" : d_1,
                    "d_3" : d_3,
                    "defl": max_defl,
                    "load": load,
-                   "E": e_mod,
-                   "G": g_mod}
+                   "E": E,
+                   "G": G}
