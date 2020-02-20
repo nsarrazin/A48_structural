@@ -215,8 +215,10 @@ class Geometry:
         alpha = np.arctan2(self.h/2.,l)
         d = l/np.cos(alpha)
         #shear center distance calculated from the leading edge
-        d_z =((self.t_sk*self.h*self.h*d*d*(1./3.-(d*np.cos(alpha))/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/2.-self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)))/(4.*4.753851442684436e-06))+self.h/2.
-        return d_z
+        dz1 =((self.t_sk*self.h*self.h*d*d*(1./3.-(d*np.cos(alpha))/l-(self.h*np.cos(alpha))/(3.*l))+self.h*self.h*((self.t_sk*self.h*self.h)/2.-self.t_sk*self.h*self.h+(4.*d*np.cos(alpha))/(self.h*self.h)))/(4.*4.753851442684436e-06))+self.h/2.
+        B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI(1))+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI(1))+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI(1))-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI(1))
+        dz2 = B+self.h/2.
+        return dz1,dz2
 
         #y_sc = 0
         #z_sc = -0.22554053758032344
