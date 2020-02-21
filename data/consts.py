@@ -25,7 +25,7 @@ d_3 = 0.01245 # vertical displacement hinge 3 [m]
 max_defl = 30 # maximum upward deflecection [deg]
 load = 49200 # Load in actuator 2 [N]
 
-N = 80 #steps for integration spanwise 
+N = 250 #steps for integration spanwise 
 
 parameters_geometry = {"c_a" : c_a,
                        "l_a" : l_a,
