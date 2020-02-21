@@ -220,8 +220,8 @@ class Geometry:
         alpha = np.arctan2(self.h/2.,l)
         d = l/np.cos(alpha)
         #shear center distance calculated from the leading edge
-        dz = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        dz = -dz
+        B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])-(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(24.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
+        dz = -(B+self.h/2.)
         return dz
 
         #y_sc = 0
@@ -248,5 +248,5 @@ if __name__ == "__main__": # is called when you run the script
     # call an instance of the class
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.torsionalstiffness)
+    print(geo.shearcenter)
    
