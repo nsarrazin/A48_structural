@@ -29,7 +29,7 @@ class Solution:
                     +sol["C3"]*x+sol["C4"]*0)       
 
 
-    def v_x(self, x):
+    def v_z(self, x):
         sol = self.sol
         return -1/(self.case.E*self.geo.MMoI[0])*(sol["Fa"]*self.case.a_z/6*step(x,self.geo.x_2-self.geo.x_a/2)**3\
             +self.case.P*self.case.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**3\
@@ -43,6 +43,11 @@ class Solution:
                     +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**1-sol["Fa"]*self.case.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**1\
                         +sol["C5"]\
                         +self.parent.interp.integrate_tau(x, z_sc=self.geo.h/2+self.case.z_sc, ord=2)[-1] + self.case.P*self.case.a_y*self.case.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.case.P*self.case.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1)
+    def v_y_prime(self,x):
+        return self.v_y(x)*np.cos(-self.case.defl)+self.v_z(x)*np.sin(-self.case.defl)
+    
+    def v_z_prime(self,x): 
+        return -self.v_y(x)*np.sin(-self.case.defl)+self.v_z(x)*np.cos(-self.case.defl)
     
     def plot(self):
 
