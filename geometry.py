@@ -230,10 +230,10 @@ class Geometry:
         #shear center distance calculated from the leading edge
         #B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])-(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(24.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
         #B = (self.t_sk*self.h**2*l*d)/(6*self.MMoI[1])-(self.t_sk*self.h**3*l)/(32*self.MMoI[1])+l-(self.t_sk*self.h**5*l)/(16*d*self.MMoI[1])+(self.t_sk*self.h**5*l*np.pi)/(8*d*self.MMoI[1])
-        #most correct one:
-        #B = (self.t_sk*self.h**2*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst3+yst4+yst5+yst6))/(self.MMoI[1])-(self.t_sk*self.h**4*l*(1./2.-np.pi))/(4.*d*self.MMoI[1])
+        #most correct one (which actually had a mistake so not sure anymore):
+        B = (self.t_sk*self.h**2*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst3+yst4+yst5+yst6))/(self.MMoI[1])-(self.t_sk*self.h**4*l*(1./2.-np.pi))/(4.*d*self.MMoI[1])
         #with moment around upper point instead of o:
-        B = (self.t_sk*self.h*d**2)/(12*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12*self.MMoI[1])-(self.h*l*(d/l-1)*self.Ast*(yst7+yst8+yst9+yst10))/(self.MMoI[1])-(self.t_sk*self.h**4*(1./2.-np.pi))/(4*self.MMoI[1])
+        #B = (self.t_sk*self.h*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst7+yst8+yst9+yst10))/(self.MMoI[1])-(self.t_sk*self.h**4*(1./2.-np.pi))/(4.*self.MMoI[1])
         dz = -(B+self.h/2.)
         return dz
 
