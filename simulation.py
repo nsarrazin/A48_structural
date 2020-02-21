@@ -26,6 +26,13 @@ if __name__ == "__main__":
     
     # print(sim.case.T(sim.geo.l_a))
     # print(sim.case.B.shape)
+    BCs = ["Vy(la)", "Vz(la)", "My(la)", "Mz(la)", "T(la)","vy'(x1)", "vz'(x1)", "vy'(x2)","vz'(x2)", "vy'(x3)","vz'(x3)","vz(act)"]
+
+    A = list(sim.case.A)
+
+    for BC, row in zip(BCs, A):
+        print(BC, row)
+    
     sols = np.linalg.solve(sim.case.A, sim.case.B)
 
     
