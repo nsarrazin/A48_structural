@@ -225,28 +225,40 @@ class Geometry:
         return dz
 
         #y_sc = 0
-        #z_sc = -0.22554053758032344
+        #z_sc = -0.08553893540215983
 
     @property
     def torsionalstiffness(self):
         A1 = 1./2.*np.pi*(self.h/2.)**2
-        A2  = (self.c_a-self.h/2.)*self.h/2.
+        A2 = (self.c_a-(self.h/2.))*self.h/2.
 
-        tint1 = np.pi*self.h/2.*self.t_sk + self.t_sp*self.h
-        tint2 = 2.*self.t_sk*self.l1 +  self.t_sp*self.h
+        T = 1.
 
-        J1 = 4*(A1**2)*tint1
-        J2 = 4*(A2**2)*tint2
+        temp1 = (1./(2*A2)*(self.h/self.t_sp + 2.*self.l1/self.t_sk) + 1./(2*A1)*self.h/self.t_sp)
+        temp2 = (1./(2*A1)*(self.h/self.t_sp + np.pi*self.h/(2.*self.t_sk)) + 1./(2*A2)*self.h/self.t_sp)
 
-        J = J1 + J2
+        q01 = temp1/(temp2 + A1/A2*temp1)*T/(2*A2)
+        q02 = (T - 2*A1*q01)/(2*A2)
+
+        Tcheck = 2*A1*q01 + 2*A2*q02
+        
+        x1 = 1./(2*A1)*((q01-q02)*self.h/self.t_sp + q01*np.pi*self.h/(2.*self.t_sk))
+        x2 = 1./(2*A2)*((q02-q01)*self.h/self.t_sp + q02*2*self.l1/(self.t_sk))
+
+        J = T/x1
 
         return J
 
 
 
+
+
+
+
+
 if __name__ == "__main__": # is called when you run the script
-    # call an instance of the class
+    # call an instance of the class)
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.shearcenter)
+    print(geo.torsionalstiffness)
    
