@@ -215,7 +215,7 @@ class Geometry:
 
     @property
     def shearcenter(self):
-        return (0, -0.22554+self.h/2)
+        return (0, -0.085+self.h/2)
         #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
         l = self.c_a - self.h/2.
         alpha = np.arctan2(self.h/2.,l)
@@ -234,4 +234,3 @@ if __name__ == "__main__": # is called when you run the script
     geo = Geometry(**parameters_geometry) 
 
     print(geo.MMoI)
-   
