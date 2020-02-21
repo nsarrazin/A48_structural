@@ -3,6 +3,9 @@ from geometry import Geometry
 from load import LoadCase
 from interpolation import Interpolation
 from data.consts import parameters_case, parameters_geometry
+from helpers import step
+import matplotlib.pyplot as plt
+
 class Simulation:
     def __init__(self, **kwargs):
         self.geo = Geometry(**kwargs)
@@ -29,8 +32,36 @@ if __name__ == "__main__":
 
     # names = ["Fy_1", "Fz_1", "Fx_2", "Fy_2", "Fz_2", "Fy_3", "Fz_3", "Fa", "C1", "C2", "C3", "C4", "C5"]
     names = ["Fy_1","Fz_1","Fy_2","Fz_2","Fy_3","Fz_3","Fa","C1","C2","C3","C4","C5","CST"]
-    for n, (sol, name) in enumerate(zip(sols, names)):
-        print(str(n) + " - "+name + " = " + str(sol))
+    sol = {}
+    for n, (val, name) in enumerate(zip(sols, names)):
+        sol[name] = val
+    
+    print(sol)
 
     print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y+sim.case.P*sim.case.a_y:.2f}N")
     print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z+sim.case.P*sim.case.a_z+sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
+    print(f"factor for v_y:{-1/(sim.case.E*sim.geo.MMoI[0])}")
+    print(f"factor for v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
+    print(sim.case.B)
+
+    def v_y(x, sol):
+        return -1/(sim.case.E*sim.geo.MMoI[0])*(sol["Fa"]*sim.case.a_z/6*step(x,sim.geo.x_2-sim.geo.x_a/2)**3\
+            +sim.case.P*sim.case.a_z*step(x,sim.geo.x_2+sim.geo.x_a/2)**3\
+                -sol["Fz_1"]/6*step(x,sim.geo.x_1)**3-sol["Fz_2"]/6*step(x,sim.geo.x_2)**3-sol["Fz_3"]/6*step(x,sim.geo.x_3)**3\
+                    +sol["C3"]*x+sol["C4"]*0)        
+    xs = np.linspace(0, sim.geo.l_a, 100)
+    ys = [v_y(i, sol) for i in xs]
+
+    offset = v_y(sim.geo.x_2, sol)*0
+
+    plt.plot(xs, ys-offset)
+    
+    for n,x in enumerate([sim.geo.x_1, sim.geo.x_2, sim.geo.x_3]):
+        plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+    for n,y in enumerate([sim.case.d_1, 0, sim.case.d_3]):
+        plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+    plt.show()
+
+        
