@@ -132,18 +132,18 @@ class LoadCase:
         
 
     def theta(self, x):
-        return np.array([-self.z_sc*step(x,self.geo.x_1)**1,
-                  0,
-                  -self.z_sc*step(x,self.geo.x_2)**1,
-                  0,
-                  -self.z_sc*step(x,self.geo.x_3)**1,
-                  0,
-                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**1-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**1,
-                  0,
-                  0,
-                  0,
-                  0,
-                  1,
+        return np.array([-self.z_sc*step(x,self.geo.x_1)**1, #Fy_1
+                  0,                                         #Fz_1
+                  -self.z_sc*step(x,self.geo.x_2)**1,        #Fy_2
+                  0,                                         #Fz_2
+                  -self.z_sc*step(x,self.geo.x_3)**1,        #Fy_3
+                  0,                                         #Fz_3
+                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**1-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**1,  #Fa
+                  0,    #C1
+                  0,    #C2
+                  0,    #C3
+                  0,    #C4
+                  1,    #C5
                   self.interp.integrate_tau(x, z_sc=self.geo.h/2+self.z_sc, ord=2)[-1] + self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1,
                   ])*1/(self.G*self.geo.J)
         
