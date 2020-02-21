@@ -99,35 +99,35 @@ class LoadCase:
         
 
     def v_y(self, x):
-        return np.array([0,
-                  -1/6*step(x,self.geo.x_1)**3,
-                  0,
-                  -1/6*step(x,self.geo.x_2)**3,
-                  0,
-                  -1/6*step(x,self.geo.x_3)**3,
-                  self.a_z/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,
-                  0,
-                  0,
-                  x,
-                  1,
-                  0,
-                  self.P*self.a_z/6*step(x,self.geo.x_2+self.geo.x_a/2)**3])*-1/(self.E*self.geo.MMoI[0])
+        return np.array([0,                         #Fy_1
+                  -1/6*step(x,self.geo.x_1)**3,     #Fz_1
+                  0,                                #Fy_2
+                  -1/6*step(x,self.geo.x_2)**3,     #Fz_2
+                  0,                                #Fy_3
+                  -1/6*step(x,self.geo.x_3)**3,     #Fz_3
+                  self.a_z/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,    #F_a
+                  0,                                #C1
+                  0,                                #C2
+                  x,                                #C3
+                  1,                                #C4
+                  0,                                #C5
+                  (self.P*self.a_z)/6*step(x,self.geo.x_2+self.geo.x_a/2)**3])*-1/(self.E*self.geo.MMoI[0]) #const*factor
         
 
     def v_z(self, x):
-        return np.array([-1/6*step(x,self.geo.x_1)**3,
-            	  0,
-                  -1/6*step(x,self.geo.x_2)**3,
-                  0,
-                  -1/6*step(x,self.geo.x_3)**3,
-                  0,
-                  self.a_y/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,
-                  x,
-                  1,
-                  0,
-                  0,
-                  0,
-                  self.interp.integrate_q(x, ord=4)[-1] + self.P*self.a_y/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
+        return np.array([-1/6*step(x,self.geo.x_1)**3,   #Fy_1
+            	  0,                                     #Fz_1
+                  -1/6*step(x,self.geo.x_2)**3,          #Fy_2
+                  0,                                     #Fz_2
+                  -1/6*step(x,self.geo.x_3)**3,          #Fy_3   
+                  0,                                     #Fz_3
+                  self.a_y/6*step(x,self.geo.x_2-self.geo.x_a/2)**3,  #Fa
+                  x,    #C1
+                  1,    #C2 
+                  0,    #C3
+                  0,    #C4
+                  0,    #C5 
+                  self.interp.integrate_q(x, ord=4)[-1] + (self.P*self.a_y)/6*step(x,self.geo.x_2+self.geo.x_a/2)**3,
                   ])*-1/(self.E*self.geo.MMoI[1])
         
 
@@ -177,7 +177,19 @@ class LoadCase:
 
     @property
     def B(self):
-        return np.array([0,0,0,0,0,self.d_1,0,0,0,self.d_3,0,0,1], dtype=np.float64)
+        return np.array([0, #shear
+                         0, #shear
+                         0, #moment
+                         0, #moment 
+                         0, #torque
+                         self.d_1, #x1 v_y`
+                         0, #x1 v_z`
+                         0, #x2 v_y`
+                         0, # x2 v_z`
+                         self.d_3, # x3 v_y`
+                         0, # x3 v_z`
+                         0, #actuator
+                         1], dtype=np.float64)  #const
     
 
 if __name__ == "__main__":
