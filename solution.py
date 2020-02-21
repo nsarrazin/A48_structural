@@ -29,10 +29,25 @@ class Solution:
                     +sol["C3"]*x+sol["C4"]*0)       
 
 
+    def v_x(self, x):
+        sol = self.sol
+        return -1/(self.case.E*self.geo.MMoI[0])*(sol["Fa"]*self.case.a_z/6*step(x,self.geo.x_2-self.geo.x_a/2)**3\
+            +self.case.P*self.case.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**3\
+                -sol["Fz_1"]/6*step(x,self.geo.x_1)**3-sol["Fz_2"]/6*step(x,self.geo.x_2)**3-sol["Fz_3"]/6*step(x,self.geo.x_3)**3\
+                    +sol["C3"]*x+sol["C4"]*0)
+
+    def theta(self, x):
+        sol = self.sol
+        return 1/(self.case.G*self.geo.J)*(sol["Fy_1"]*-self.case.z_sc*step(x,self.geo.x_1)**1-sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2)**1\
+                -sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3)**1\
+                    +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**1-sol["Fa"]*self.case.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**1\
+                        +sol["C5"]\
+                        +self.parent.interp.integrate_tau(x, z_sc=self.geo.h/2+self.case.z_sc, ord=2)[-1] + self.case.P*self.case.a_y*self.case.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**1-self.case.P*self.case.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**1)
+    
     def plot(self):
 
         xs = np.linspace(0, self.geo.l_a, 100)
-        ys = [self.v_y(i) for i in xs]
+        ys = [self.theta(i) for i in xs]
 
         offset = self.v_y(self.geo.x_2)*0
 
