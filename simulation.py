@@ -39,16 +39,19 @@ if __name__ == "__main__":
     sim = Simulation(**params)
     sim.run()
 
-    print(sim.x)
-    print(sim.BCs)
-    print(sim.solution.sol)
+    # print(sim.x)
+    # print(sim.BCs)
+    # print(sim.solution.sol)
 
-    sols = sim.x
+    # sols = sim.x
+    for key in sim.BCs.keys():
+        print(f"{key} - {sim.BCs[key]}")
+    print(sim.BCs)
     
-    print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y+sim.case.P*sim.case.a_y:.2f}N")
-    print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z+sim.case.P*sim.case.a_z+sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
-    print(f"factor for v_y:{-1/(sim.case.E*sim.geo.MMoI[0])}")
-    print(f"factor for v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
-    print(sim.case.B)
+    # print(f"Sum of fo/r v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
+    # print(sim.case.B)
 
     sim.solution.plot()
+
+
+    # [print(n[-1]) for n in sim.BCs.values()]
