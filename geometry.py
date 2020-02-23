@@ -248,17 +248,12 @@ class Geometry:
 
         Tcheck = 2*A1*q01 + 2*A2*q02
         
-        x1 = 1./(2*A1)*((q01-q02)*self.h/self.t_sp + q01*np.pi*self.h/(2.*self.t_sk))
-        x2 = 1./(2*A2)*((q02-q01)*self.h/self.t_sp + q02*2*self.l1/(self.t_sk))
+        Gx1 = 1./(2*A1)*((q01-q02)*self.h/self.t_sp + q01*np.pi*self.h/(2.*self.t_sk))
+        Gx2 = 1./(2*A2)*((q02-q01)*self.h/self.t_sp + q02*2*self.l1/(self.t_sk))
 
-        J = T/x1
+        J = T/Gx1
 
         return J
-
-
-
-
-
 
 
 
@@ -267,4 +262,5 @@ if __name__ == "__main__": # is called when you run the script
     geo = Geometry(**parameters_geometry) 
 
     print(geo.torsionalstiffness)
+
    
