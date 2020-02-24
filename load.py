@@ -20,81 +20,81 @@ class LoadCase:
         _ , self.z_sc = self.geo.shearcenter
         # _ , self.z_sc = 0, 0
     def V_y(self, x):
-        return np.array([-step(x, self.geo.x_1)**0,
-                  0,
-                  -step(x, self.geo.x_2)**0,
-                  0, 
-                  -step(x, self.geo.x_3)**0,
-                  0,
-                  self.a_y*step(x, self.geo.x_2-self.geo.x_a/2)**0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  self.interp.integrate_q(x, ord=1)[-1]+self.P*self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**0
+        return np.array([-step(x, self.geo.x_1)**0,     #Fy_1
+                  0,                                    #Fz_1
+                  -step(x, self.geo.x_2)**0,            #Fy_2
+                  0,                                    #Fz_2
+                  -step(x, self.geo.x_3)**0,            #Fy_3
+                  0,                                    #Fz_3
+                  self.a_y*step(x, self.geo.x_2-self.geo.x_a/2)**0, #Fa
+                  0,    #C1
+                  0,    #C2
+                  0,    #C3
+                  0,    #C4
+                  0,    #C5
+                  self.interp.integrate_q(x, ord=1)[-1]+self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**0 #const
                   ])
 
     def V_z(self,x):
-        return np.array([0,
-                 -step(x,self.geo.x_1)**0,
-                 0,
-                 -step(x,self.geo.x_2)**0,
-                 0,
-                 -step(x,self.geo.x_3)**0,
-                 self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**0,
-                 0,
-                 0,
-                 0,
-                 0,
-                 0,
-                 self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**0])
+        return np.array([0,                     #Fy_1
+                 -step(x,self.geo.x_1)**0,      #Fz_1
+                 0,                             #Fy_2
+                 -step(x,self.geo.x_2)**0,      #Fz_2
+                 0,                             #Fy_3
+                 -step(x,self.geo.x_3)**0,      #Fz_3
+                 self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**0,   #Fa
+                 0,     #C1
+                 0,     #C2
+                 0,     #C3
+                 0,     #C4
+                 0,     #C5
+                 self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**0])   #const
 
     def M_y(self, x):
-        return np.array([0,
-                  -step(x,self.geo.x_1)**1,
-                  0,
-                  -step(x,self.geo.x_2)**1,
-                  0,
-                  -step(x,self.geo.x_3)**1,
-                  self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**1,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**1])
+        return np.array([0,                     #Fy_1
+                  -step(x,self.geo.x_1)**1,     #Fz_1
+                  0,                            #Fy_2
+                  -step(x,self.geo.x_2)**1,     #Fz_2
+                  0,                            #Fy_3
+                  -step(x,self.geo.x_3)**1,     #Fz_3
+                  self.a_z*step(x,self.geo.x_2-self.geo.x_a/2)**1,  #Fa
+                  0,    #C1
+                  0,    #C2
+                  0,    #C3
+                  0,    #C4
+                  0,    #C5 
+                  self.P*self.a_z*step(x,self.geo.x_2+self.geo.x_a/2)**1])  #const
 
     def M_z(self, x):
-        return np.array([-step(x,self.geo.x_1)**1,
-                  0,
-                  -step(x,self.geo.x_2)**1,
-                  0,
-                  -step(x,self.geo.x_3)**1,
-                  0,
-                  self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**1,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  self.interp.integrate_q(x, ord=2)[-1] + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1
+        return np.array([-step(x,self.geo.x_1)**1,      #Fy_1
+                  0,                                    #Fz_1
+                  -step(x,self.geo.x_2)**1,             #Fy_2
+                  0,                                    #Fz_2
+                  -step(x,self.geo.x_3)**1,             #Fy_3
+                  0,                                    #Fz_3
+                  self.a_y*step(x,self.geo.x_2-self.geo.x_a/2)**1,  #Fa
+                  0,    #C1
+                  0,    #C2
+                  0,    #C3
+                  0,    #C4
+                  0,    #C5
+                  self.interp.integrate_q(x, ord=2)[-1] + self.P*self.a_y*step(x,self.geo.x_2+self.geo.x_a/2)**1    #const
                   ])
 
     def T(self, x):
-        return np.array([-self.z_sc*step(x,self.geo.x_1)**0,
-                  0,
-                  -self.z_sc*step(x,self.geo.x_2)**0,
-                  0,
-                  -self.z_sc*step(x,self.geo.x_3)**0,
-                  0,
-                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**0-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  self.interp.integrate_tau(x, z_sc=self.geo.h/2+self.z_sc, ord=1)[-1] + self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0,
+        return np.array([-self.z_sc*step(x,self.geo.x_1)**0,    #Fy_1
+                  0,                                            #Fz_1
+                  -self.z_sc*step(x,self.geo.x_2)**0,           #Fy_2
+                  0,                                            #Fz_2
+                  -self.z_sc*step(x,self.geo.x_3)**0,           #Fy_3
+                  0,                                            #Fz_3
+                  self.a_y*self.z_sc*step(x,self.geo.x_2-self.geo.x_a/2)**0-self.a_m*step(x,self.geo.x_2-self.geo.x_a/2)**0,    #Fa
+                  0,    #C1
+                  0,    #C2
+                  0,    #C3
+                  0,    #C4
+                  0,    #C5
+                  self.interp.integrate_tau(x, z_sc=self.geo.h/2+self.z_sc, ord=1)[-1] + self.P*self.a_y*self.z_sc*step(x,self.geo.x_2+self.geo.x_a/2)**0-self.P*self.a_m*step(x,self.geo.x_2+self.geo.x_a/2)**0, #const
                   ])
         
 
