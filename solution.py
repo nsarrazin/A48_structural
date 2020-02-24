@@ -56,7 +56,7 @@ class Solution:
 
         print(self.v_y_prime(self.geo.x_1)+self.theta(self.geo.x_1)*self.case.z_sc)
 
-        offset = self.v_y_prime(self.geo.x_1)+self.theta(self.geo.x_1)*self.case.z_sc
+        offset = self.v_y_prime(self.geo.x_1)+self.theta(self.geo.x_1)*self.case.z_sc*0
 
         plt.plot(xs, ys-offset)
         
