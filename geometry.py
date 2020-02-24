@@ -1,4 +1,5 @@
 import numpy as np
+from shearcenter import Shearcenter
 import matplotlib.pyplot as plt
 from data.consts import parameters_geometry
 
@@ -21,6 +22,8 @@ class Geometry:
         self.h_st = kwargs.get("h_st")
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
+
+        self.shear = Shearcenter(self)
         pass
     
 
@@ -257,7 +260,7 @@ class Geometry:
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class)
-    geo = Geometry(**parameters_geometry) 
+    geo = Geometry(**parameters_geometry)
 
     #plot of crosssection with locations of stringers (might want to change to actual yz coordinate system)
     #plt.plot(geo.crosssection[0],geo.crosssection[1],'x',markersize = 14,label = 'stringer')
@@ -268,4 +271,5 @@ if __name__ == "__main__": # is called when you run the script
     #plt.legend()
     #plt.show()
 
+    print(geo.shear.q1(1))
     print(geo.strint)
