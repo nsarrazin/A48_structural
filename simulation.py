@@ -46,12 +46,13 @@ if __name__ == "__main__":
     # sols = sim.x
     for key in sim.BCs.keys():
         print(f"{key} - {sim.BCs[key]}")
-    print(sim.BCs)
+    # print(sim.BCs)
     
     # print(f"Sum of fo/r v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
     # print(sim.case.B)
 
     sim.solution.plot()
+    # print(sim.Bcs)
 
 
     # [print(n[-1]) for n in sim.BCs.values()]
