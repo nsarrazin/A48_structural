@@ -103,7 +103,19 @@ class Geometry:
         yst10 = (9*self.strint-np.pi*self.h/4.)*np.sin(beta)
         yst11 = self.h/2. + self.h/2.*np.sin(theta2)
 
-        return ([zst1,zst2,zst3,zst4,zst5,zst6,zst7,zst8,zst9,zst10,zst11],[yst1,yst2,yst3,yst4,yst5,yst6,yst7,yst8,yst9,yst10,yst11])
+        circlst = np.pi*np.linspace(0,1,100)
+        ycirc = self.h/2. - self.h/2*np.cos(circlst)
+        zcirc = self.h/2. - self.h/2*np.sin(circlst)
+
+        skinlst1 = np.linspace(0,1,100)
+        yskin1 = skinlst1 * self.h/2.
+        zskin1 = self.h/2. + (self.c_a - self.h/2.)*skinlst1
+
+        skinlst2 = np.linspace(0,1,100)
+        yskin2 = self.h - skinlst2 * self.h/2.
+        zskin2 = self.h/2. + (self.c_a - self.h/2.)*skinlst2
+
+        return ([zst1,zst2,zst3,zst4,zst5,zst6,zst7,zst8,zst9,zst10,zst11],[yst1,yst2,yst3,yst4,yst5,yst6,yst7,yst8,yst9,yst10,yst11],zcirc,ycirc,zskin1,yskin1,zskin2,yskin2)
 
     @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
@@ -240,13 +252,20 @@ class Geometry:
 
         J = T/Gx1
 
-        return J
-
+        return q01, q02
 
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class)
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.shearcenter)
-   
+    #plot of crosssection with locations of stringers (might want to change to actual yz coordinate system)
+    #plt.plot(geo.crosssection[0],geo.crosssection[1],'x',markersize = 14,label = 'stringer')
+    #plt.plot(geo.crosssection[2],geo.crosssection[3],'black')
+    #plt.plot(geo.crosssection[4],geo.crosssection[5],'black')
+    #plt.plot(geo.crosssection[6],geo.crosssection[7],'black')
+    #plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
+    #plt.legend()
+    #plt.show()
+
+    print(geo.strint)
