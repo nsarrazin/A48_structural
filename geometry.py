@@ -274,20 +274,20 @@ class Geometry:
 
         J = T/Gx1
 
-        return J
-
+        return q01, q02
 
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class)
     geo = Geometry(**parameters_geometry) 
 
-    print(geo.shearcenter)
-
     #plot of crosssection with locations of stringers (might want to change to actual yz coordinate system)
-    #plt.plot(geo.crosssection[0],geo.crosssection[1],'x')
+    #plt.plot(geo.crosssection[0],geo.crosssection[1],'x',markersize = 14,label = 'stringer')
     #plt.plot(geo.crosssection[2],geo.crosssection[3],'black')
     #plt.plot(geo.crosssection[4],geo.crosssection[5],'black')
     #plt.plot(geo.crosssection[6],geo.crosssection[7],'black')
+    #plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
+    #plt.legend()
     #plt.show()
-   
+
+    print(geo.strint)
