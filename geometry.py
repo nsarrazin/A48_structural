@@ -227,10 +227,10 @@ class Geometry:
         return Iyy, Izz
 
 
-    # @property
-    # def shearcenter(self):
-    #
-    #     return dz
+    @property
+    def shearcenter(self):
+
+        return dz
 
         #y_sc = 0
         #z_sc = -0.08553893540215983
