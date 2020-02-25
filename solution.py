@@ -37,7 +37,7 @@ class Solution:
 
     def theta(self, x):
         sol = self.sol
-        return sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1)**1+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2)**1+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3)**1\
+        return (sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1)**1+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2)**1+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3)**1\
             +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I)**1+sol["Fa"]*self.case.a_m*step(x,self.case.x_I)**1\
                 +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II)**1+self.case.P*self.case.a_m*step(x,self.case.x_II)**1\
                     +self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])*1/(self.case.G*self.geo.J)\
@@ -50,15 +50,14 @@ class Solution:
         return +self.v_y(x)*np.sin(self.case.defl)+self.v_z_prime(x)*np.cos(self.case.defl)
     
     def plot(self):
-
         xs = np.linspace(0, self.geo.l_a, 100)
-        ys = [self.v_y(i)+self.theta(i)*self.case.z_sc for i in xs]
 
-        print(self.v_y(self.geo.x_1)+self.theta(self.geo.x_1)*self.case.z_sc)
+        ys = []
 
-        offset = self.v_y(self.geo.x_1)+self.theta(self.geo.x_1)*self.case.z_sc*0
+        for x in xs:
+            ys.append(self.v_y(x)+self.theta(x)*self.case.z_sc)
 
-        plt.plot(xs, ys-offset)
+        plt.plot(xs, ys)
         
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
