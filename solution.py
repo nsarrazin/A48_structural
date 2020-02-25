@@ -39,7 +39,7 @@ class Solution:
         sol = self.sol
         return -sol["Fy_1"]*step(x,self.geo.x_1)**1-sol["Fy_2"]*step(x,self.geo.x_2)**1-sol["Fy_3"]*step(x,self.geo.x_3)**1\
             -sol["Fa"]*self.case.a_y*step(x,self.case.x_I)**1\
-                -self.case.P*self.case.a_y*step(x,self.case.x_II)**1-self.case.interp.integrate_q(x,ord=2)[-1]
+                -self.case.P*self.case.a_y*step(x,self.case.x_II)**1+self.case.interp.integrate_q(x,ord=2)[-1]
 
     def T(self,x):
         sol = self.sol
