@@ -40,7 +40,7 @@ if __name__ == "__main__":
     sim.run()
 
     # print(sim.x)
-    # print(sim.BCs)
+    #print(sim.BCs)
     # print(sim.solution.sol)
 
     # sols = sim.x
