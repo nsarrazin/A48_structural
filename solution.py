@@ -21,53 +21,53 @@ class Solution:
 
     def V_y_prime(self,x):
         sol = self.sol
-        return sol["Fy_1"]*step(x,self.geo.x_1)**0+sol["Fy_2"]*step(x,self.geo.x_2)**0+sol["Fy_3"]*step(x,self.geo.x_3)**0\
-            +sol["Fa"]*self.case.a_y*step(x,self.case.x_I)**0\
-                +self.case.P*self.case.a_y*step(x,self.case.x_II)**0+self.case.interp.integrate_q(x,ord=1)[-1]
+        return sol["Fy_1"]*step(x,self.geo.x_1,pow=0)+sol["Fy_2"]*step(x,self.geo.x_2,pow=0)+sol["Fy_3"]*step(x,self.geo.x_3,pow=0)\
+            +sol["Fa"]*self.case.a_y*step(x,self.case.x_I,pow=0)\
+                +self.case.P*self.case.a_y*step(x,self.case.x_II,pow=0)+self.case.interp.integrate_q(x,ord=1)[-1]
 
     def V_z_prime(self,x):
         sol = self.sol
-        return sol["Fz_1"]*step(x,self.geo.x_1)**0+sol["Fz_2"]*step(x,self.geo.x_2)**0+sol["Fz_3"]*step(x,self.geo.x_3)**0\
-            +sol["Fa"]*self.case.a_z*step(x,self.case.x_I)**0+self.case.P*self.case.a_z*step(x,self.case.x_II)**0
+        return sol["Fz_1"]*step(x,self.geo.x_1,pow=0)+sol["Fz_2"]*step(x,self.geo.x_2,pow=0)+sol["Fz_3"]*step(x,self.geo.x_3,pow=0)\
+            +sol["Fa"]*self.case.a_z*step(x,self.case.x_I,pow=0)+self.case.P*self.case.a_z*step(x,self.case.x_II,pow=0)
 
     def M_y_prime(self,x):
         sol = self.sol
-        return -sol["Fz_1"]*step(x,self.geo.x_1)**1-sol["Fz_2"]*step(x,self.geo.x_2)**1-sol["Fz_3"]*step(x,self.geo.x_3)**1\
-            -sol["Fa"]*self.case.a_z*step(x,self.case.x_I)**1-self.case.P*self.case.a_z*step(x,self.case.x_II)**1
+        return -sol["Fz_1"]*step(x,self.geo.x_1,pow=1)-sol["Fz_2"]*step(x,self.geo.x_2,pow=1)-sol["Fz_3"]*step(x,self.geo.x_3,pow=1)\
+            -sol["Fa"]*self.case.a_z*step(x,self.case.x_I,pow=1)-self.case.P*self.case.a_z*step(x,self.case.x_II,pow=1)
 
     def M_z_prime(self,x):
         sol = self.sol
-        return -sol["Fy_1"]*step(x,self.geo.x_1)**1-sol["Fy_2"]*step(x,self.geo.x_2)**1-sol["Fy_3"]*step(x,self.geo.x_3)**1\
-            -sol["Fa"]*self.case.a_y*step(x,self.case.x_I)**1\
-                -self.case.P*self.case.a_y*step(x,self.case.x_II)**1+self.case.interp.integrate_q(x,ord=2)[-1]
+        return -sol["Fy_1"]*step(x,self.geo.x_1,pow=1)-sol["Fy_2"]*step(x,self.geo.x_2,pow=1)-sol["Fy_3"]*step(x,self.geo.x_3,pow=1)\
+            -sol["Fa"]*self.case.a_y*step(x,self.case.x_I,pow=1)\
+                -self.case.P*self.case.a_y*step(x,self.case.x_II,pow=1)+self.case.interp.integrate_q(x,ord=2)[-1]
 
     def T(self,x):
         sol = self.sol
-        return sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1)**0+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2)**0+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3)**0\
-            +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I)**0+sol["Fa"]*self.case.a_m*step(x,self.case.x_I)**0\
-                +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II)**0+self.case.P*self.case.a_m*step(x,self.case.x_II)**0\
+        return sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,pow=0)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,pow=0)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,pow=0)\
+            +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,pow=0)+sol["Fa"]*self.case.a_m*step(x,self.case.x_I,pow=0)\
+                +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,pow=0)+self.case.P*self.case.a_m*step(x,self.case.x_II,pow=0)\
                     +self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1]
 
     def v_y_prime(self, x):
         sol = self.sol
-        return (-sol["Fy_1"]/6*step(x,self.geo.x_1)**3-sol["Fy_2"]/6*step(x,self.geo.x_2)**3-sol["Fy_3"]/6*step(x,self.geo.x_3)**3\
-            -(sol["Fa"]*self.case.a_y)/6*step(x,self.case.x_I)**3\
-                -(self.case.P*self.case.a_y)/6*step(x,self.case.x_II)**3-self.case.interp.integrate_q(x,ord=4)[-1])*-1/(self.case.E*self.geo.MMoI[1])\
+        return (-sol["Fy_1"]/6*step(x,self.geo.x_1,pow=3)-sol["Fy_2"]/6*step(x,self.geo.x_2,pow=3)-sol["Fy_3"]/6*step(x,self.geo.x_3,pow=3)\
+            -(sol["Fa"]*self.case.a_y)/6*step(x,self.case.x_I,pow=3)\
+                -(self.case.P*self.case.a_y)/6*step(x,self.case.x_II,pow=3)-self.case.interp.integrate_q(x,ord=4)[-1])*-1/(self.case.E*self.geo.MMoI[1])\
                     +sol["C3"]*x+sol["C4"]        
 
     def v_z_prime(self, x):
         sol = self.sol
-        return (-sol["Fz_1"]/6*step(x,self.geo.x_1)**3-sol["Fz_2"]/6*step(x,self.geo.x_2)**3-sol["Fz_3"]/6*step(x,self.geo.x_3)**3\
-            -(sol["Fa"]*self.case.a_z)/6*step(x,self.case.x_I)**3\
-                -(self.case.P*self.case.a_z)/6*step(x,self.case.x_II))*-1/(self.case.E*self.geo.MMoI[0])\
+        return (-sol["Fz_1"]/6*step(x,self.geo.x_1,pow=3)-sol["Fz_2"]/6*step(x,self.geo.x_2,pow=3)-sol["Fz_3"]/6*step(x,self.geo.x_3,pow=3)\
+            -(sol["Fa"]*self.case.a_z)/6*step(x,self.case.x_I,pow=3)\
+                -(self.case.P*self.case.a_z)/6*step(x,self.case.x_II,pow=3))-1/(self.case.E*self.geo.MMoI[0])\
                     +sol["C1"]*x+sol["C2"]
 
 
     def theta(self, x):
         sol = self.sol
-        return (sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1)**1+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2)**1+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3)**1\
-            +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I)**1+sol["Fa"]*self.case.a_m*step(x,self.case.x_I)**1\
-                +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II)**1+self.case.P*self.case.a_m*step(x,self.case.x_II)**1\
+        return (sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,pow=1)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,pow=1)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,pow=1)\
+            +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,pow=1)+sol["Fa"]*self.case.a_m*step(x,self.case.x_I,pow=1)\
+                +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,pow=1)+self.case.P*self.case.a_m*step(x,self.case.x_II,pow=1)\
                     +self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])*1/(self.case.G*self.geo.J)\
                         +sol["C5"]
     
