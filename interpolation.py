@@ -190,13 +190,6 @@ if __name__ == "__main__":
 
 
     print(test.x, test.z)
-    for i in range(0, 3):
-        plt.plot(test.integrate_q(1.611, ord=i), label=i)
-
-        # plt.plot(test.integrate_tau(1.611, -0.225-16.1E-2/2, ord=i), label=i)
-    plt.legend()
-    plt.show()
-
     ## Uncomment for full 2D plot
     # u = np.zeros((len(z_test), len(x_test)))
     # for row, zi in enumerate(u):
