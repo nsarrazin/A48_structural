@@ -1,3 +1,5 @@
+import numpy as np 
+
 c_a = 0.505 # chord length aileron [m]
 l_a = 1.611 # span of the aileron [m]
 
@@ -22,7 +24,7 @@ n_st = 11 # number of stiffeners [-]
 d_1 = 0.00389 # vertical displacement hinge 1 [m]
 d_3 = 0.01245 # vertical displacement hinge 3 [m]
 
-max_defl = 30 # maximum upward deflecection [deg]
+max_defl = np.radians(30) # maximum upward deflecection [deg]
 load = 49200 # Load in actuator 2 [N]
 
 N = 80 #steps for integration spanwise 
