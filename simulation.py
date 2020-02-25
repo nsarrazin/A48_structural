@@ -40,7 +40,7 @@ if __name__ == "__main__":
     sim.run()
 
     # print(sim.x)
-    #print(sim.BCs)
+    # print(sim.BCs)
     # print(sim.solution.sol)
 
     sols = sim.x
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     # print(sim.BCs)
     # print(sols[0], sols[2], sols[4], sols[6], )
     # print(sim.interp.integrate_q(sim.geo.l_a,ord=0)[-1])
-    # print(sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1])
+    print(sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1])
     # print(sim.interp.integrate_q(sim.geo.l_a,ord=2)[-1])
     # print(sim.interp.integrate_q(sim.geo.l_a,ord=3)[-1])
     # print(sim.case.v_z_prime(sim.case.geo.x_2)*np.cos(sim.case.defl))
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z+sim.case.P*sim.case.a_z:.2f}N")
 
 
-    print(sim.solution.sol)
+    # print(sim.solution.sol)
     # for key in sim.BCs.keys():
     #     print(f"{key} - {sim.BCs[key]}")
     # print(sim.BCs)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # print(f"Sum of fo/r v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
     # print(sim.case.B)
 
-    sim.solution.plot()
+    sim.solution.plot_1()
     # print(sim.Bcs)
 
 
