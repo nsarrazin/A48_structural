@@ -227,7 +227,7 @@ class Geometry:
 
     @property
     def J(self):
-        return 0.0001753
+        return 7.748548555816594e-06
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class

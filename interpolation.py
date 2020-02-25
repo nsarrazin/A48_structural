@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from data.consts import N
-
+from data.consts import N, h
+from scipy.integrate import trapz, cumtrapz
 """
 Technique   : Bi-linear interpolation
 Author      : Group A48, AE year 2020
@@ -11,7 +11,7 @@ Date        : February 2020
 class Interpolation:
     def __init__(self):
         # Generating the x, z, F arrays
-        self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")
+        self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")*1e3
         self.x = np.zeros(41)
         self.z = np.zeros(81)
 
@@ -97,23 +97,10 @@ class Interpolation:
                 break
             z_begin = self.z[i]
             z_end = self.z[i+1]
-            result = result + (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 ))
 
-        return result
-
-    def q_intergrate_double(self, x_begin, x_end, dx):
-        """
-        :param x_begin: scalar; starting value of the integration (span-wise location)
-        :param x_end: scalar; ending value of the integration (span-wise location)
-        :param dx: scalar; integration step-size in x-direction
-        :return: scalar; integrated value of the integrated values along z, along x (double integral)
-        """
-        x_intergrate = np.arange(x_begin, (x_end+dx), dx)
-        result = 0
-        for i, xi in enumerate(x_intergrate):
-            if i == (len(x_intergrate) - 1):
-                break
-            result = result + ((x_intergrate[i+1] - x_intergrate[i])/2) * (self.q_intergration_fixed_x(x_intergrate[i]) + self.q_intergration_fixed_x(x_intergrate[i+1]))
+            val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 ))
+            # print(val)
+            result += val 
         return result
 
     def trapezoidalrule(self, y, x):
@@ -136,10 +123,10 @@ class Interpolation:
             result = None
         return result
 
+
     def integrate_q(self, x, ord=2):
         xs = np.linspace(0, x, N)
         ys = np.array([self.q_intergration_fixed_x(x) for x in xs])
-        
         for i in range(ord):
             ys = self.trapezoidalrule(ys, xs)
 
@@ -170,8 +157,8 @@ class Interpolation:
             z_midpoint = z_integration[i]
             val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - \
                  ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 )) 
-
-            result += val * (z_midpoint - z_sc)
+    
+            result += val * (z_sc + (z_midpoint+h/2))
 
         return result
 
@@ -181,7 +168,8 @@ class Interpolation:
         
         for i in range(ord):
             ys = self.trapezoidalrule(ys, xs)
-
+            # print(ys.shape, xs.shape)
+            # ys = cumtrapz(ys)
         return ys
 
 
@@ -201,14 +189,7 @@ if __name__ == "__main__":
     # print(test.trapezoidalrule(y, x))
 
 
-
-    for i in range(0, 4):
-        # plt.plot(test.integrate_q(1.611, ord=i), label=i)
-
-        plt.plot(test.integrate_tau(1.611, -0.225-16.1E-2/2, ord=i), label=i)
-    plt.legend()
-    plt.show()
-
+    print(test.x, test.z)
     ## Uncomment for full 2D plot
     # u = np.zeros((len(z_test), len(x_test)))
     # for row, zi in enumerate(u):
