@@ -94,3 +94,25 @@ class Solution:
             plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
         plt.show()
+
+
+    def plot_2(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+        ys_2 = []
+
+        for x in xs:
+            ys_1.append(self.V_y_prime(x))
+            ys_2.append(self.V_z_prime(x))
+
+        plt.plot(xs, ys_1)
+        plt.plot(xs, ys_2)
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
