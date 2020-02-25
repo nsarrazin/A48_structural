@@ -183,37 +183,37 @@ class LoadCase:
                          self.P*self.a_z*step(self.geo.l_a,self.x_II)**1, #M_y_prime
 
                          self.P*self.a_y*step(self.geo.l_a,self.x_II)**1\
-                             +self.interp.integrate_q(self.geo.l_a,ord=2)[-1],     #M_z_prime
+                             -self.interp.integrate_q(self.geo.l_a,ord=2)[-1],     #M_z_prime
 
                          -self.P*self.a_y*self.z_sc*step(self.geo.l_a,self.x_II)**0\
                              -self.P*self.a_m*step(self.geo.l_a,self.x_II)**0\
                                  -self.interp.integrate_tau(self.geo.l_a,self.z_sc,ord=1)[-1], #T
                          
                          self.d_1\
-                             +((self.P*self.a_y)/6*step(self.geo.x_1,self.x_II)**3+self.interp.integrate_q(self.geo.x_1,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
+                             +((self.P*self.a_y)/6*step(self.geo.x_1,self.x_II)**3-self.interp.integrate_q(self.geo.x_1,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
                                 +(self.P*self.a_z)/6*step(self.geo.x_1,self.x_II)**3*-np.sin(self.defl)/(self.E*self.geo.MMoI[1])\
                                     -(self.P*self.a_y*self.z_sc*step(self.geo.x_1,self.x_II)**1+self.P*self.a_m*step(self.geo.x_1,self.x_II)**1+self.interp.integrate_tau(self.geo.x_1,self.z_sc,ord=2)[-1])*self.z_sc/(self.G*self.geo.J), #vy(x1)+theta(x1)*z_sc
 
                          (self.P*self.a_z)/6*step(self.geo.x_1,self.x_II)**3*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
-                             +((self.P*self.a_y)/6*step(self.geo.x_1,self.x_II)**3+self.interp.integrate_q(self.geo.x_1,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x1)=0
+                             +((self.P*self.a_y)/6*step(self.geo.x_1,self.x_II)**3-self.interp.integrate_q(self.geo.x_1,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x1)=0
 
-                         ((self.P*self.a_y)/6*step(self.geo.x_2,self.x_II)**3+self.interp.integrate_q(self.geo.x_2,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
+                         ((self.P*self.a_y)/6*step(self.geo.x_2,self.x_II)**3-self.interp.integrate_q(self.geo.x_2,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
                                 +(self.P*self.a_z)/6*step(self.geo.x_2,self.x_II)**3*-np.sin(self.defl)/(self.E*self.geo.MMoI[1])\
                                     -(self.P*self.a_y*self.z_sc*step(self.geo.x_2,self.x_II)**1+self.P*self.a_m*step(self.geo.x_2,self.x_II)**1+self.interp.integrate_tau(self.geo.x_2,self.z_sc,ord=2)[-1])*self.z_sc/(self.G*self.geo.J), #vy(x2)+theta(x2)*z_sc
                          
                          (self.P*self.a_z)/6*step(self.geo.x_2,self.x_II)**3*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
-                             +((self.P*self.a_y)/6*step(self.geo.x_2,self.x_II)**3+self.interp.integrate_q(self.geo.x_2,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x2)=0
+                             +((self.P*self.a_y)/6*step(self.geo.x_2,self.x_II)**3-self.interp.integrate_q(self.geo.x_2,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x2)=0
                          
                          self.d_3\
-                             +((self.P*self.a_y)/6*step(self.geo.x_3,self.x_II)**3+self.interp.integrate_q(self.geo.x_3,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
+                             +((self.P*self.a_y)/6*step(self.geo.x_3,self.x_II)**3-self.interp.integrate_q(self.geo.x_3,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
                                 +(self.P*self.a_z)/6*step(self.geo.x_3,self.x_II)**3*-np.sin(self.defl)/(self.E*self.geo.MMoI[1])\
                                     -(self.P*self.a_y*self.z_sc*step(self.geo.x_3,self.x_II)**1+self.P*self.a_m*step(self.geo.x_3,self.x_II)**1+self.interp.integrate_tau(self.geo.x_3,self.z_sc,ord=2)[-1])*self.z_sc/(self.G*self.geo.J), #vy(x3)+theta(x3)*z_sc
                          
                          (self.P*self.a_z)/6*step(self.geo.x_3,self.x_II)**3*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
-                             +((self.P*self.a_y)/6*step(self.geo.x_3,self.x_II)**3+self.interp.integrate_q(self.geo.x_3,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x3)=0
+                             +((self.P*self.a_y)/6*step(self.geo.x_3,self.x_II)**3-self.interp.integrate_q(self.geo.x_3,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(x3)=0
                          
                          (self.P*self.a_z)/6*step(self.x_I,self.x_II)**3*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
-                             +((self.P*self.a_y)/6*step(self.x_I,self.x_II)**3+self.interp.integrate_q(self.x_I,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(xI)=0
+                             +((self.P*self.a_y)/6*step(self.x_I,self.x_II)**3-self.interp.integrate_q(self.x_I,ord=4)[-1])*-np.sin(self.defl)/(self.E*self.geo.MMoI[1]), #vz(xI)=0
                          ], dtype=np.float64)  
     
 
