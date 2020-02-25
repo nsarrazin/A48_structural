@@ -49,7 +49,7 @@ class Solution:
     def v_z(self,x): 
         return +self.v_y(x)*np.sin(self.case.defl)+self.v_z_prime(x)*np.cos(self.case.defl)
     
-    def plot(self):
+    def plot_1(self):
         xs = np.linspace(0, self.geo.l_a, 100)
 
         ys = []
