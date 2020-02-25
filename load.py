@@ -127,7 +127,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          0, #C5
-                         ])*-self.E*self.geo.MMoI[0]
+                         ])/(-self.E*self.geo.MMoI[0])
         
 
     def theta(self, x):
