@@ -1,4 +1,5 @@
 import numpy as np
+from shearcenter import Shearcenter
 import matplotlib.pyplot as plt
 from data.consts import parameters_geometry
 
@@ -21,6 +22,8 @@ class Geometry:
         self.h_st = kwargs.get("h_st")
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
+
+        self.shear = Shearcenter(self)
         pass
     
 
@@ -226,29 +229,7 @@ class Geometry:
 
     @property
     def shearcenter(self):
-        #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
 
-        l = self.c_a - self.h/2.
-        alpha = np.arctan2(self.h/2.,l)
-        d = l/np.cos(alpha)
-        yst3 = self.crosssection[1][2]
-        yst4 = self.crosssection[1][3]
-        yst5 = self.crosssection[1][4]
-        yst6 = self.crosssection[1][5]
-        yst7 = self.crosssection[1][6]
-        yst8 = self.crosssection[1][7]
-        yst9 = self.crosssection[1][8]
-        yst10 = self.crosssection[1][9]
-        #shear center distance calculated from the leading edge
-        #B = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])-(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(24.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        #B = (self.t_sk*self.h**2*l*d)/(6*self.MMoI[1])-(self.t_sk*self.h**3*l)/(32*self.MMoI[1])+l-(self.t_sk*self.h**5*l)/(16*d*self.MMoI[1])+(self.t_sk*self.h**5*l*np.pi)/(8*d*self.MMoI[1])
-        #most correct one:
-        B = (self.t_sk*self.h**2*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst3+yst4+yst5+yst6))/(self.MMoI[1])-(self.t_sk*self.h**4*l*(1./2.-np.pi))/(4.*d*self.MMoI[1])
-        #with different moment arm
-        #B = (self.t_sk*self.h**2*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst3+yst4+yst5+yst6))/(self.MMoI[1])-(self.t_sk*self.h**4*(1./2.-np.pi))/(4.*self.MMoI[1])
-        #with moment around upper point instead of o:
-        #B = (self.t_sk*self.h*d**2)/(12.*self.MMoI[1])-(self.t_sk*self.h**2*d*l)/(12.*self.MMoI[1])-(self.h*l*(d/l-1.)*self.Ast*(yst7+yst8+yst9+yst10))/(self.MMoI[1])-(self.t_sk*self.h**4*(1./2.-np.pi))/(4.*self.MMoI[1])
-        dz = -(B+self.h/2.)
         return dz
 
         #y_sc = 0
@@ -279,15 +260,16 @@ class Geometry:
 
 if __name__ == "__main__": # is called when you run the script
     # call an instance of the class)
-    geo = Geometry(**parameters_geometry) 
+    geo = Geometry(**parameters_geometry)
 
     #plot of crosssection with locations of stringers (might want to change to actual yz coordinate system)
-    plt.plot(geo.crosssection[0],geo.crosssection[1],'o',markersize = 14,label = 'stringer')
-    plt.plot(geo.crosssection[2],geo.crosssection[3],'black')
-    plt.plot(geo.crosssection[4],geo.crosssection[5],'black')
-    plt.plot(geo.crosssection[6],geo.crosssection[7],'black')
-    plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
-    plt.plot(2*[geo.h/2.],[0,geo.h], 'black')
-    plt.axis('off')
-    plt.legend()
-    plt.show()
+    #plt.plot(geo.crosssection[0],geo.crosssection[1],'x',markersize = 14,label = 'stringer')
+    #plt.plot(geo.crosssection[2],geo.crosssection[3],'black')
+    #plt.plot(geo.crosssection[4],geo.crosssection[5],'black')
+    #plt.plot(geo.crosssection[6],geo.crosssection[7],'black')
+    #plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
+    #plt.legend()
+    #plt.show()
+
+    print(geo.shear.q1(1))
+    print(geo.strint)
