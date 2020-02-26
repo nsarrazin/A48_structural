@@ -156,28 +156,78 @@ x2, z2, sigmaz5, sigmax8 = test.sigmaduetozforce(Rz2, x_hinge2)
 x2, z2, sigmaz6, sigmax9 = test.sigmaduetozforce(Rz3, x_hinge3)
 x2, z2, sigmaz7, sigmax10 = test.sigmaduetozforce(Rza, x_actuator1)
 
+
+#########################sigma y #############################################################
+
 #these vary over span
 sigmaytotal1array = np.array(sigmay1 + sigmay2 + sigmay3 + sigmay4 + sigmay5)
 sigmaytotal1 = sigmaytotal1array[0]
 
 #vary chordwise
 sigmaytotal2array = np.array(sigmay6 + sigmay7)
-sigmaytotal2 = sigmaztotal1array[0]
+sigmaytotal2 = sigmaytotal2array[0]
 
+#take critical crosssection of chordwise varying stress
+sigmaycritical = np.matrix(10*[sigmaytotal2[-1]])
+
+#combine
+sigmayarray = np.array(np.matrix(sigmaytotal1) + sigmaycritical)
+sigmay = sigmayarray[0]
+
+#plot
+plt.plot(x1,sigmay)
+plt.show()
+
+
+
+###################### sigma z #############################################################
 #vary heightwise
 sigmaztotal1array = np.array(sigmaz1 + sigmaz2)
 sigmaztotal1 = sigmaztotal1array[0]
 
+#take maximum tension stress
+mtension = max(sigmaztotal1)
+mtensionmatrix = np.matrix(10*[mtension])
+
+#take maximum compression stress
+mcompression = min(sigmaztotal1)
+mcompressionmatrix = np.matrix(10*[mcompression])
 
 #these vary over span
 sigmaztotal2array = np.array(sigmaz3 + sigmaz4 + sigmaz5 + sigmaz6 + sigmaz7)
 sigmaztotal2 = sigmaztotal2array[0]
 
+
+#combine maximum tension/compression stress that changes over the heigth with span varying stress
+sigmazmatrix = np.matrix(sigmaztotal2)
+sigmaztensionmatrix = sigmazmatrix + mtensionmatrix
+sigmazcompressionmatrix = sigmazmatrix + mcompressionmatrix
+
+sigmaztensionarray = np.array(sigmaztensionmatrix)
+sigmaztension = sigmaztensionarray[0]
+
+sigmazcompressionarray = np.array(sigmazcompressionmatrix)
+sigmazcompression = sigmazcompressionarray[0]
+
+plt.plot(x1, sigmazcompression)
+plt.plot(x1, sigmaztension)
+plt.show()
+
+####################################sigma x#########################################
+
 #these vary over span and height
 sigmaxtotal1 = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
+critical1 = np.matrix(sigmaxtotal1[0])
 
 #these vary over span and chord
 sigmaxtotal2 = np.array(sigmax6 + sigmax7 + sigmax8 + sigmax9 + sigmax10)
+critical2 = np.matrix(sigmaxtotal1[0])
+
+criticalarray = np.array(critical1 + critical2)
+critical = criticalarray[0]
+
+plt.plot(x1,critical)
+plt.show()
 
 
 
@@ -206,7 +256,7 @@ sigmaxtotal2 = np.array(sigmax6 + sigmax7 + sigmax8 + sigmax9 + sigmax10)
 
 
 #fig = plt.figure()
-#cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, -0.0805, 0.0805), cmap='Blues')
+#cs = plt.imshow(sigmaxtotal1, extent = (0., 1.611, -0.0805, 0.0805), cmap='Blues')
 #cbar= plt.colorbar(cs, shrink =0.5)
 #cbar.ax.set_ylabel("Bending in x direction [Pa]")
 #plt.xlabel("Span-wise direction [m]")
