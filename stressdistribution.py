@@ -29,6 +29,7 @@ class stressdistribution:
     def sigmaduetoyforce(self,F,xF): 
         c = self.c_a
         b = self.l_a
+        h = self.h
         Iyy = 4.594369333645184e-05
         Izz = 4.753851442684437e-06
         
@@ -44,10 +45,10 @@ class stressdistribution:
         #bending stress in y direction due to force (varying spanwise)
         sigmay2 = np.matrix(Mz/Izz*x)
 
-        sigmaytotal = sigmay1 + sigmay2
+        sigmay = sigmay1 + sigmay2
 
         #heightwise locations
-        y = c*np.linspace(0,1,10)
+        y = 0.5*h*np.linspace(-1,1,10)
 
         #bending stress in x direction due to force (varying in height and spanwise)
         sigmax = []
@@ -56,7 +57,7 @@ class stressdistribution:
 
         sigmax = np.matrix(sigmax)
 
-        return x,y,sigmaytotal, sigmax
+        return x,y,sigmay, sigmax
     
     def sigmaduetoxmoment(self, Mx):
         c = self.c_a
@@ -67,13 +68,50 @@ class stressdistribution:
         z = c*np.linspace(0,1,10)
 
         #sigmay due to moment in x varies chordwise
-        sigmay = Mx/Ixx*z
+        sigmay = np.matrix(Mx/Ixx*z)
 
-        y = h*np.linspace(0,1,10)
+        #height locations
+        y = 0.5*h*np.linspace(-1,1,10)
+
         #sigmaz due to moment in x varies heightwise
-        sigmaz = Mx/Ixx*y
+        sigmaz = np.matrix(Mx/Ixx*y)
 
         return z, y, sigmay, sigmaz
+
+    def sigmaduetozforce(self,F,xF):
+        c = self.c_a
+        b = self.l_a
+        h = self.h
+        Iyy = 4.594369333645184e-05
+        Izz = 4.753851442684437e-06
+
+        #span locations
+        x = b*np.linspace(0,1,10)
+
+        #direct stress in z direction due to force
+        sigmaz1 = np.matrix(len(x)*[F/(b*h)])
+
+        #moment in y (My) varying over span
+        My = Pz*(xF - x)
+
+        #bending stress in z (sigmaz) varying over span
+        sigmaz2 = np.matrix(My/Iyy*x)
+
+        sigmaz = sigmaz1 + sigmaz2
+
+        #chord locations
+        z = c*np.linspace(0,1,10)
+
+        #bending stress in x direction (sigmax) varying over span and chord
+        sigmax = []
+        for a in range(len(x)):
+            sigmax.append(My[a]/Izz*z)
+
+        sigmax = np.matrix(sigmax)
+
+        return x, z, sigmaz, sigmax
+
+
 
 test = stressdistribution(**parameters_geometry)
 
@@ -83,36 +121,96 @@ x_hinge3 = 1.494
 x_actuator1 = 0.3755
 x_actuator2 = 0.6205
 
-Py = 7589.171334469135
-Ry1 = 5 * 10**4
-Ry2 = -7.8 * 10**4
-Ry3 = 2.7 * 10**4
-Rya = -3.6 * 10**4
-Mxa = Rya*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
+P = 42900
+Py = np.sin(np.radians(30))*P
+Pz = np.cos(np.radians(30))*P
+
+Rz1 = 161996.81039122655
+Rz2 = -230586.479726097
+Rz3 = 80376.08188197864
+
+Ry1 = 28819.824616900863
+Ry2 = -34036.20675301132
+Ry3 = 18207.170412479594
+
+Ra = -62809.776913705806
+Rya = Ra*np.sin(np.radians(30))
+Rza = Ra*np.cos(np.radians(30))
+
+Mxa = Ra*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
+Mxp = P*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
+
+
+x1, y1, sigmay1, sigmax1 = test.sigmaduetoyforce(Py, x_actuator2)
+x1, y1, sigmay2, sigmax2 = test.sigmaduetoyforce(Ry1, x_hinge1)
+x1, y1, sigmay3, sigmax3 = test.sigmaduetoyforce(Ry2, x_hinge2)
+x1, y1, sigmay4, sigmax4 = test.sigmaduetoyforce(Ry3, x_hinge3)
+x1, y1, sigmay5, sigmax5 = test.sigmaduetoyforce(Rya, x_actuator1)
+
+z1, y2, sigmay6, sigmaz1 = test.sigmaduetoxmoment(Mxa)
+z1, y2, sigmay7, sigmaz2 = test.sigmaduetoxmoment(Mxp)
+
+x2, z2, sigmaz3, sigmax6 = test.sigmaduetozforce(Pz, x_actuator2)
+x2, z2, sigmaz4, sigmax7 = test.sigmaduetozforce(Rz1, x_hinge1)
+x2, z2, sigmaz5, sigmax8 = test.sigmaduetozforce(Rz2, x_hinge2)
+x2, z2, sigmaz6, sigmax9 = test.sigmaduetozforce(Rz3, x_hinge3)
+x2, z2, sigmaz7, sigmax10 = test.sigmaduetozforce(Rza, x_actuator1)
+
+#these vary over span
+sigmaytotal1array = np.array(sigmay1 + sigmay2 + sigmay3 + sigmay4 + sigmay5)
+sigmaytotal1 = sigmaytotal1array[0]
+
+#vary chordwise
+sigmaytotal2array = np.array(sigmay6 + sigmay7)
+sigmaytotal2 = sigmaztotal1array[0]
+
+#vary heightwise
+sigmaztotal1array = np.array(sigmaz1 + sigmaz2)
+sigmaztotal1 = sigmaztotal1array[0]
+
+
+#these vary over span
+sigmaztotal2array = np.array(sigmaz3 + sigmaz4 + sigmaz5 + sigmaz6 + sigmaz7)
+sigmaztotal2 = sigmaztotal2array[0]
+
+#these vary over span and height
+sigmaxtotal1 = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
+
+#these vary over span and chord
+sigmaxtotal2 = np.array(sigmax6 + sigmax7 + sigmax8 + sigmax9 + sigmax10)
 
 
 
-x1, y1, sigmaytotal1, sigmax1 = test.sigmaduetoyforce(Py, x_actuator2)
-x2, y2, sigmaytotal2, sigmax2 = test.sigmaduetoyforce(Ry1, x_hinge1)
-x3, y3, sigmaytotal3, sigmax3 = test.sigmaduetoyforce(Ry2, x_hinge2)
-x4, y4, sigmaytotal4, sigmax4 = test.sigmaduetoyforce(Ry3, x_hinge3)
-x5, y5, sigmaytotal5, sigmax5 = test.sigmaduetoyforce(Rya, x_actuator1)
+#plt.plot(x1,sigmaytotal1)
+#plt.show()
 
-z1, y1, sigmaytotal6, sigmax6 = test.sigmaduetoxmoment(Mxa)
+#plt.plot(z1,sigmaytotal2)
+#plt.show()
 
-sigmaytotalarray = np.array(sigmaytotal1 + sigmaytotal2 + sigmaytotal3 + sigmaytotal4 + sigmaytotal5)
-sigmaytotal = sigmaytotalarray[0]
+#plt.plot(y2,sigmaztotal1)
+#plt.show()
 
-sigmaxtotal = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
-
+#plt.plot(x2,sigmaztotal2)
+#plt.show()
 
 
-fig = plt.figure()
-cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, 0., 0.161), cmap='Blues')
-cbar= plt.colorbar(cs, shrink =0.5)
-cbar.ax.set_ylabel("Bending in x direction [Pa]")
-plt.xlabel("Span-wise direction [m]")
-plt.ylabel("Height direction [m]")
-plt.title("Bending stress over the aileron")
-plt.tight_layout()
-plt.show()
+#fig = plt.figure()
+#cs = plt.imshow(sigmaxtotal2, extent = (0., 1.611, 0, 0.505), cmap='Blues')
+#cbar= plt.colorbar(cs, shrink =0.5)
+#cbar.ax.set_ylabel("Bending in x direction [Pa]")
+#plt.xlabel("Span-wise direction [m]")
+#plt.ylabel("Chord-wise direction [m]")
+#plt.title("Bending stress in x direction (sigma_x)")
+#plt.tight_layout()
+#plt.show()
+
+
+#fig = plt.figure()
+#cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, -0.0805, 0.0805), cmap='Blues')
+#cbar= plt.colorbar(cs, shrink =0.5)
+#cbar.ax.set_ylabel("Bending in x direction [Pa]")
+#plt.xlabel("Span-wise direction [m]")
+#plt.ylabel("Height direction [m]")
+#plt.title("Bending stress in x direction (sigma_x)")
+#plt.tight_layout()
+#plt.show()
