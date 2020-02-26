@@ -124,7 +124,7 @@ class interpolation:
         """
         if len(y) == len(x):
             result = np.zeros(len(x))
-            result[0] = y[0]
+            result[0] = 0
             for i, xi in enumerate(x):
                 if i == (len(y) - 1):
                     break
@@ -138,8 +138,12 @@ class interpolation:
 
 
 
+
+
+
 ## Testing implementations
-# test = interpolation()
+#test = interpolation()
+
 # x_test = np.linspace(0, 1.611, 82)
 # z_test = np.linspace(0, -0.505, 162)
 

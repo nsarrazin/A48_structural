@@ -255,7 +255,7 @@ class Geometry:
 
         J = T/Gx1
 
-        return J
+        return q01, q02
 
 
 if __name__ == "__main__": # is called when you run the script
@@ -271,5 +271,14 @@ if __name__ == "__main__": # is called when you run the script
     #plt.legend()
     #plt.show()
 
-    print(geo.shear.q1(1))
-    print(geo.MMoI)
+    print("q1:", geo.shear.q1(1)[-1])
+    print("q2:", geo.shear.q2(1)[-1])
+    print("q3:", geo.shear.q3(1)[-1])
+    print("q4:", geo.shear.q4(1)[-1])
+    print("q5:", geo.shear.q5(1)[-1])
+    print("q6:", geo.shear.q6(1)[-1])
+    print("q01, q02:", geo.shear.q0_redundant(1))
+    dz = geo.shear.shearcenter(1)
+    print("S_z:", geo.h/2 + dz , "[m] dz:", dz, "[m]")
+    error = 0.0855 - (geo.h/2 + dz)
+    print("Error:", error , "[m] -->", round((error/0.0855)*100, 2), "%")
