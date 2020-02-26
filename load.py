@@ -154,7 +154,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          self.G*self.geo.J, #C5
-                         self.P*self.z_sc*step(x,self.x_II,power=1)+self.P*self.a_m*step(x,self.x_II,power=1)+self.interp.integrate_tau(x,self.z_sc,ord=2)   #const
+                         self.P*self.z_sc*step(x,self.x_II,power=1)+self.P*self.a_m*step(x,self.x_II,power=1)+self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
                          ])*1/(self.G*self.geo.J)
         
 
