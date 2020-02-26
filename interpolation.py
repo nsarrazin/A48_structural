@@ -127,7 +127,12 @@ class Interpolation:
     def integrate_q(self, x, ord=2):
         xs = np.linspace(0, x, N)
         ys = np.array([self.q_intergration_fixed_x(x) for x in xs])
+
+        if ord == 0:
+            return ys
+
         for i in range(ord):
+            # print(i)
             ys = self.trapezoidalrule(ys, xs)
 
         return ys
@@ -165,6 +170,9 @@ class Interpolation:
     def integrate_tau(self, x, z_sc, ord=2):
         xs = np.linspace(0, x, N)
         ys = np.array([self.tau(x, z_sc) for x in xs])
+        
+        if ord == 0 :
+            return ys
         
         for i in range(ord):
             ys = self.trapezoidalrule(ys, xs)
