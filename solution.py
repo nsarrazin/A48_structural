@@ -77,14 +77,57 @@ class Solution:
     
     def v_z(self,x): 
         return +self.v_y(x)*np.sin(self.case.defl)+self.v_z_prime(x)*np.cos(self.case.defl)
+
+    def tau(self,x,z_sc):
+        return self.case.interp.tau(x,self.case.z_sc)
+
+    def slope_y_prime(self,x):
+        sol = self.sol
+        return (-sol["Fy_1"]/2*step(x,self.geo.x_1,power=2)-sol["Fy_2"]/2*step(x,self.geo.x_2,power=2)-sol["Fy_3"]/2*step(x,self.geo.x_3,power=2)\
+            -(sol["Fa"]*self.case.a_y)/2*step(x,self.case.x_I,power=2)\
+                -(self.case.P*self.case.a_y)/2*step(x,self.case.x_II,power=2)-self.case.interp.integrate_q(x,ord=3)[-1])*-1/(self.case.E*self.geo.MMoI[1])\
+                    +sol["C3"]
     
-    def plot_1(self):
+    def slope_z_prime(self,x):
+        sol = self.sol
+        return (-sol["Fz_1"]/2*step(x,self.geo.x_1,power=2)-sol["Fz_2"]/2*step(x,self.geo.x_2,power=2)-sol["Fz_3"]/2*step(x,self.geo.x_3,power=2)\
+            -(sol["Fa"]*self.case.a_z)/2*step(x,self.case.x_I,power=2)-(self.case.P*self.case.a_z)/2*step(x,self.case.x_II,power=2)*-1/(self.case.E*self.geo.MMoI[0]))\
+                +sol["C1"]
+
+    def slope_y(self,x):
+        return -self.slope_y_prime(x)*np.sin(self.case.defl)-self.slope_z_prime(x)*np.cos(self.case.defl)
+
+    def slope_z(self,x):
+        return -self.slope_z_prime(x)*np.sin(self.case.defl)+self.slope_y_prime(x)*np.cos(self.case.defl)
+    
+    def plot_defl(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+        ys_2 = []
+
+        for x in xs:
+            ys_1.append(self.v_y(x)+self.theta(x)*self.case.z_sc)
+            ys_2.append(self.v_z_prime(x))
+
+        plt.plot(xs, ys_1)
+        plt.plot(xs, ys_2)
+        
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+            plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
+
+    def plot_twist(self):
         xs = np.linspace(0, self.geo.l_a, 100)
 
         ys = []
 
         for x in xs:
-            ys.append(self.v_y(x)+self.theta(x)*self.case.z_sc)
+            ys.append(self.theta(x))
 
         plt.plot(xs, ys)
         
@@ -97,7 +140,7 @@ class Solution:
         plt.show()
 
 
-    def plot_2(self):
+    def plot_shear(self):
         xs = np.linspace(0, self.geo.l_a, 100)
 
         ys_1 = []
@@ -117,3 +160,81 @@ class Solution:
             # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
         plt.show()
+
+    def plot_moment(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+        ys_2 = []
+
+        for x in xs:
+            ys_1.append(self.M_y_prime(x))
+            ys_2.append(self.M_z_prime(x))
+
+        plt.plot(xs, ys_1)
+        plt.plot(xs, ys_2)
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
+
+    def plot_torque(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+        #ys_2 = []
+
+        for x in xs:
+            ys_1.append(self.T(x))
+
+        plt.plot(xs, ys_1)
+        # plt.plot(xs, ys_2)
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
+
+    def plot_tau(self):
+        xs = np.linspace(0, self.geo.l_a,100)
+        ys = []
+        for x in xs:
+            ys.append(self.tau(x,self.case.z_sc))
+        plt.plot(xs,ys)
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
+
+    def plot_slope(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+        # ys_2 = []
+
+        for x in xs:
+            ys_1.append(self.slope_y(x))
+            # ys_2.append(self.slope_z(x))
+
+        plt.plot(xs, ys_1)
+        # plt.plot(xs, ys_2)
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        plt.show()
+
+    
+        
+    
