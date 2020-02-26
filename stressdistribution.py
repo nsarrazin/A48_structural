@@ -24,38 +24,37 @@ class stressdistribution:
         self.n_st = kwargs.get("n_st")
         pass
 
-    def sigmacalcduetoyforce(self,F,xF):
+    def sigmaduetoyforce(self,F,xF): 
         c = self.c_a
         b = self.l_a
         Iyy = 4.594369333645184e-05
         Izz = 4.753851442684437e-06
-
-        #direct stress due to force
-        sigmay1 = F/(c*b)
-
-        #
-        x = b*np.linspace(0,1,41)
-        sigmay2 = (F*(xF - x)*x)/Izz
-
-        #
-        sigmay = []
-        for a in range(len(sigmay2)):
-            sigmay.append(sigmay2[a] + sigmay1)
-
-
-
-        y = c*np.linspace(0,1,81)
-        sigmax = []
-        sigmaxmax = []
-        for b in range(len(x)):
-            sigmax.append((F*(xF - x[b])*y)/Izz)
-            sigmaxmax.append(max(abs(sigmax[b])))
-
-        q = max(sigmaxmax)
-
         
-        return sigmaxmax.index(q), x, y, sigmax, sigmay
+        #spanwise locations
+        x = b*np.linspace(0,1,10)
 
+        #moment z varying spanwise
+        Mz = F*(xF - x)
+
+        #direct stress in y direction due to force (constant throughout span and chord)
+        sigmay1 = np.matrix(len(x)*[F/(c*b)])
+
+        #bending stress in y direction due to force (varying spanwise)
+        sigmay2 = np.matrix(Mz/Izz*x)
+
+        sigmaytotal = sigmay1 + sigmay2
+
+        #chordwise locations
+        y = c*np.linspace(0,1,10)
+
+        #bending stress in x direction due to force (varying chordwise and spanwise)
+        sigmax = []
+        for a in range(len(x)):
+            sigmax.append(Mz[a]/Izz*y)
+
+        sigmax = np.matrix(sigmax)
+
+        return x,y,sigmaytotal, sigmax
 
 test = stressdistribution(**parameters_geometry)
 
@@ -66,23 +65,29 @@ x_actuator1 = 0.3755
 x_actuator2 = 0.6205
 
 Py = 7589.171334469135
-Ry1 = -7589
-Ry2 = 0
-Ry3 = 0
-Rya = 0
+Ry1 = 5 * 10**4
+Ry2 = -7.8 * 10**4
+Ry3 = 2.7 * 10**4
+Rya = -3.6 * 10**4
 
-index1, x1, y1, sigmax1, sigmay1 = test.sigmacalcduetoyforce(Py,x_actuator2)
-index2, x2, y2, sigmax2, sigmay2 = test.sigmacalcduetoyforce(Ry1,x_hinge1)
-index3, x3, y3, sigmax3, sigmay3 = test.sigmacalcduetoyforce(Ry2,x_hinge2)
-index4, x4, y4, sigmax4, sigmay4 = test.sigmacalcduetoyforce(Ry3,x_hinge3)
-index5, x5, y5, sigmax5, sigmay5 = test.sigmacalcduetoyforce(Rya,x_actuator1)
 
-sigmaytotal = []
-for x in range(len(x1)):
-    sigmaytotal.append(sigmay1[x] + sigmay2[x] + sigmay3[x] + sigmay4[x] + sigmay5[x])
+x1, y1, sigmaytotal1, sigmax1 = test.sigmaduetoyforce(Py, x_actuator2)
+x2, y2, sigmaytotal2, sigmax2 = test.sigmaduetoyforce(Ry1, x_hinge1)
+x3, y3, sigmaytotal3, sigmax3 = test.sigmaduetoyforce(Ry2, x_hinge2)
+x4, y4, sigmaytotal4, sigmax4 = test.sigmaduetoyforce(Ry3, x_hinge3)
+x5, y5, sigmaytotal5, sigmax5 = test.sigmaduetoyforce(Rya, x_actuator1)
 
-plt.plot(x1,sigmaytotal)
+sigmaytotalarray = np.array(sigmaytotal1 + sigmaytotal2 + sigmaytotal3 + sigmaytotal4 + sigmaytotal5)
+sigmaytotal = sigmaytotalarray[0]
+
+sigmaxtotal = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
+
+fig = plt.figure()
+cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, 0., 0.505), cmap='Blues')
+cbar= plt.colorbar(cs, shrink =0.5)
+cbar.ax.set_ylabel("Bending in x direction [Pa]")
+plt.xlabel("Span-wise direction [m]")
+plt.ylabel("Chord-wise direction [m]")
+plt.title("Aerodynamic loading over the aileron")
+plt.tight_layout()
 plt.show()
-
-#plt.plot(y,sigmax[index])
-#plt.show()
