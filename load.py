@@ -23,7 +23,7 @@ class LoadCase:
         self.x_II = self.geo.x_2+self.geo.h/2
 
     def V_y_prime(self, x):
-        return np.array([step(x,self.geo.x_1,power=0),     #Fy_1
+        return -1*np.array([step(x,self.geo.x_1,power=0),     #Fy_1
                          0, #Fz_1
                         step(x,self.geo.x_2,power=0),     #Fy_2
                         0,                          #Fz_2
@@ -38,7 +38,7 @@ class LoadCase:
                         ])
 
     def V_z_prime(self,x):
-        return np.array([0,    #Fy_1
+        return -1*np.array([0,    #Fy_1
                          step(x,self.geo.x_1,power=0),     #Fz_1
                          0, #Fy_2
                          step(x,self.geo.x_2,power=0),     #Fz_2
@@ -83,7 +83,7 @@ class LoadCase:
                          ])
 
     def T(self, x):
-        return np.array([self.z_sc*step(x,self.geo.x_1,power=0),    #Fy_1
+        return -1*np.array([self.z_sc*step(x,self.geo.x_1,power=0),    #Fy_1
                          0, #Fz_1
                          self.z_sc*step(x,self.geo.x_2,power=0),  #Fy_2
                          0,  #Fz_2
@@ -111,7 +111,7 @@ class LoadCase:
                          -self.E*self.geo.MMoI[1]*x,    #C3
                          -self.E*self.geo.MMoI[1],  #C4
                          0 #C5
-                         ])*-1/(self.E*self.geo.MMoI[1])
+                         ])*1/(-self.E*self.geo.MMoI[1])
         
 
     def v_z_prime(self, x):
@@ -131,7 +131,7 @@ class LoadCase:
         
 
     def theta(self, x):
-        return np.array([self.z_sc*step(x,self.geo.x_1,power=1),    #Fy_1
+        return -1*np.array([self.z_sc*step(x,self.geo.x_1,power=1),    #Fy_1
                          0, #Fz_1
                          self.z_sc*step(x,self.geo.x_2,power=1), #Fy_2
                          0, #Fz_2
@@ -175,19 +175,19 @@ class LoadCase:
 
     @property
     def B(self):
-        return np.array([-self.P*self.a_y*step(self.geo.l_a,self.x_II,power=0)\
-                            -self.interp.integrate_q(self.geo.l_a,ord=1)[-1], #V_y_prime
+        return np.array([self.P*self.a_y*step(self.geo.l_a,self.x_II,power=0)\
+                            +self.interp.integrate_q(self.geo.l_a,ord=1)[-1], #V_y_prime
 
-                         -self.P*self.a_z*step(self.geo.l_a,self.x_II,power=0),  #V_z_prime
+                         +self.P*self.a_z*step(self.geo.l_a,self.x_II,power=0),  #V_z_prime
 
                          self.P*self.a_z*step(self.geo.l_a,self.x_II,power=1), #M_y_prime
 
                          self.P*self.a_y*step(self.geo.l_a,self.x_II,power=1)\
                              -self.interp.integrate_q(self.geo.l_a,ord=2)[-1],     #M_z_prime
 
-                         -self.P*self.a_y*self.z_sc*step(self.geo.l_a,self.x_II,power=0)\
-                             -self.P*self.a_m*step(self.geo.l_a,self.x_II,power=0)\
-                                 -self.interp.integrate_tau(self.geo.l_a,self.z_sc,ord=1)[-1], #T
+                         self.P*self.a_y*self.z_sc*step(self.geo.l_a,self.x_II,power=0)\
+                             +self.P*self.a_m*step(self.geo.l_a,self.x_II,power=0)\
+                                 +self.interp.integrate_tau(self.geo.l_a,self.z_sc,ord=1)[-1], #T
                          
                          self.d_1\
                              +((self.P*self.a_y)/6*step(self.geo.x_1,self.x_II,power=3)-self.interp.integrate_q(self.geo.x_1,ord=4)[-1])*-np.cos(self.defl)/(self.E*self.geo.MMoI[0])\
