@@ -272,4 +272,4 @@ if __name__ == "__main__": # is called when you run the script
     #plt.show()
 
     print(geo.shear.q1(1))
-    print(geo.strint)
+    print(geo.MMoI)
