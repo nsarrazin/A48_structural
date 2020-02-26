@@ -39,7 +39,7 @@ class Solution:
         sol = self.sol
         return -sol["Fy_1"]*step(x,self.geo.x_1,power=1)-sol["Fy_2"]*step(x,self.geo.x_2,power=1)-sol["Fy_3"]*step(x,self.geo.x_3,power=1)\
             -sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=1)\
-                -self.case.P*self.case.a_y*step(x,self.case.x_II,power=1)+self.case.interp.integrate_q(x,ord=2)[-1]
+                -self.case.P*self.case.a_y*step(x,self.case.x_II,power=1)-self.case.interp.integrate_q(x,ord=2)[-1]
 
     def T(self,x):
         sol = self.sol
@@ -53,7 +53,7 @@ class Solution:
         return (-sol["Fy_1"]/6*step(x,self.geo.x_1,power=3)-sol["Fy_2"]/6*step(x,self.geo.x_2,power=3)-sol["Fy_3"]/6*step(x,self.geo.x_3,power=3)\
             -(sol["Fa"]*self.case.a_y)/6*step(x,self.case.x_I,power=3)\
                 -(self.case.P*self.case.a_y)/6*step(x,self.case.x_II,power=3)-self.case.interp.integrate_q(x,ord=4)[-1])*-1/(self.case.E*self.geo.MMoI[1])\
-                    +sol["C3"]*x+sol["C4"]        
+                    +sol["C3"]*x+sol["C4"]       
 
     def v_z_prime(self, x):
         sol = self.sol

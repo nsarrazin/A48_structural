@@ -59,7 +59,7 @@ class LoadCase:
                          -step(x,self.geo.x_2,power=1),  #Fz_2
                          0,     #Fy_3
                          -step(x,self.geo.x_3,power=1),   #Fz_3
-                         -self.a_y*step(x,self.x_I,power=1), #Fa
+                         -self.a_z*step(x,self.x_I,power=1), #Fa
                          0, #C1
                          0, #C2
                          0, #C3
@@ -183,7 +183,7 @@ class LoadCase:
                          self.P*self.a_z*step(self.geo.l_a,self.x_II,power=1), #M_y_prime
 
                          self.P*self.a_y*step(self.geo.l_a,self.x_II,power=1)\
-                             -self.interp.integrate_q(self.geo.l_a,ord=2)[-1],     #M_z_prime
+                             +self.interp.integrate_q(self.geo.l_a,ord=2)[-1],     #M_z_prime
 
                          self.P*self.a_y*self.z_sc*step(self.geo.l_a,self.x_II,power=0)\
                              +self.P*self.a_m*step(self.geo.l_a,self.x_II,power=0)\
