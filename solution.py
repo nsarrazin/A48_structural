@@ -21,15 +21,14 @@ class Solution:
 
     def V_y_prime(self,x):
         sol = self.sol
-        print(self.case.interp.integrate_q(x,ord=1)[-1])
-        return sol["Fy_1"]*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*step(x,self.geo.x_3,power=0)\
+        return -1*(sol["Fy_1"]*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*step(x,self.geo.x_3,power=0)\
             +sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=0)\
-                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)+self.case.interp.integrate_q(x,ord=1)[-1]
+                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)+self.case.interp.integrate_q(x,ord=1)[-1])
 
     def V_z_prime(self,x):
         sol = self.sol
-        return sol["Fz_1"]*step(x,self.geo.x_1,power=0)+sol["Fz_2"]*step(x,self.geo.x_2,power=0)+sol["Fz_3"]*step(x,self.geo.x_3,power=0)\
-            +sol["Fa"]*self.case.a_z*step(x,self.case.x_I,power=0)+self.case.P*self.case.a_z*step(x,self.case.x_II,power=0)
+        return -1*(sol["Fz_1"]*step(x,self.geo.x_1,power=0)+sol["Fz_2"]*step(x,self.geo.x_2,power=0)+sol["Fz_3"]*step(x,self.geo.x_3,power=0)\
+            +sol["Fa"]*self.case.a_z*step(x,self.case.x_I,power=0)+self.case.P*self.case.a_z*step(x,self.case.x_II,power=0))
 
     def M_y_prime(self,x):
         sol = self.sol
@@ -44,10 +43,10 @@ class Solution:
 
     def T(self,x):
         sol = self.sol
-        return sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
+        return -1*(sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
             +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)+sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
                 +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=0)+self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
-                    +self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1]
+                    +self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1])
 
     def v_y_prime(self, x):
         sol = self.sol
@@ -66,17 +65,17 @@ class Solution:
 
     def theta(self, x):
         sol = self.sol
-        return (sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
+        return -1*((sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)+sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)+sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
             +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)+sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
                 +self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=1)+self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
                     +self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])*1/(self.case.G*self.geo.J)\
-                        +sol["C5"]
+                        +sol["C5"])
     
     def v_y(self,x):
         return self.v_y_prime(x)*np.cos(self.case.defl)-self.v_z_prime(x)*np.sin(self.case.defl)
     
     def v_z(self,x): 
-        return +self.v_y(x)*np.sin(self.case.defl)+self.v_z_prime(x)*np.cos(self.case.defl)
+        return self.v_y_prime(x)*np.sin(self.case.defl)+self.v_z_prime(x)*np.cos(self.case.defl)
 
     def tau(self,x,z_sc):
         return self.case.interp.tau(x,self.case.z_sc)
@@ -107,8 +106,8 @@ class Solution:
         ys_2 = []
 
         for x in xs:
-            ys_1.append(self.v_y(x)+self.theta(x)*self.case.z_sc)
-            ys_2.append(self.v_z_prime(x))
+            ys_1.append(self.v_y(x))
+            ys_2.append(self.v_z(x))
 
         plt.plot(xs, ys_1)
         plt.plot(xs, ys_2)
