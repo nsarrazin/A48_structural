@@ -182,7 +182,7 @@ class LoadCase:
                     +self.v_y_prime(self.geo.x_3)*np.sin(self.defl), #vz(x3)=0
                 self.v_z_prime(self.x_I)*np.cos(self.defl)\
                     +self.v_y_prime(self.x_I)*np.sin(self.defl), #vz(xI)=0
-                [0,0,0,0,0,0,0,0,0,0,0,0,1]]
+                np.array([0,0,0,0,0,0,0,0,0,0,0,0,1], dtype=np.float64)]
         return np.vstack(rows)
 
     @property
