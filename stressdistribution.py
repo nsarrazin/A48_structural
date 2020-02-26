@@ -22,6 +22,8 @@ class stressdistribution:
         self.h_st = kwargs.get("h_st")
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
+
+        self.defl = kwargs.get('max_defl')
         pass
 
     def sigmaduetoyforce(self,F,xF): 
@@ -44,10 +46,10 @@ class stressdistribution:
 
         sigmaytotal = sigmay1 + sigmay2
 
-        #chordwise locations
+        #heightwise locations
         y = c*np.linspace(0,1,10)
 
-        #bending stress in x direction due to force (varying chordwise and spanwise)
+        #bending stress in x direction due to force (varying in height and spanwise)
         sigmax = []
         for a in range(len(x)):
             sigmax.append(Mz[a]/Izz*y)
@@ -55,6 +57,23 @@ class stressdistribution:
         sigmax = np.matrix(sigmax)
 
         return x,y,sigmaytotal, sigmax
+    
+    def sigmaduetoxmoment(self, Mx):
+        c = self.c_a
+        h = self.h
+        Ixx = 1./12.*self.l_a*self.c_a**3
+
+        #chord locations
+        z = c*np.linspace(0,1,10)
+
+        #sigmay due to moment in x varies chordwise
+        sigmay = Mx/Ixx*z
+
+        y = h*np.linspace(0,1,10)
+        #sigmaz due to moment in x varies heightwise
+        sigmaz = Mx/Ixx*y
+
+        return z, y, sigmay, sigmaz
 
 test = stressdistribution(**parameters_geometry)
 
@@ -69,6 +88,8 @@ Ry1 = 5 * 10**4
 Ry2 = -7.8 * 10**4
 Ry3 = 2.7 * 10**4
 Rya = -3.6 * 10**4
+Mxa = Rya*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
+
 
 
 x1, y1, sigmaytotal1, sigmax1 = test.sigmaduetoyforce(Py, x_actuator2)
@@ -77,17 +98,21 @@ x3, y3, sigmaytotal3, sigmax3 = test.sigmaduetoyforce(Ry2, x_hinge2)
 x4, y4, sigmaytotal4, sigmax4 = test.sigmaduetoyforce(Ry3, x_hinge3)
 x5, y5, sigmaytotal5, sigmax5 = test.sigmaduetoyforce(Rya, x_actuator1)
 
+z1, y1, sigmaytotal6, sigmax6 = test.sigmaduetoxmoment(Mxa)
+
 sigmaytotalarray = np.array(sigmaytotal1 + sigmaytotal2 + sigmaytotal3 + sigmaytotal4 + sigmaytotal5)
 sigmaytotal = sigmaytotalarray[0]
 
 sigmaxtotal = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
 
+
+
 fig = plt.figure()
-cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, 0., 0.505), cmap='Blues')
+cs = plt.imshow(sigmaxtotal, extent = (0., 1.611, 0., 0.161), cmap='Blues')
 cbar= plt.colorbar(cs, shrink =0.5)
 cbar.ax.set_ylabel("Bending in x direction [Pa]")
 plt.xlabel("Span-wise direction [m]")
-plt.ylabel("Chord-wise direction [m]")
-plt.title("Aerodynamic loading over the aileron")
+plt.ylabel("Height direction [m]")
+plt.title("Bending stress over the aileron")
 plt.tight_layout()
 plt.show()
