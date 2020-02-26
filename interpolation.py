@@ -158,7 +158,7 @@ class Interpolation:
             val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - \
                  ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 )) 
     
-            result += val * (z_sc + (z_midpoint+h/2))
+            result += val * (- z_sc - (z_midpoint+h/2))
 
         return result
 
