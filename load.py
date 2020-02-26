@@ -158,6 +158,14 @@ class LoadCase:
                          ])*1/(self.G*self.geo.J)
         
 
+    def v_y(self, x):
+        return self.v_y_prime(x)*np.cos(self.defl)\
+                  -self.v_z_prime(x)*np.sin(self.defl)
+
+    def v_z(self, x):
+        return self.v_z_prime(x)*np.cos(self.defl)\
+                    +self.v_y_prime(x)*np.sin(self.defl)
+    
     @property
     def A(self):
         rows = [self.V_y_prime(self.geo.l_a),
@@ -165,23 +173,19 @@ class LoadCase:
                 self.M_y_prime(self.geo.l_a),
                 self.M_z_prime(self.geo.l_a),
                 self.T(self.geo.l_a),
-                self.v_y_prime(self.geo.x_1)*np.cos(self.defl)\
-                    -self.v_z_prime(self.geo.x_1)*np.sin(self.defl)\
-                        +self.theta(self.geo.x_1)*self.z_sc, #vy(x1)+theta(x1)*z_sc
-                self.v_z_prime(self.geo.x_1)*np.cos(self.defl)\
-                    +self.v_y_prime(self.geo.x_1)*np.sin(self.defl),  #vz(x1)=0
-                self.v_y_prime(self.geo.x_2)*np.cos(self.defl)\
-                    -self.v_z_prime(self.geo.x_2)*np.sin(self.defl)\
-                        +self.theta(self.geo.x_2)*self.z_sc, #vy(x2)+theta(x2)*z_sc
-                self.v_z_prime(self.geo.x_2)*np.cos(self.defl)\
-                    +self.v_y_prime(self.geo.x_2)*np.sin(self.defl), #vz(x2)=0
-                self.v_y_prime(self.geo.x_3)*np.cos(self.defl)\
-                    -self.v_z_prime(self.geo.x_3)*np.sin(self.defl)\
-                        +self.theta(self.geo.x_3)*self.z_sc,    #vy(x3)+theta(x3)*z_sc
-                self.v_z_prime(self.geo.x_3)*np.cos(self.defl)\
-                    +self.v_y_prime(self.geo.x_3)*np.sin(self.defl), #vz(x3)=0
-                self.v_z_prime(self.x_I)*np.cos(self.defl)\
-                    +self.v_y_prime(self.x_I)*np.sin(self.defl), #vz(xI)=0
+
+                self.v_y(self.geo.x_1)+self.theta(self.geo.x_1)*self.z_sc, #vy(x1)+theta(x1)*z_sc
+                self.v_z(self.geo.x_1), #vz(x1)=0
+                
+                self.v_y(self.geo.x_2) +self.theta(self.geo.x_2)*self.z_sc, #vy(x2)+theta(x2)*z_sc
+                self.v_z(self.geo.x_2), #vz(x2)=0
+                
+                self.v_y(self.geo.x_3)+self.theta(self.geo.x_3)*self.z_sc,    #vy(x3)+theta(x3)*z_sc
+                
+                self.v_z(self.geo.x_3),
+
+                self.v_z(self.x_I),
+
                 np.array([0,0,0,0,0,0,0,0,0,0,0,0,1], dtype=np.float64)]
         return np.vstack(rows)
 
