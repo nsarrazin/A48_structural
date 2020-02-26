@@ -37,6 +37,8 @@ if __name__ == "__main__":
     params.update(parameters_geometry)
 
     sim = Simulation(**params)
+
+    print(sim.case.A, sim.case.B)
     sim.run()
 
     # print(sim.x)
@@ -56,7 +58,7 @@ if __name__ == "__main__":
     # print(sim.case.v_y_prime(sim.case.geo.x_2)*np.sin(sim.case.defl)) #vz(
     # sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]
 
-    print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y+sim.case.P*sim.case.a_y+sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
+    print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y+sim.case.P*sim.case.a_y-sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
     print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z+sim.case.P*sim.case.a_z:.2f}N")
 
 
@@ -70,11 +72,11 @@ if __name__ == "__main__":
     # print(sim.interp.integrate_q(sim.geo.x_1,ord=4)[-1])
     # sim.solution.plot_defl()
     # sim.solution.plot_twist()
-    sim.solution.plot_shear()
-    sim.solution.plot_moment()
-    sim.solution.plot_torque()
+    # sim.solution.plot_shear()
+    # sim.solution.plot_moment()
+    # sim.solution.plot_torque()
     # sim.solution.plot_tau()
-    # sim.solution.plot_slope()
+    sim.solution.plot_slope()
     # print(sim.Bcs)
 
 

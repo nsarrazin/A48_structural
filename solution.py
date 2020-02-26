@@ -23,7 +23,7 @@ class Solution:
         sol = self.sol
         return -1*(sol["Fy_1"]*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*step(x,self.geo.x_3,power=0)\
             +sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=0)\
-                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)+self.case.interp.integrate_q(x,ord=1)[-1])
+                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)-self.case.interp.integrate_q(x,ord=1)[-1])
 
     def V_z_prime(self,x):
         sol = self.sol
@@ -106,8 +106,8 @@ class Solution:
         ys_2 = []
 
         for x in xs:
-            ys_1.append(self.v_y(x))
-            ys_2.append(self.v_z(x))
+            ys_1.append(self.v_y_prime(x))
+            ys_2.append(self.v_z_prime(x))
 
         plt.plot(xs, ys_1)
         plt.plot(xs, ys_2)
@@ -217,14 +217,14 @@ class Solution:
         xs = np.linspace(0, self.geo.l_a, 100)
 
         ys_1 = []
-        # ys_2 = []
+        ys_2 = []
 
         for x in xs:
-            ys_1.append(self.slope_y(x))
-            # ys_2.append(self.slope_z(x))
+            ys_1.append(self.slope_y_prime(x))
+            ys_2.append(self.slope_z_prime(x))
 
         plt.plot(xs, ys_1)
-        # plt.plot(xs, ys_2)
+        plt.plot(xs, ys_2)
 
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
