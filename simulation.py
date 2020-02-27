@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # print(sim.case.v_y_prime(sim.case.geo.x_2)*np.sin(sim.case.defl)) #vz(
     # sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]
 
-    print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y+sim.case.P*sim.case.a_y-sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
-    print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z+sim.case.P*sim.case.a_z:.2f}N")
+    print(f"Sum of forces in the y-direction : {sols[0]+sols[2]+sols[4]+sols[6]*sim.case.a_y-sim.case.P*sim.case.a_y+sim.interp.integrate_q(sim.geo.l_a,ord=1)[-1]:.2f}N")
+    print(f"Sum of forces in the z-direction : {sols[1]+sols[3]+sols[5]+sols[6]*sim.case.a_z-sim.case.P*sim.case.a_z:.2f}N")
 
     BC = sim.BCs
     # print(sim.solution.sol)
