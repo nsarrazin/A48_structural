@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     print(sim.case.A, sim.case.B)
     sim.run()
-
+    print(f"Det : {np.linalg.det(sim.case.A)}")
     # print(sim.x)
     # print(sim.BCs)
     print(sim.solution.sol)
@@ -70,13 +70,13 @@ if __name__ == "__main__":
     # print(f"Sum of fo/r v_z:{-1/(sim.case.E*sim.geo.MMoI[1])}")
     # print(sim.case.B)
     # print(sim.interp.integrate_q(sim.geo.x_1,ord=4)[-1])
-    # sim.solution.plot_defl()
+    sim.solution.plot_defl()
     # sim.solution.plot_twist()
-    sim.solution.plot_shear()
-    sim.solution.plot_moment()
-    sim.solution.plot_torque()
+    # sim.solution.plot_shear()
+    # sim.solution.plot_moment()
+    # sim.solution.plot_torque()
     # sim.solution.plot_tau()
-    # sim.solution.plot_slope()
+    sim.solution.plot_slope()
     # print(sim.Bcs)
 
 

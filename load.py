@@ -120,7 +120,7 @@ class LoadCase:
                          -self.E*self.geo.MMoI[1]*x,    #C3
                          -self.E*self.geo.MMoI[1],  #C4
                          0, #C5
-                         (self.P*self.a_y)/6*step(self.geo.x_1,self.x_II,power=3)-self.interp.integrate_q(self.geo.x_1,ord=4)[-1]  #const
+                         (self.P*self.a_y)/6*step(x,self.x_II,power=3)-self.interp.integrate_q(x,ord=4)[-1]  #const
                          ])*1/(-self.E*self.geo.MMoI[1])
         
 
@@ -154,7 +154,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          self.G*self.geo.J, #C5
-                         -self.P*self.z_sc*step(x,self.x_II,power=1)-self.P*self.a_m*step(x,self.x_II,power=1)-self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
+                         -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=1)-self.P*self.a_m*step(x,self.x_II,power=1)-self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
                          ])*1/(self.G*self.geo.J)
         
 
@@ -182,9 +182,10 @@ class LoadCase:
                 
                 self.v_y(self.geo.x_3)+self.theta(self.geo.x_3)*self.z_sc,    #vy(x3)+theta(x3)*z_sc
                 
-                self.v_z(self.geo.x_3),
+                self.v_z(self.geo.x_3), #vz(x3)=0
 
-                self.v_z(self.x_I),
+                self.v_y(self.x_I)*np.sin(np.pi-self.defl)+self.v_z(self.x_I)*np.cos(np.pi-self.defl)\
+                    +self.theta(self.x_I)*(self.geo.h/2*np.cos(np.pi-self.defl)+self.z_sc*np.sin(np.pi-self.defl)), #vz(x_I)=0
 
                 np.array([0,0,0,0,0,0,0,0,0,0,0,0,1], dtype=np.float64)]
         return np.vstack(rows)
