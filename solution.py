@@ -12,7 +12,7 @@ class Solution:
     @property
     def sol(self):
         if self._sol == {}:
-            names = ["Fy_1","Fz_1","Fy_2","Fz_2","Fy_3","Fz_3","Fa","C1","C2","C3","C4","C5","CST"]
+            names = ["Fy'_1","Fz'_1","Fy'_2","Fz'_2","Fy'_3","Fz'_3","Fa","C1","C2","C3","C4","C5","CST"]
             self._sol = {}
             for n, (val, name) in enumerate(zip(self.parent.x, names)):
                 self._sol[name] = val
@@ -21,43 +21,43 @@ class Solution:
 
     def V_y_prime(self,x):
         sol = self.sol
-        return -1*(sol["Fy_1"]*step(x,self.geo.x_1,power=0)\
-                  +sol["Fy_2"]*step(x,self.geo.x_2,power=0)\
-                  +sol["Fy_3"]*step(x,self.geo.x_3,power=0)\
+        return -1*(sol["Fy'_1"]*step(x,self.geo.x_1,power=0)\
+                  +sol["Fy'_2"]*step(x,self.geo.x_2,power=0)\
+                  +sol["Fy'_3"]*step(x,self.geo.x_3,power=0)\
                   +sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)\
                   +self.case.interp.integrate_q(x,ord=1)[-1])
 
     def V_z_prime(self,x):
         sol = self.sol
-        return -1*(sol["Fz_1"]*step(x,self.geo.x_1,power=0)\
-                  +sol["Fz_2"]*step(x,self.geo.x_2,power=0)\
-                  +sol["Fz_3"]*step(x,self.geo.x_3,power=0)\
+        return -1*(sol["Fz'_1"]*step(x,self.geo.x_1,power=0)\
+                  +sol["Fz'_2"]*step(x,self.geo.x_2,power=0)\
+                  +sol["Fz'_3"]*step(x,self.geo.x_3,power=0)\
                   +sol["Fa"]*self.case.a_z*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_z*step(x,self.case.x_II,power=0))
 
     def M_y_prime(self,x):
         sol = self.sol
-        return -sol["Fz_1"]*step(x,self.geo.x_1,power=1)\
-               -sol["Fz_2"]*step(x,self.geo.x_2,power=1)\
-               -sol["Fz_3"]*step(x,self.geo.x_3,power=1)\
+        return -sol["Fz'_1"]*step(x,self.geo.x_1,power=1)\
+               -sol["Fz'_2"]*step(x,self.geo.x_2,power=1)\
+               -sol["Fz'_3"]*step(x,self.geo.x_3,power=1)\
                -sol["Fa"]*self.case.a_z*step(x,self.case.x_I,power=1)\
                +self.case.P*self.case.a_z*step(x,self.case.x_II,power=1)
 
     def M_z_prime(self,x):
         sol = self.sol
-        return -sol["Fy_1"]*step(x,self.geo.x_1,power=1)\
-               -sol["Fy_2"]*step(x,self.geo.x_2,power=1)\
-               -sol["Fy_3"]*step(x,self.geo.x_3,power=1)\
+        return -sol["Fy'_1"]*step(x,self.geo.x_1,power=1)\
+               -sol["Fy'_2"]*step(x,self.geo.x_2,power=1)\
+               -sol["Fy'_3"]*step(x,self.geo.x_3,power=1)\
                -sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=1)\
                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=1)\
                -self.case.interp.integrate_q(x,ord=2)[-1]
 
     def T(self,x):
         sol = self.sol
-        return -1*(sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
-                  +sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)\
-                  +sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
+        return -1*(sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
+                  +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)\
+                  +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
                   +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
                   +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=0)\
@@ -66,7 +66,7 @@ class Solution:
 
     def v_y_prime(self, x):
         sol = self.sol
-        return (-sol["Fy_1"]/6*step(x,self.geo.x_1,power=3)-sol["Fy_2"]/6*step(x,self.geo.x_2,power=3)-sol["Fy_3"]/6*step(x,self.geo.x_3,power=3)\
+        return (-sol["Fy'_1"]/6*step(x,self.geo.x_1,power=3)-sol["Fy'_2"]/6*step(x,self.geo.x_2,power=3)-sol["Fy'_3"]/6*step(x,self.geo.x_3,power=3)\
                 -(sol["Fa"]*self.case.a_y)/6*step(x,self.case.x_I,power=3)\
                 +(self.case.P*self.case.a_y)/6*step(x,self.case.x_II,power=3)\
                 -self.case.interp.integrate_q(x,ord=4)[-1])\
@@ -75,7 +75,7 @@ class Solution:
 
     def v_z_prime(self, x):
         sol = self.sol
-        return (-sol["Fz_1"]/6*step(x,self.geo.x_1,power=3)-sol["Fz_2"]/6*step(x,self.geo.x_2,power=3)-sol["Fz_3"]/6*step(x,self.geo.x_3,power=3)\
+        return (-sol["Fz'_1"]/6*step(x,self.geo.x_1,power=3)-sol["Fz'_2"]/6*step(x,self.geo.x_2,power=3)-sol["Fz'_3"]/6*step(x,self.geo.x_3,power=3)\
                 -(sol["Fa"]*self.case.a_z)/6*step(x,self.case.x_I,power=3)\
                 +(self.case.P*self.case.a_z)/6*step(x,self.case.x_II,power=3))*-1/(self.case.E*self.geo.MMoI[0])\
                 +sol["C1"]*x+sol["C2"]
@@ -83,9 +83,9 @@ class Solution:
 
     def theta(self, x):
         sol = self.sol
-        return -1*((sol["Fy_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
-                   +sol["Fy_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)\
-                   +sol["Fy_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
+        return -1*((sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
+                   +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)\
+                   +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
                    +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
                    +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
                    -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=1)\
@@ -105,9 +105,9 @@ class Solution:
 
     def slope_y_prime(self,x):
         sol = self.sol
-        return (-sol["Fy_1"]/2*step(x,self.geo.x_1,power=2)\
-                -sol["Fy_2"]/2*step(x,self.geo.x_2,power=2)\
-                -sol["Fy_3"]/2*step(x,self.geo.x_3,power=2)\
+        return (-sol["Fy'_1"]/2*step(x,self.geo.x_1,power=2)\
+                -sol["Fy'_2"]/2*step(x,self.geo.x_2,power=2)\
+                -sol["Fy'_3"]/2*step(x,self.geo.x_3,power=2)\
                 -(sol["Fa"]*self.case.a_y)/2*step(x,self.case.x_I,power=2)\
                 +(self.case.P*self.case.a_y)/2*step(x,self.case.x_II,power=2)\
                 -self.case.interp.integrate_q(x,ord=3)[-1])\
@@ -116,9 +116,9 @@ class Solution:
     
     def slope_z_prime(self,x):
         sol = self.sol
-        return (-sol["Fz_1"]/2*step(x,self.geo.x_1,power=2)\
-                -sol["Fz_2"]/2*step(x,self.geo.x_2,power=2)\
-                -sol["Fz_3"]/2*step(x,self.geo.x_3,power=2)\
+        return (-sol["Fz'_1"]/2*step(x,self.geo.x_1,power=2)\
+                -sol["Fz'_2"]/2*step(x,self.geo.x_2,power=2)\
+                -sol["Fz'_3"]/2*step(x,self.geo.x_3,power=2)\
                 -(sol["Fa"]*self.case.a_z)/2*step(x,self.case.x_I,power=2)\
                 +(self.case.P*self.case.a_z)/2*step(x,self.case.x_II,power=2))\
                 *-1/(self.case.E*self.geo.MMoI[0])\

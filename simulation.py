@@ -21,7 +21,7 @@ class Simulation:
     
     @property
     def BCs(self):
-        BCs = ["Vy(la)", "Vz(la)", "My(la)", "Mz(la)", "T(la)","vy(x1)", "vz(x1)", "vy(x2)","vz(x2)", "vy(x3)","vz(x3)","vz(act)"]
+        BCs = ["Vy'(la)", "Vz'(la)", "My'(la)", "Mz'(la)", "T(la)","vy'(x1)", "vz'(x1)", "vy'(x2)","vz'(x2)", "vy'(x3)","vz'(x3)","vz'(act)"]
 
         A = list(sim.case.A)
 
