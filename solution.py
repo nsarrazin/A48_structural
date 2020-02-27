@@ -98,15 +98,23 @@ class Solution:
 
     def slope_y_prime(self,x):
         sol = self.sol
-        return (-sol["Fy_1"]/2*step(x,self.geo.x_1,power=2)-sol["Fy_2"]/2*step(x,self.geo.x_2,power=2)-sol["Fy_3"]/2*step(x,self.geo.x_3,power=2)\
-            -(sol["Fa"]*self.case.a_y)/2*step(x,self.case.x_I,power=2)\
-                -(self.case.P*self.case.a_y)/2*step(x,self.case.x_II,power=2)-self.case.interp.integrate_q(x,ord=3)[-1])*-1/(self.case.E*self.geo.MMoI[1])\
-                    +sol["C3"]
+        return (-sol["Fy_1"]/2*step(x,self.geo.x_1,power=2)\
+                -sol["Fy_2"]/2*step(x,self.geo.x_2,power=2)\
+                -sol["Fy_3"]/2*step(x,self.geo.x_3,power=2)\
+                -(sol["Fa"]*self.case.a_y)/2*step(x,self.case.x_I,power=2)\
+                +(self.case.P*self.case.a_y)/2*step(x,self.case.x_II,power=2)\
+                -self.case.interp.integrate_q(x,ord=3)[-1])\
+                *-1/(self.case.E*self.geo.MMoI[1])\
+                +sol["C3"]
     
     def slope_z_prime(self,x):
         sol = self.sol
-        return (-sol["Fz_1"]/2*step(x,self.geo.x_1,power=2)-sol["Fz_2"]/2*step(x,self.geo.x_2,power=2)-sol["Fz_3"]/2*step(x,self.geo.x_3,power=2)\
-            -(sol["Fa"]*self.case.a_z)/2*step(x,self.case.x_I,power=2)-(self.case.P*self.case.a_z)/2*step(x,self.case.x_II,power=2))*-1/(self.case.E*self.geo.MMoI[0])\
+        return (-sol["Fz_1"]/2*step(x,self.geo.x_1,power=2)\
+                -sol["Fz_2"]/2*step(x,self.geo.x_2,power=2)\
+                -sol["Fz_3"]/2*step(x,self.geo.x_3,power=2)\
+                -(sol["Fa"]*self.case.a_z)/2*step(x,self.case.x_I,power=2)\
+                +(self.case.P*self.case.a_z)/2*step(x,self.case.x_II,power=2))\
+                *-1/(self.case.E*self.geo.MMoI[0])\
                 +sol["C1"]
 
 
