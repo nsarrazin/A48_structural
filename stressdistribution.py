@@ -121,7 +121,7 @@ x_hinge3 = 1.494
 x_actuator1 = 0.3755
 x_actuator2 = 0.6205
 
-P = 42900
+P = 49200
 Py = np.sin(np.radians(30))*P
 Pz = np.cos(np.radians(30))*P
 
@@ -217,32 +217,34 @@ plt.show()
 
 #these vary over span and height
 sigmaxtotal1 = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
-critical1 = np.matrix(sigmaxtotal1[0])
+
+#take critical spanwise cut
+sigmaxtotal1critical = np.matrix(sigmaxtotal1[-1])
+
+#take critical crosssectional cut
+sigmatotal1crosssection = sigmaxtotal1[:][-1]
+
+#print(sigmaxtotal1)
+
+#fig = plt.figure()
+#cs = plt.imshow(sigmaxtotal1, extent = (0., 1.611, -0.0805, 0.0805), cmap='Blues')
+#cbar= plt.colorbar(cs, shrink =0.5)
+#cbar.ax.set_ylabel("Bending in x direction [Pa]")
+#plt.xlabel("Span-wise direction [m]")
+#plt.ylabel("Height direction [m]")
+#plt.title("Bending stress in x direction (sigma_x)")
+#plt.tight_layout()
+#plt.show()
 
 #these vary over span and chord
 sigmaxtotal2 = np.array(sigmax6 + sigmax7 + sigmax8 + sigmax9 + sigmax10)
-critical2 = np.matrix(sigmaxtotal1[0])
 
-criticalarray = np.array(critical1 + critical2)
-critical = criticalarray[0]
+#take highest tension and highest compression cuts spanwise
+sigmaxtotal2criticaltension = np.matrix(sigmaxtotal2[0])
+sigmaxtotal2criticalcompression = np.matrix(sigmaxtotal2[-1])
 
-plt.plot(x1,critical)
-plt.show()
-
-
-
-#plt.plot(x1,sigmaytotal1)
-#plt.show()
-
-#plt.plot(z1,sigmaytotal2)
-#plt.show()
-
-#plt.plot(y2,sigmaztotal1)
-#plt.show()
-
-#plt.plot(x2,sigmaztotal2)
-#plt.show()
-
+#take critical crossectioncut
+sigmatotal2crosssection = sigmaxtotal2[:][-1]
 
 #fig = plt.figure()
 #cs = plt.imshow(sigmaxtotal2, extent = (0., 1.611, 0, 0.505), cmap='Blues')
@@ -255,12 +257,34 @@ plt.show()
 #plt.show()
 
 
-#fig = plt.figure()
-#cs = plt.imshow(sigmaxtotal1, extent = (0., 1.611, -0.0805, 0.0805), cmap='Blues')
-#cbar= plt.colorbar(cs, shrink =0.5)
-#cbar.ax.set_ylabel("Bending in x direction [Pa]")
-#plt.xlabel("Span-wise direction [m]")
-#plt.ylabel("Height direction [m]")
-#plt.title("Bending stress in x direction (sigma_x)")
-#plt.tight_layout()
-#plt.show()
+#make critical spanwise cuts
+critical1array = np.array(sigmaxtotal1critical + sigmaxtotal2criticaltension)
+critical2array = np.array(sigmaxtotal1critical + sigmaxtotal2criticalcompression)
+critical1 = critical1array[0]
+critical2 = critical2array[0]
+
+#plot critical spanwise distributions
+plt.plot(x1,critical1)
+plt.plot(x1,critical2)
+plt.show()
+
+#make critical crosssection
+criticalcrosssection = []
+
+for a in range(len(sigmatotal1crosssection)):
+    criticalcrosssection.append([])
+    for b in range(len(sigmatotal2crosssection)):       
+        criticalcrosssection[-1].append(sigmatotal1crosssection[a]+sigmatotal2crosssection[b])
+
+fig = plt.figure()
+cs = plt.imshow(criticalcrosssection, extent = (0., 0.505, -0.0805, 0.0805), cmap='Blues')
+cbar= plt.colorbar(cs, shrink =0.5)
+cbar.ax.set_ylabel("Sigmaxx in crosssection [Pa]")
+plt.xlabel("Chord-wise direction [m]")
+plt.ylabel("Height-wise direction [m]")
+plt.title("Bending stress in x direction (sigma_x)")
+plt.tight_layout()
+plt.show()
+
+
+
