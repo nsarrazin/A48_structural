@@ -35,8 +35,8 @@ class LoadCase:
                         0,  #C3
                         0,  #C4
                         0,  #C5
-                        self.P*self.a_y*step(x,self.x_II,power=0)\
-                            self.interp.integrate_q(x,ord=1)[-1]   #const
+                        -self.P*self.a_y*step(x,self.x_II,power=0)\
+                        + self.interp.integrate_q(x,ord=1)[-1]   #const
                         ])
 
     def V_z_prime(self,x):
@@ -52,7 +52,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          0, #C5
-                         self.P*self.a_z*step(x,self.x_II,power=0) #const
+                         -self.P*self.a_z*step(x,self.x_II,power=0) #const
                          ])
 
     def M_y_prime(self, x):
@@ -68,7 +68,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          0, #C5
-                         -self.P*self.a_z*step(x,self.x_II,power=1)   #const
+                         +self.P*self.a_z*step(x,self.x_II,power=1)   #const
                          ])
 
     def M_z_prime(self, x):
@@ -84,7 +84,7 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          0,  #C5
-                         -self.P*self.a_y*step(x,self.x_II,power=1)\
+                         +self.P*self.a_y*step(x,self.x_II,power=1)\
                              -self.interp.integrate_q(x,ord=2)[-1]   #const
                          ])
 
@@ -101,8 +101,8 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          0, #C5
-                         self.P*self.a_y*self.z_sc*step(x,self.x_II,power=0)\
-                             +self.P*self.a_m*step(x,self.x_II,power=0)\
+                         -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=0)\
+                             -self.P*self.a_m*step(x,self.x_II,power=0)\
                                  +self.interp.integrate_tau(x,self.z_sc,ord=1)[-1]  #const
                          ])
         
@@ -120,7 +120,8 @@ class LoadCase:
                          -self.E*self.geo.MMoI[1]*x,    #C3
                          -self.E*self.geo.MMoI[1],  #C4
                          0, #C5
-                         (self.P*self.a_y)/6*step(x,self.x_II,power=3)-self.interp.integrate_q(x,ord=4)[-1]  #const
+                         +(self.P*self.a_y)/6*step(x,self.x_II,power=3)\
+                         -self.interp.integrate_q(x,ord=4)[-1]  #const
                          ])*1/(-self.E*self.geo.MMoI[1])
         
 
@@ -154,7 +155,9 @@ class LoadCase:
                          0, #C3
                          0, #C4
                          self.G*self.geo.J, #C5
-                         -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=1)-self.P*self.a_m*step(x,self.x_II,power=1)-self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
+                         +self.P*self.a_y*self.z_sc*step(x,self.x_II,power=1)\
+                             +self.P*self.a_m*step(x,self.x_II,power=1)\
+                             -self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
                          ])*1/(self.G*self.geo.J)
         
 
@@ -193,17 +196,31 @@ class LoadCase:
 
     @property
     def B(self):
+# return np.array([0, #V_y_prime
+#             0,  #V_z_priee
+#             0, #M_y_prime
+#             0,     #M_z_prime
+#             0, #T
+#             self.d_1*np.cos(-self.defl), #vy(x1)+theta(x1)*z_sc
+#             self.d_1*np.sin(-self.defl), #vz(x1)=0
+#             0, #vy(x2)+theta(x2)*z_sc
+#             0, #vz(x2)=0
+#             self.d_3*np.cos(-self.defl), #vy(x3)+theta(x3)*z_sc
+#             self.d_3*np.sin(-self.defl), #vz(x3)=0
+#             0, #vz(xI)=0
+#             1], dtype=np.float64)  
+    
         return np.array([0, #V_y_prime
                          0,  #V_z_priee
                          0, #M_y_prime
                          0,     #M_z_prime
                          0, #T
                          self.d_1, #vy(x1)+theta(x1)*z_sc
-                         0, #vz(x1)=0
+                         0,
                          0, #vy(x2)+theta(x2)*z_sc
                          0, #vz(x2)=0
-                         self.d_3, #vy(x3)+theta(x3)*z_sc
-                         0, #vz(x3)=0
+                         self.d_3,
+                         0,
                          0, #vz(xI)=0
                          1], dtype=np.float64)  
     

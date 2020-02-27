@@ -72,11 +72,11 @@ if __name__ == "__main__":
     # print(sim.interp.integrate_q(sim.geo.x_1,ord=4)[-1])
     sim.solution.plot_defl()
     # sim.solution.plot_twist()
-    # sim.solution.plot_shear()
-    # sim.solution.plot_moment()
-    # sim.solution.plot_torque()
+    sim.solution.plot_shear()
+    sim.solution.plot_moment()
+    sim.solution.plot_torque()
     # sim.solution.plot_tau()
-    sim.solution.plot_slope()
+    # sim.solution.plot_slope()
     # print(sim.Bcs)
 
 
