@@ -23,7 +23,8 @@ class Solution:
         sol = self.sol
         return -1*(sol["Fy_1"]*step(x,self.geo.x_1,power=0)+sol["Fy_2"]*step(x,self.geo.x_2,power=0)+sol["Fy_3"]*step(x,self.geo.x_3,power=0)\
             +sol["Fa"]*self.case.a_y*step(x,self.case.x_I,power=0)\
-                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)-self.case.interp.integrate_q(x,ord=1)[-1])
+                +self.case.P*self.case.a_y*step(x,self.case.x_II,power=0)\
+                    +self.case.interp.integrate_q(x,ord=1)[-1])
 
     def V_z_prime(self,x):
         sol = self.sol

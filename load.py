@@ -36,7 +36,7 @@ class LoadCase:
                         0,  #C4
                         0,  #C5
                         self.P*self.a_y*step(x,self.x_II,power=0)\
-                            -self.interp.integrate_q(x,ord=1)[-1]   #const
+                            self.interp.integrate_q(x,ord=1)[-1]   #const
                         ])
 
     def V_z_prime(self,x):
