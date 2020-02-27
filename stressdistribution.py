@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from data.consts import parameters_geometry
 import geometry
+import interpolation as inter
 
 class stressdistribution:
     def __init__(self, **kwargs):
@@ -30,14 +31,15 @@ class stressdistribution:
         c = self.c_a
         b = self.l_a
         h = self.h
-        Iyy = 4.594369333645184e-05
-        Izz = 4.753851442684437e-06
+        Iyy = 4.594369333645184 * 10**(-5)
+        Izz = 4.753851442684437 * 10**(-6)
         
         #spanwise locations
         x = b*np.linspace(0,1,10)
 
         #moment z varying spanwise
         Mz = F*(xF - x)
+        print(Mz)
 
         #direct stress in y direction due to force (constant throughout span and chord)
         sigmay1 = np.matrix(len(x)*[F/(c*b)])
@@ -62,10 +64,10 @@ class stressdistribution:
     def sigmaduetoxmoment(self, Mx):
         c = self.c_a
         h = self.h
-        Ixx = 1./12.*self.l_a*self.c_a**3
+        Ixx = 1./12.*self.l_a*self.c_a**3 - 1./12.*(self.l_a-2*self.t_sk)*(self.c_a-2*self.t_sk)**3
 
         #chord locations
-        z = c*np.linspace(0,1,10)
+        z = np.linspace(-self.h/2.,self.c_a-self.h/2.,10)
 
         #sigmay due to moment in x varies chordwise
         sigmay = np.matrix(Mx/Ixx*z)
@@ -77,6 +79,60 @@ class stressdistribution:
         sigmaz = np.matrix(Mx/Ixx*y)
 
         return z, y, sigmay, sigmaz
+
+    def sigmaduetoq(self,F,xF,zF): 
+        c = self.c_a
+        b = self.l_a
+        h = self.h
+        Iyy = 4.594369333645184e-05
+        Izz = 4.753851442684437e-06
+        Ixx = 1./12.*self.l_a*self.c_a**3 - 1./12.*(self.l_a-2*self.t_sk)*(self.c_a-2*self.t_sk)**3
+
+        print(Ixx)
+
+
+        #spanwise locations
+        x = b*np.linspace(0,1,10)
+
+        #chordwise locations
+        z = np.linspace(-self.h/2.,self.c_a-self.h/2.,10)
+
+        #moment z varying spanwise
+        Mz = F*(xF - x)
+
+        Mx = F*(zF -z)
+
+        #direct stress in y direction due to force (constant throughout span and chord)
+        sigmay1 = np.matrix(len(x)*[F/(c*b)])
+
+        #bending stress in y direction due to force (varying spanwise)
+        sigmay2 = np.matrix(Mz/Izz*x)
+
+        #bending stress in y direction due to force (varying chordwise)
+        sigmay3 = np.matrix(Mx/Ixx*z)
+
+        sigmay = sigmay1 + sigmay2 + sigmay3
+
+        #heightwise locations
+        y = 0.5*h*np.linspace(-1,1,10)
+
+        #bending stress in x direction due to force (varying in height and spanwise)
+        sigmax = []
+        for a in range(len(x)):
+            sigmax.append(Mz[a]/Izz*y)
+
+
+        sigmax = np.matrix(sigmax)
+
+
+        #bending stress in z direction due to force(varying in height and chord)
+        sigmaz = []
+        for b in range(len(z)):
+            sigmaz.append(Mx[b]/Ixx*y)
+        
+        sigmaz = np.matrix(sigmaz)
+
+        return x,y,z, sigmax, sigmay, sigmaz
 
     def sigmaduetozforce(self,F,xF):
         c = self.c_a
@@ -100,7 +156,7 @@ class stressdistribution:
         sigmaz = sigmaz1 + sigmaz2
 
         #chord locations
-        z = c*np.linspace(0,1,10)
+        z = np.linspace(-self.h/2.,self.c_a-self.h/2.,10)
 
         #bending stress in x direction (sigmax) varying over span and chord
         sigmax = []
@@ -110,6 +166,13 @@ class stressdistribution:
         sigmax = np.matrix(sigmax)
 
         return x, z, sigmaz, sigmax
+
+    def sigmaduetoxforce(self, F):
+        h = self.h
+        c = self.c_a
+        sigmax = F/(c*h)
+
+        return sigmax
 
 
 
@@ -121,23 +184,24 @@ x_hinge3 = 1.494
 x_actuator1 = 0.3755
 x_actuator2 = 0.6205
 
-P = 49200
+P = -49200
 Py = np.sin(np.radians(30))*P
 Pz = np.cos(np.radians(30))*P
 
-Rz1 = 161996.81039122655
-Rz2 = -230586.479726097
-Rz3 = 80376.08188197864
+Rz1 = 0 #-145131.4967561881
+Rz2 = 0 #219109.49055686826
+Rz3 = 0 #-62191.58125357197
 
-Ry1 = 28819.824616900863
-Ry2 = -34036.20675301132
-Ry3 = 18207.170412479594
+Ry1 = 0 #84700.72749871935
+Ry2 = 0 #-99334.78822558284
+Ry3 = 0 #15253.049364200167
 
-Ra = -62809.776913705806
-Rya = Ra*np.sin(np.radians(30))
-Rza = Ra*np.cos(np.radians(30))
+Ra = 0 #-62809.776913705806
+Rya = 0 #Ra*np.sin(np.radians(30))
+Rza = 0 #Ra*np.cos(np.radians(30))
+Rxa = 0
 
-Mxa = Ra*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
+Mxa = 0 #Ra*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
 Mxp = P*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
 
 
@@ -157,27 +221,21 @@ x2, z2, sigmaz6, sigmax9 = test.sigmaduetozforce(Rz3, x_hinge3)
 x2, z2, sigmaz7, sigmax10 = test.sigmaduetozforce(Rza, x_actuator1)
 
 
-#########################sigma y #############################################################
+#########################   sigma y #############################################################
 
 #these vary over span
 sigmaytotal1array = np.array(sigmay1 + sigmay2 + sigmay3 + sigmay4 + sigmay5)
 sigmaytotal1 = sigmaytotal1array[0]
 
+plt.plot(x1,sigmaytotal1)
+plt.show()
+
 #vary chordwise
 sigmaytotal2array = np.array(sigmay6 + sigmay7)
 sigmaytotal2 = sigmaytotal2array[0]
 
-#take critical crosssection of chordwise varying stress
-sigmaycritical = np.matrix(10*[sigmaytotal2[-1]])
-
-#combine
-sigmayarray = np.array(np.matrix(sigmaytotal1) + sigmaycritical)
-sigmay = sigmayarray[0]
-
-#plot
-plt.plot(x1,sigmay)
+plt.plot(z1,sigmaytotal2)
 plt.show()
-
 
 
 ###################### sigma z #############################################################
@@ -185,44 +243,34 @@ plt.show()
 sigmaztotal1array = np.array(sigmaz1 + sigmaz2)
 sigmaztotal1 = sigmaztotal1array[0]
 
-#take maximum tension stress
-mtension = max(sigmaztotal1)
-mtensionmatrix = np.matrix(10*[mtension])
-
-#take maximum compression stress
-mcompression = min(sigmaztotal1)
-mcompressionmatrix = np.matrix(10*[mcompression])
+plt.plot(y1,sigmaztotal1)
+plt.show()
 
 #these vary over span
 sigmaztotal2array = np.array(sigmaz3 + sigmaz4 + sigmaz5 + sigmaz6 + sigmaz7)
 sigmaztotal2 = sigmaztotal2array[0]
 
-
-#combine maximum tension/compression stress that changes over the heigth with span varying stress
-sigmazmatrix = np.matrix(sigmaztotal2)
-sigmaztensionmatrix = sigmazmatrix + mtensionmatrix
-sigmazcompressionmatrix = sigmazmatrix + mcompressionmatrix
-
-sigmaztensionarray = np.array(sigmaztensionmatrix)
-sigmaztension = sigmaztensionarray[0]
-
-sigmazcompressionarray = np.array(sigmazcompressionmatrix)
-sigmazcompression = sigmazcompressionarray[0]
-
-plt.plot(x1, sigmazcompression)
-plt.plot(x1, sigmaztension)
+plt.plot(x1,sigmaztotal2)
 plt.show()
 
+
 ####################################sigma x#########################################
+#direct force
+sigmax10 = test.sigmaduetoxforce(Rxa)
+
 
 #these vary over span and height
-sigmaxtotal1 = np.array(sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5)
+sigmaxtotal1 = sigmax1 + sigmax2 + sigmax3 + sigmax4 + sigmax5
 
 #take critical spanwise cut
-sigmaxtotal1critical = np.matrix(sigmaxtotal1[-1])
+sigmaxtotal1criticallst = np.array(sigmaxtotal1[-1])
+sigmaxtotal1critical = sigmaxtotal1criticallst[0]
+
+
+
 
 #take critical crosssectional cut
-sigmatotal1crosssection = sigmaxtotal1[:][-1]
+#sigmatotal1crosssection = sigmaxtotal1[:][-1]
 
 #print(sigmaxtotal1)
 
@@ -239,45 +287,93 @@ sigmatotal1crosssection = sigmaxtotal1[:][-1]
 #these vary over span and chord
 sigmaxtotal2 = np.array(sigmax6 + sigmax7 + sigmax8 + sigmax9 + sigmax10)
 
-#take highest tension and highest compression cuts spanwise
-sigmaxtotal2criticaltension = np.matrix(sigmaxtotal2[0])
-sigmaxtotal2criticalcompression = np.matrix(sigmaxtotal2[-1])
+maximumtotal2 = sigmaxtotal2[-1][:]
 
-#take critical crossectioncut
-sigmatotal2crosssection = sigmaxtotal2[:][-1]
+
+fig = plt.figure()
+cs = plt.imshow(sigmaxtotal2, extent = (0., 1.611, 0, 0.505), cmap='Blues')
+cbar= plt.colorbar(cs, shrink =0.5)
+cbar.ax.set_ylabel("Bending in x direction [Pa]")
+plt.xlabel("Span-wise direction [m]")
+plt.ylabel("Chord-wise direction [m]")
+plt.title("Bending stress in x direction (sigma_x)")
+plt.tight_layout()
+plt.show()
+
+
 
 #fig = plt.figure()
-#cs = plt.imshow(sigmaxtotal2, extent = (0., 1.611, 0, 0.505), cmap='Blues')
+#cs = plt.imshow(criticalcrosssection, extent = (0., 0.505, -0.0805, 0.0805), cmap='Blues')
 #cbar= plt.colorbar(cs, shrink =0.5)
-#cbar.ax.set_ylabel("Bending in x direction [Pa]")
-#plt.xlabel("Span-wise direction [m]")
-#plt.ylabel("Chord-wise direction [m]")
+#cbar.ax.set_ylabel("Sigmaxx in crosssection [Pa]")
+#plt.xlabel("Chord-wise direction [m]")
+#plt.ylabel("Height-wise direction [m]")
 #plt.title("Bending stress in x direction (sigma_x)")
 #plt.tight_layout()
 #plt.show()
 
 
-#make critical spanwise cuts
-critical1array = np.array(sigmaxtotal1critical + sigmaxtotal2criticaltension)
-critical2array = np.array(sigmaxtotal1critical + sigmaxtotal2criticalcompression)
-critical1 = critical1array[0]
-critical2 = critical2array[0]
+#################### aeroload #######################
+interp = inter.interpolation()
+p = 10
+xlst = test.l_a*np.linspace(0,1,p)
+zlst = np.linspace(-test.h/2.,test.c_a-test.h/2.,p)
 
-#plot critical spanwise distributions
-plt.plot(x1,critical1)
-plt.plot(x1,critical2)
-plt.show()
+l = test.l_a/p
+A = (test.l_a*test.c_a)/(p*p) 
 
-#make critical crosssection
-criticalcrosssection = []
+sigmaxtotal = 0
+sigmaytotal = 0
+sigmaztotal = 0
 
-for a in range(len(sigmatotal1crosssection)):
-    criticalcrosssection.append([])
-    for b in range(len(sigmatotal2crosssection)):       
-        criticalcrosssection[-1].append(sigmatotal1crosssection[a]+sigmatotal2crosssection[b])
+
+for x in xlst:
+    for z in zlst:
+        qk, a = interp.bilinear_interpolation(x,z)
+        Fk = qk*l
+        xn, yn, zn, sigmax, sigmay, sigmaz = test.sigmaduetoq(Fk,x,z)
+
+        sigmaxtotal += sigmax
+        sigmaytotal += sigmay
+        sigmaztotal += sigmaz
+
+maximumq = sigmaxtotal[-1][:]
+
+#fig = plt.figure()
+#cs = plt.imshow(sigmaztotal, extent = (0., 1.611, 0, 0.505), cmap='Blues')
+#cbar= plt.colorbar(cs, shrink =0.5)
+#cbar.ax.set_ylabel("Sigmaxx in crosssection [Pa]")
+#plt.xlabel("Chord-wise direction [m]")
+#plt.ylabel("Height-wise direction [m]")
+#plt.title("Bending stress in x direction (sigma_x)")
+#plt.tight_layout()
+#plt.show()
+
+
+############## sigma x total ########################
+
+
+####### crosssection #######
+
+#varies over chord
+newtotallst = np.array(maximumq + maximumtotal2)
+newtotal = newtotallst[0]
+
+print(maximumq)
+
+#varies over height
+#sigmaxtotal1critical 
+
+sigmafinalx = []
+
+for c in range(10):
+    sigmafinalx.append([])
+    for d in range(10):
+        sigmafinalx[c].append(newtotal[c] + sigmaxtotal1critical[d] + sigmax10)
+
 
 fig = plt.figure()
-cs = plt.imshow(criticalcrosssection, extent = (0., 0.505, -0.0805, 0.0805), cmap='Blues')
+cs = plt.imshow(sigmafinalx, extent = (0., 0.505, -0.0805, 0.0805 ), cmap='Blues')
 cbar= plt.colorbar(cs, shrink =0.5)
 cbar.ax.set_ylabel("Sigmaxx in crosssection [Pa]")
 plt.xlabel("Chord-wise direction [m]")
@@ -285,6 +381,4 @@ plt.ylabel("Height-wise direction [m]")
 plt.title("Bending stress in x direction (sigma_x)")
 plt.tight_layout()
 plt.show()
-
-
 
