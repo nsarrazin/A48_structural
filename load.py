@@ -184,8 +184,9 @@ class LoadCase:
                 
                 self.v_z(self.geo.x_3), #vz(x3)=0
 
-                self.v_y(self.x_I)*np.sin(np.pi-self.defl)+self.v_z(self.x_I)*np.cos(np.pi-self.defl)\
-                    +self.theta(self.x_I)*(self.geo.h/2*np.cos(np.pi-self.defl)+self.z_sc*np.sin(np.pi-self.defl)), #vz(x_I)=0
+                self.v_z(self.x_I) + 
+                    self.theta(self.x_I) * (self.z_sc-self.geo.h/2) * np.sin(self.defl)
+                    + self.theta(self.x_I) * (self.geo.h/2) * np.cos(self.defl),
 
                 np.array([0,0,0,0,0,0,0,0,0,0,0,0,1], dtype=np.float64)]
         return np.vstack(rows)
@@ -193,7 +194,7 @@ class LoadCase:
     @property
     def B(self):
         return np.array([0, #V_y_prime
-                         0,  #V_z_prime
+                         0,  #V_z_priee
                          0, #M_y_prime
                          0,     #M_z_prime
                          0, #T
