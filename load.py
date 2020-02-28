@@ -95,16 +95,16 @@ class LoadCase:
                          0,  #Fz_2
                          self.z_sc*step(x,self.geo.x_3,power=0),  #Fy_3
                          0, #Fz_3
-                         self.a_y*self.z_sc*step(x,self.x_I,power=0) \
-                         + self.a_m*step(x,self.x_I,power=0),  #Fa
+                         - self.a_y*self.z_sc*step(x,self.x_I,power=0) \
+                         - self.a_m*step(x,self.x_I,power=0),  #Fa
                          0, #C1
                          0, #C2
                          0, #C3
                          0, #C4
                          0, #C5
                          -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=0)\
-                         -self.P*self.a_m*step(x,self.x_II,power=0)\
-                         +self.interp.integrate_tau(x,self.z_sc,ord=1)[-1]  #const
+                         +self.P*self.a_m*step(x,self.x_II,power=0)\
+                         -self.interp.integrate_tau(x,self.z_sc,ord=1)[-1]  #const
                          ])
         
 
@@ -150,16 +150,16 @@ class LoadCase:
                             0, #Fz_2
                             self.z_sc*step(x,self.geo.x_3,power=1), #Fy_3
                             0, #Fz_3
-                            self.a_y*self.z_sc*step(x,self.x_I,power=1) \
-                            + self.a_m*step(x,self.x_I,power=1), #Fa
+                            -self.a_y*self.z_sc*step(x,self.x_I,power=1) \
+                            - self.a_m*step(x,self.x_I,power=1), #Fa
                             0, #C1
                             0, #C2
                             0, #C3
                             0, #C4
                             self.G*self.geo.J, #C5
                             -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=1)\
-                            -self.P*self.a_m*step(x,self.x_II,power=1)\
-                            +self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
+                            +self.P*self.a_m*step(x,self.x_II,power=1)\
+                            -self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
                             ])*1/(self.G*self.geo.J)
             
 

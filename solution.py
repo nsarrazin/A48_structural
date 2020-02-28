@@ -58,11 +58,11 @@ class Solution:
         return -1*(sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
                   +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)\
                   +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
-                  +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
-                  +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
+                  -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
+                  -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=0)\
-                  -self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
-                  +self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1])
+                  +self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
+                  -self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1])
 
     def v_y_prime(self, x):
         sol = self.sol
@@ -86,11 +86,11 @@ class Solution:
         return -1*((sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
                    +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)\
                    +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
-                   +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
-                   +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
+                   -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
+                   -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
                    -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=1)\
-                   -self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
-                   +self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])\
+                   +self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
+                   -self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])\
                    *1/(self.case.G*self.geo.J)\
                    +sol["C5"])
     
@@ -130,12 +130,6 @@ class Solution:
         y_prime = x * np.sin(self.case.defl) + y * np.cos(self.case.defl)
 
         return x_prime, y_prime
-
-    def slope_y(self,x):
-        return -self.slope_y_prime(x)*np.sin(self.case.defl)-self.slope_z_prime(x)*np.cos(self.case.defl)
-
-    def slope_z(self,x):
-        return -self.slope_z_prime(x)*np.sin(self.case.defl)+self.slope_y_prime(x)*np.cos(self.case.defl)
     
     def plot_defl(self):
         xs = np.linspace(0, self.geo.l_a, 100)
@@ -149,12 +143,16 @@ class Solution:
 
         plt.plot(xs, ys_1)
         plt.plot(xs, ys_2)
-        
-        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
+
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
-        for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+        
+        # for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
+        #     plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+
+        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
+        #     plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
         plt.show()
 
@@ -166,14 +164,10 @@ class Solution:
         for x in xs:
             ys.append(self.theta(x))
 
-        plt.plot(xs, ys)
-        
-        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
-        for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
+        plt.plot(xs, ys)
         plt.show()
 
 
@@ -194,9 +188,6 @@ class Solution:
 
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
-        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
         plt.show()
 
