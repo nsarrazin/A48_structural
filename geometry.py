@@ -1,7 +1,7 @@
 import numpy as np
 from shearcenter import Shearcenter
 import matplotlib.pyplot as plt
-from data.consts import parameters_geometry
+from data.consts_validation import parameters_geometry
 
 class Geometry:
     def __init__(self, **kwargs):

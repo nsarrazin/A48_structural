@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from data.consts import parameters_geometry
+from data.consts_validation import parameters_geometry
 import geometry
 import interpolation as inter
 

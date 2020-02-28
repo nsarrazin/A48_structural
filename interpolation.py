@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from data.consts import N, h
+from data.consts_validation import N, h
 from scipy.integrate import trapz, cumtrapz
 """
 Technique   : Bi-linear interpolation
@@ -12,6 +12,7 @@ class Interpolation:
     def __init__(self):
         # Generating the x, z, F arrays
         self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")*1e3
+        self.F = np.ones(self.F.shape)*5.54e3
         self.x = np.zeros(41)
         self.z = np.zeros(81)
 
@@ -54,6 +55,7 @@ class Interpolation:
         :param z: scalar; z-position of the point
         :return: scalar, array; the value of q at (x, z) , the weight coefficients of the bi-linear interpolation
         """
+        # return 5.54e3
         row, column = self.index_search(x, z)
         # If point (x,z) is lies on the right boundary
         if row == 80 or column == 40:

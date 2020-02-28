@@ -3,7 +3,7 @@ from geometry import Geometry
 from load import LoadCase
 from interpolation import Interpolation
 from solution import Solution
-from data.consts import parameters_case, parameters_geometry
+from data.consts_validation import parameters_case, parameters_geometry
 from helpers import step
 import matplotlib.pyplot as plt
 import matplotlib as mpl
