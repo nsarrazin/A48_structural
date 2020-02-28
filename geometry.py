@@ -1,4 +1,5 @@
 import numpy as np
+from shearcenter import Shearcenter
 import matplotlib.pyplot as plt
 from data.consts import parameters_geometry
 
@@ -21,6 +22,8 @@ class Geometry:
         self.h_st = kwargs.get("h_st")
         self.w_st = kwargs.get("w_st")
         self.n_st = kwargs.get("n_st")
+
+        self.shear = Shearcenter(self)
         pass
     
 
@@ -103,7 +106,19 @@ class Geometry:
         yst10 = (9*self.strint-np.pi*self.h/4.)*np.sin(beta)
         yst11 = self.h/2. + self.h/2.*np.sin(theta2)
 
-        return ([zst1,zst2,zst3,zst4,zst5,zst6,zst7,zst8,zst9,zst10,zst11],[yst1,yst2,yst3,yst4,yst5,yst6,yst7,yst8,yst9,yst10,yst11])
+        circlst = np.pi*np.linspace(0,1,100)
+        ycirc = self.h/2. - self.h/2*np.cos(circlst)
+        zcirc = self.h/2. - self.h/2*np.sin(circlst)
+
+        skinlst1 = np.linspace(0,1,100)
+        yskin1 = skinlst1 * self.h/2.
+        zskin1 = self.h/2. + (self.c_a - self.h/2.)*skinlst1
+
+        skinlst2 = np.linspace(0,1,100)
+        yskin2 = self.h - skinlst2 * self.h/2.
+        zskin2 = self.h/2. + (self.c_a - self.h/2.)*skinlst2
+
+        return ([zst1,zst2,zst3,zst4,zst5,zst6,zst7,zst8,zst9,zst10,zst11],[yst1,yst2,yst3,yst4,yst5,yst6,yst7,yst8,yst9,yst10,yst11],zcirc,ycirc,zskin1,yskin1,zskin2,yskin2)
 
     @property
     #the y coordinate of the centroid is given w.r.t to the top of airfoil (but the value would be the same if the bottom is taken as reference line)
@@ -177,7 +192,7 @@ class Geometry:
         Iyy1 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy2 = self.t_sk*(l1)**3*(np.cos(beta))**2/12. + l1*self.t_sk* (self.centroid[1]-(self.h/2.+(self.c_a-self.h/2.)/2.))**2
         Iyy3 = self.h*(self.t_sp**3)/12. + self.h*self.t_sp*(self.centroid[1]-self.h/2.)**2
-        Iyy4 = 1.707458589362663*10**(-7) + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-(self.h/2. - 2*(self.h/2.)/(np.pi)))**2
+        Iyy4 = 1./2.*(self.h/2.)**3*np.pi*self.t_sk - (np.pi*self.h/2.*self.t_sk)*(self.h/np.pi)**2 + np.pi*self.t_sk*self.h/2.*(self.centroid[1]-(self.h/2. - 2*(self.h/2.)/(np.pi)))**2
         Iyyst1 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][0])**2
         Iyyst2 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][1])**2
         Iyyst3 = (self.w_st+self.h_st)*self.t_st * (self.centroid[1]-self.crosssection[0][2])**2
@@ -212,25 +227,56 @@ class Geometry:
 
         return Iyy, Izz
 
+    @property
+    def J(self):
+        A1 = 1./2.*np.pi*(self.h/2.)**2
+        A2 = (self.c_a-(self.h/2.))*self.h/2.
+
+        T = 1.
+
+        temp1 = (1./(2*A2)*(self.h/self.t_sp + 2.*self.l1/self.t_sk) + 1./(2*A1)*self.h/self.t_sp)
+        temp2 = (1./(2*A1)*(self.h/self.t_sp + np.pi*self.h/(2.*self.t_sk)) + 1./(2*A2)*self.h/self.t_sp)
+
+        q01 = temp1/(temp2 + A1/A2*temp1)*T/(2*A2)
+        q02 = (T - 2*A1*q01)/(2*A2)
+
+        Tcheck = 2*A1*q01 + 2*A2*q02
+        
+        Gx1 = 1./(2*A1)*((q01-q02)*self.h/self.t_sp + q01*np.pi*self.h/(2.*self.t_sk))
+        Gx2 = 1./(2*A2)*((q02-q01)*self.h/self.t_sp + q02*2*self.l1/(self.t_sk))
+
+        J = T/Gx1
+
+        return J
 
     @property
     def shearcenter(self):
-        return (0, -0.085+self.h/2)
-        #Iyy_verification = 4.5943507864451845e-05, Izz_verification = 4.753851442684436e-06
-        l = self.c_a - self.h/2.
-        alpha = np.arctan2(self.h/2.,l)
-        d = l/np.cos(alpha)
-        #shear center distance calculated from the leading edge
-        dz = l-(self.t_sk*self.h*self.h*d*l)/(12.*self.MMoI[1])+(d*d*self.h*self.h*self.t_sk*np.cos(alpha))/(4.*self.MMoI[1])+(d*self.h*self.h*self.h*self.t_sk*np.cos(alpha))/(12.*self.MMoI[1])-(self.h*self.h*self.h*self.h*self.t_sk*l)/(8.*d*self.MMoI[1])
-        dz = -dz
-        return dz
+        return 0, -self.shear.shearcenter(1)
 
-    @property
-    def J(self):
-        return 7.748548555816594e-06
 
 if __name__ == "__main__": # is called when you run the script
-    # call an instance of the class
-    geo = Geometry(**parameters_geometry) 
+    # call an instance of the class)
+    geo = Geometry(**parameters_geometry)
 
-    print(geo.MMoI)
+    #plot of crosssection with locations of stringers (might want to change to actual yz coordinate system)
+    #plt.plot(geo.crosssection[0],geo.crosssection[1],'x',markersize = 14,label = 'stringer')
+    #plt.plot(geo.crosssection[2],geo.crosssection[3],'black')
+    #plt.plot(geo.crosssection[4],geo.crosssection[5],'black')
+    #plt.plot(geo.crosssection[6],geo.crosssection[7],'black')
+    #plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
+    #plt.legend()
+    #plt.show()
+    # print(geo.centroid)
+
+    # print("q1:", geo.shear.q1(1)[-1])
+    # print("q2:", geo.shear.q2(1)[-1])
+    # print("q3:", geo.shear.q3(1)[-1])
+    # print("q4:", geo.shear.q4(1)[-1])
+    # print("q5:", geo.shear.q5(1)[-1])
+    # print("q6:", geo.shear.q6(1)[-1])
+    print("q01, q02:", geo.shear.q0_redundant(1))
+    dz = geo.shear.shearcenter(1)
+    print("S_z:", geo.h/2 + dz , "[m] dz:", dz, "[m]")
+    error = 0.0855 - (geo.h/2 + dz)
+    print("Error:", error , "[m] -->", round((error/0.0855)*100, 2), "%")
+    geo.shear.shearflow_plot(18125.5, -36451.6)
