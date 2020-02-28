@@ -151,6 +151,7 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Deflection [m]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
 
     def plot_twist(self):
@@ -170,6 +171,7 @@ class Solution:
         plt.ylabel("Twist [rad]")
         plt.legend()
 
+        plt.tight_layout()
         plt.show()
 
 
@@ -192,6 +194,7 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Shear [N]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
 
     def plot_moment(self):
@@ -213,6 +216,7 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Bending moment [N.m]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
 
     def plot_torque(self):
@@ -231,6 +235,7 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Torque [N.m]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
 
     def plot_tau(self):
@@ -243,6 +248,7 @@ class Solution:
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
+        plt.tight_layout()
         plt.show()
 
     def plot_slope(self):
@@ -264,6 +270,7 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Deflection [rad]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
     
         
@@ -290,4 +297,5 @@ class Solution:
         plt.xlabel("Span-wise length [m]")
         plt.ylabel("Deflection [m]")
         plt.legend()
+        plt.tight_layout()
         plt.show()
