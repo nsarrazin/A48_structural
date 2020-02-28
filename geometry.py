@@ -185,6 +185,7 @@ class Geometry:
 
 
     def MMoI(self):
+        return(4.59435E-5, 4.75385E-6)
         beta = self.beta
         l1 = self.l1
 
@@ -226,15 +227,6 @@ class Geometry:
 
         return Iyy, Izz
 
-
-    @property
-    def shearcenter(self):
-
-        return dz
-
-        #y_sc = 0
-        #z_sc = -0.08553893540215983
-
     @property
     def torsionalstiffness(self):
         A1 = 1./2.*np.pi*(self.h/2.)**2
@@ -255,7 +247,7 @@ class Geometry:
 
         J = T/Gx1
 
-        return q01, q02
+        return J
 
 
 if __name__ == "__main__": # is called when you run the script

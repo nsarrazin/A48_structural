@@ -1,16 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from data.consts import N, h
+from scipy.integrate import trapz, cumtrapz
 """
 Technique   : Bi-linear interpolation
 Author      : Group A48, AE year 2020
 Date        : February 2020
 """
 
-class interpolation:
+class Interpolation:
     def __init__(self):
         # Generating the x, z, F arrays
-        self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")
+        self.F = np.genfromtxt("data/aerodynamicloadf100.dat", delimiter=",")*1e3
         self.x = np.zeros(41)
         self.z = np.zeros(81)
 
@@ -96,31 +97,17 @@ class interpolation:
                 break
             z_begin = self.z[i]
             z_end = self.z[i+1]
-            result = result + (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 ))
 
-        return result
-
-    def q_intergrate_double(self, x_begin, x_end, dx):
-        """
-        :param x_begin: scalar; starting value of the integration (span-wise location)
-        :param x_end: scalar; ending value of the integration (span-wise location)
-        :param dx: scalar; integration step-size in x-direction
-        :return: scalar; integrated value of the integrated values along z, along x (double integral)
-        """
-        x_intergrate = np.arange(x_begin, (x_end+dx), dx)
-        result = 0
-        for i, xi in enumerate(x_intergrate):
-            if i == (len(x_intergrate) - 1):
-                break
-            result = result + ((x_intergrate[i+1] - x_intergrate[i])/2) * (self.q_intergration_fixed_x(x_intergrate[i]) + self.q_intergration_fixed_x(x_intergrate[i+1]))
+            val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 ))
+            # print(val)
+            result += val 
         return result
 
     def trapezoidalrule(self, y, x):
         """
         :param y: array; array to integrate
         :param x: array; array with the x-values associated with the y-values
-        :return: array; value of the integral on each interval + the value of the previous interval
-        -> return[i] corresponds to the area of interval i + the area of interval (i-1)
+        :return: array; value of the integral on each x location + the value of the previous x location
         """
         if len(y) == len(x):
             result = np.zeros(len(x))
@@ -137,63 +124,119 @@ class interpolation:
         return result
 
 
+    def integrate_q(self, x, ord=2):
+        xs = np.linspace(0, x, N)
+        ys = np.array([self.q_intergration_fixed_x(x) for x in xs])
+
+        if ord == 0:
+            return ys
+
+        for i in range(ord):
+            # print(i)
+            ys = self.trapezoidalrule(ys, xs)
+
+        return ys
+
+    def tau(self, x_fixed, z_sc):
+        """
+        blabla this is tau #TODO: add documentation
+        """
+        z_integration = np.zeros(80)
+        for i, zi in enumerate(self.z):
+            if i == 80:
+                break
+            z_integration[i] = (self.z[i] + self.z[i+1])/2
+
+        a_list = []
+        for i, zi in enumerate(z_integration):
+            func, a = self.bilinear_interpolation(x_fixed, zi)
+            a_list.append(a)
+
+        result = 0
+        for i, zi in enumerate(self.z):
+            if i == 80:
+                break
+            z_begin = self.z[i]
+            z_end = self.z[i+1]
+
+            z_midpoint = z_integration[i]
+            val = (((a_list[i][0]*z_end) + a_list[i][1]*x_fixed*z_end + (a_list[i][2]/2)*z_end**2 + (a_list[i][3]/2)*x_fixed*z_end**2) - \
+                 ((a_list[i][0]*z_begin) + a_list[i][1]*x_fixed*z_begin + (a_list[i][2]/2)*z_begin**2 + (a_list[i][3]/2)*x_fixed*z_begin**2 )) 
+    
+            result += val * (z_sc - (z_midpoint+h/2))
+
+        return result
+
+    def integrate_tau(self, x, z_sc, ord=2):
+        xs = np.linspace(0, x, N)
+        ys = np.array([self.tau(x, z_sc) for x in xs])
+        
+        if ord == 0 :
+            return ys
+        
+        for i in range(ord):
+            ys = self.trapezoidalrule(ys, xs)
+            # print(ys.shape, xs.shape)
+            # ys = cumtrapz(ys)
+        return ys
 
 
+if __name__ == "__main__":
+        
+    ## Testing implementations
+    test = Interpolation()
+    # x_test = np.linspace(0, 1.611, 82)
+    # z_test = np.linspace(0, -0.505, 162)
+
+    # y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    # x = np.linspace(0, 10, 11)
+    # plt.plot(x, y)
+    # plt.show()
+    # plt.plot(x, test.trapezoidalrule(y, x))
+    # plt.show()
+    # print(test.trapezoidalrule(y, x))
 
 
-## Testing implementations
-#test = interpolation()
+    print(test.x, test.z)
+    ## Uncomment for full 2D plot
+    # u = np.zeros((len(z_test), len(x_test)))
+    # for row, zi in enumerate(u):
+    #     for column, xi in enumerate(zi):
+    #         func, a = test.bilinear_interpolation(x_test[column], z_test[row])
+    #         u[row,column] = func
+    # plt.imshow(u)
+    # plt.show()
 
-# x_test = np.linspace(0, 1.611, 82)
-# z_test = np.linspace(0, -0.505, 162)
+    ## Uncomment for x-direction crossection
+    # u_cross = np.zeros(len(x_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(x_test[i], test.z[40])
+    #     u_cross[i] = func
+    # plt.plot(test.x, test.F[40, :], "-")
+    # plt.plot(x_test, u_cross, "-" )
+    # plt.show()
 
-# y = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-# x = np.linspace(0, 10, 11)
-# plt.plot(x, y)
-# plt.show()
-# plt.plot(x, test.trapezoidalrule(y, x))
-# plt.show()
-# print(test.trapezoidalrule(y, x))
+    ## Uncomment for z-direction crossection
+    # u_cross = np.zeros(len(z_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(test.x[21], z_test[i])
+    #     u_cross[i] = func
+    # plt.plot(test.z, test.F[:, 21], "-")
+    # plt.plot(z_test, u_cross, "-" )
+    # plt.show()
 
-## Uncomment for full 2D plot
-# u = np.zeros((len(z_test), len(x_test)))
-# for row, zi in enumerate(u):
-#     for column, xi in enumerate(zi):
-#         func, a = test.bilinear_interpolation(x_test[column], z_test[row])
-#         u[row,column] = func
-# plt.imshow(u)
-# plt.show()
+    ## Uncomment to test integration
+    # u_cross = np.zeros(len(z_test))
+    # for i, ui in enumerate(u_cross):
+    #     func, a = test.bilinear_interpolation(test.x[20], z_test[i])
+    #     u_cross[i] = func
+    # trapz_result = np.trapz(u_cross, z_test)
+    # result = test.q_intergration_fixed_x(test.x[20])
+    # print("Numpy trapezoidal implementation:", trapz_result)
+    # print("Own analytical implementation   :", result)
+    # print("Difference                      :", abs(trapz_result-result))
 
-## Uncomment for x-direction crossection
-# u_cross = np.zeros(len(x_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(x_test[i], test.z[40])
-#     u_cross[i] = func
-# plt.plot(test.x, test.F[40, :], "-")
-# plt.plot(x_test, u_cross, "-" )
-# plt.show()
-
-## Uncomment for z-direction crossection
-# u_cross = np.zeros(len(z_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(test.x[21], z_test[i])
-#     u_cross[i] = func
-# plt.plot(test.z, test.F[:, 21], "-")
-# plt.plot(z_test, u_cross, "-" )
-# plt.show()
-
-## Uncomment to test integration
-# u_cross = np.zeros(len(z_test))
-# for i, ui in enumerate(u_cross):
-#     func, a = test.bilinear_interpolation(test.x[20], z_test[i])
-#     u_cross[i] = func
-# trapz_result = np.trapz(u_cross, z_test)
-# result = test.q_intergration_fixed_x(test.x[20])
-# print("Numpy trapezoidal implementation:", trapz_result)
-# print("Own analytical implementation   :", result)
-# print("Difference                      :", abs(trapz_result-result))
-
-## Uncomment to test double integral
-# result = test.q_intergrate_double(1, 1.5, 0.01)
-# print(result)
+    ## Uncomment to test double integral
+    # result = test.q_intergrate_double(1, 1.5, 0.01)
+    # print(result)
 
