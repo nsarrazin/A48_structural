@@ -106,8 +106,7 @@ class LoadCase:
                          -self.P*self.a_m*step(x,self.x_II,power=0)\
                          -self.interp.integrate_tau(x,self.z_sc,ord=1)[-1]  #const
                          ])
-        
-
+    
     def v_y_prime(self, x):
         return np.array([-1/6*step(x,self.geo.x_1,power=3),    #Fy_1
                          0, #Fz_1
@@ -186,7 +185,7 @@ class LoadCase:
                 self.v_z(self.geo.x_2), #vz(x2)=0
                 
                 self.v_y(self.geo.x_3)+self.theta(self.geo.x_3)*self.z_sc,    #vy(x3)+theta(x3)*z_sc
-                
+
                 self.v_z(self.geo.x_3), #vz(x3)=0
 
                 self.v_z(self.x_I) + 

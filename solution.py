@@ -255,14 +255,14 @@ class Solution:
             ys_1.append(self.slope_y_prime(x))
             ys_2.append(self.slope_z_prime(x))
 
-        plt.plot(xs, ys_1, label=r"$\frac^{d_{v_{y'}}_{d_x}$")
-        plt.plot(xs, ys_2, label=r"$\frac^{d_{v_{z'}}_{d_x}$")
+        plt.plot(xs, ys_1, label=r"$\frac{d_{v_{y'}}}{d_x}$")
+        plt.plot(xs, ys_2, label=r"$\frac{d_{v_{z'}}}{d_x}$")
 
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
             plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
         plt.xlabel("Span-wise length [m]")
-        plt.ylabel("Deflection [m]")
+        plt.ylabel("Deflection [rad]")
         plt.legend()
         plt.show()
     
