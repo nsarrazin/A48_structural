@@ -95,8 +95,8 @@ class LoadCase:
                          0,  #Fz_2
                          self.z_sc*step(x,self.geo.x_3,power=0),  #Fy_3
                          0, #Fz_3
-                         - self.a_y*self.z_sc*step(x,self.x_I,power=0) \
-                         - self.a_m*step(x,self.x_I,power=0),  #Fa
+                         + self.a_y*self.z_sc*step(x,self.x_I,power=0) \
+                         + self.a_m*step(x,self.x_I,power=0),  #Fa
                          0, #C1
                          0, #C2
                          0, #C3
@@ -150,8 +150,8 @@ class LoadCase:
                             0, #Fz_2
                             self.z_sc*step(x,self.geo.x_3,power=1), #Fy_3
                             0, #Fz_3
-                            -self.a_y*self.z_sc*step(x,self.x_I,power=1) \
-                            - self.a_m*step(x,self.x_I,power=1), #Fa
+                            +self.a_y*self.z_sc*step(x,self.x_I,power=1) \
+                            + self.a_m*step(x,self.x_I,power=1), #Fa
                             0, #C1
                             0, #C2
                             0, #C3

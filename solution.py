@@ -8,6 +8,7 @@ class Solution:
         self.case = parent.case
         self.geo = parent.geo
         self._sol = {}
+        self.labels=["Hinge 1", "Hinge 2" , "Hinge 3", "Actuator I", "Actuator II"]
 
     @property
     def sol(self):
@@ -58,8 +59,8 @@ class Solution:
         return (sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
                   +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)\
                   +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
-                  -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
-                  -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
+                  +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
+                  +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=0)\
                   -self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
                   -self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1])
@@ -86,8 +87,8 @@ class Solution:
         return ((sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
                    +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)\
                    +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
-                   -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
-                   -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
+                   +sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
+                   +sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
                    -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=1)\
                    -self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
                    -self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])\
@@ -141,20 +142,15 @@ class Solution:
             ys_1.append(self.v_y_prime(x))
             ys_2.append(self.v_z_prime(x))
 
-        plt.plot(xs, ys_1)
-        plt.plot(xs, ys_2)
-
-        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
+        plt.plot(xs, ys_1, label="v_y'")
+        plt.plot(xs, ys_2, label="v_z'")
         
-        # for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3]):
-        #     plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
-        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-        #     plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
-        # plt.legend((ys_1,ys_2),("v_y'","v_z'"))
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Deflection [m]")
+        plt.legend()
         plt.show()
 
     def plot_twist(self):
@@ -165,10 +161,15 @@ class Solution:
         for x in xs:
             ys.append(self.theta(x))
 
-        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+        plt.plot(xs, ys, label="Twist")
 
-        plt.plot(xs, ys)
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
+        
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Twist [rad]")
+        plt.legend()
+
         plt.show()
 
 
@@ -182,14 +183,15 @@ class Solution:
             ys_1.append(self.V_y_prime(x))
             ys_2.append(self.V_z_prime(x))
 
-        # ys_1, ys_2 = self.rotate(np.array(ys_1), np.array(ys_2))
-
-        plt.plot(xs, ys_1)
-        plt.plot(xs, ys_2)
-
+        plt.plot(xs, ys_1, label="Vy'")
+        plt.plot(xs, ys_2, label="Vz'")
+        
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Shear [N]")
+        plt.legend()
         plt.show()
 
     def plot_moment(self):
@@ -202,35 +204,33 @@ class Solution:
             ys_1.append(self.M_y_prime(x))
             ys_2.append(self.M_z_prime(x))
 
-        plt.plot(xs, ys_1)
-        plt.plot(xs, ys_2)
+        plt.plot(xs, ys_1, label="My'")
+        plt.plot(xs, ys_2, label="Mz'")
 
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
-        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Bending moment [N.m]")
+        plt.legend()
         plt.show()
 
     def plot_torque(self):
         xs = np.linspace(0, self.geo.l_a, 100)
 
         ys_1 = []
-        #ys_2 = []
 
         for x in xs:
             ys_1.append(self.T(x))
 
-        plt.plot(xs, ys_1)
-        # plt.plot(xs, ys_2)
-
+        plt.plot(xs, ys_1, label="Torque")
+        
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
-        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Torque [N.m]")
+        plt.legend()
         plt.show()
 
     def plot_tau(self):
@@ -255,17 +255,39 @@ class Solution:
             ys_1.append(self.slope_y_prime(x))
             ys_2.append(self.slope_z_prime(x))
 
-        plt.plot(xs, ys_1)
-        plt.plot(xs, ys_2)
+        plt.plot(xs, ys_1, label=r"$\frac^{d_{v_{y'}}_{d_x}$")
+        plt.plot(xs, ys_2, label=r"$\frac^{d_{v_{z'}}_{d_x}$")
 
         for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
-            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}")
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
 
-        # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
-            # plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
-
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Deflection [m]")
+        plt.legend()
         plt.show()
-
     
         
-    
+    def plot_solution(self):
+        xs = np.linspace(0, self.geo.l_a, 100)
+
+        ys_1 = []
+
+        for x in xs:
+            ys_1.append(self.theta(x)*self.case.z_sc+self.v_y(x))
+
+        plt.plot(xs, ys_1, label="v_y'(x)+theta(x)*z_sc")
+
+        bc = [(self.geo.x_1, self.case.d_1),
+              (self.geo.x_2, 0),
+              (self.geo.x_3, self.case.d_3)]
+        
+        for n,x in enumerate([self.geo.x_1, self.geo.x_2, self.geo.x_3, self.case.x_I, self.case.x_II]):
+            plt.axvline(x=x, linestyle="dashed", linewidth=1.2, color=f"C{n}", label=self.labels[n])
+
+        for n,point in enumerate(bc):
+            plt.scatter(point[0], point[1], c=f"C{n}",s=40, label=f"BC @ Hinge {n}")
+        
+        plt.xlabel("Span-wise length [m]")
+        plt.ylabel("Deflection [m]")
+        plt.legend()
+        plt.show()
