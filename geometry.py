@@ -270,6 +270,7 @@ if __name__ == "__main__": # is called when you run the script
     #plt.plot(geo.centroid[1],geo.centroid[0],'o',label = 'centroid')
     #plt.legend()
     #plt.show()
+    print(geo.centroid)
 
     print("q1:", geo.shear.q1(1)[-1])
     print("q2:", geo.shear.q2(1)[-1])
@@ -282,3 +283,4 @@ if __name__ == "__main__": # is called when you run the script
     print("S_z:", geo.h/2 + dz , "[m] dz:", dz, "[m]")
     error = 0.0855 - (geo.h/2 + dz)
     print("Error:", error , "[m] -->", round((error/0.0855)*100, 2), "%")
+    geo.shear.shearflow_plot(18125.5, -36451.6)
