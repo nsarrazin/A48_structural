@@ -253,7 +253,7 @@ class Geometry:
         A1 = 1. / 2. * np.pi * (self.h / 2.) ** 2
         A2 = (self.c_a - (self.h / 2.)) * self.h / 2.
 
-        T = 1.
+        T = -1847.4
 
         temp1 = (1. / (2 * A2) * (self.h / self.t_sp + 2. * self.l1 / self.t_sk) + 1. / (2 * A1) * self.h / self.t_sp)
         temp2 = (1. / (2 * A1) * (self.h / self.t_sp + np.pi * self.h / (2. * self.t_sk)) + 1. / (
@@ -302,3 +302,4 @@ if __name__ == "__main__": # is called when you run the script
     error = 0.0855 - (geo.h/2 + dz)
     print("Error:", error , "[m] -->", round((error/0.0855)*100, 2), "%")
     geo.shear.shearflow_plot(18125.5, -36451.6)
+    print(geo.shear.h)

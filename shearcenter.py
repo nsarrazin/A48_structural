@@ -304,16 +304,16 @@ class Shearcenter:
         tau6 = (self.q6(Vy) + self.q6_z(Vz) + qs1)/self.t_skin
         return tau1, tau2, tau3, tau4, tau5, tau6
 
-
     def shearflow_plot(self, Vz, Vy):
+        q_T1, q_T2 = self.geometry.torsionalstiffness
         qs1, qs2 = self.q0_redundant(Vy)
 
-        q1 = self.q1(Vy) + self.q1_z(Vz) + qs1
-        q2 = self.q2(Vy) + self.q2_z(Vz) - qs1 + qs2
-        q3 = self.q3(Vy) + self.q3_z(Vz) + qs2
-        q4 = self.q4(Vy) + self.q4_z(Vz) + qs2
-        q5 = self.q5(Vy) + self.q5_z(Vz) - qs1 + qs2
-        q6 = self.q6(Vy) + self.q6_z(Vz) + qs1
+        q1 = self.q1(Vy) + self.q1_z(Vz) + qs1 + q_T1
+        q2 = self.q2(Vy) + self.q2_z(Vz) - qs1 + qs2 + q_T2 - q_T1
+        q3 = self.q3(Vy) + self.q3_z(Vz) + qs2 + q_T2
+        q4 = self.q4(Vy) + self.q4_z(Vz) + qs2 + q_T2
+        q5 = self.q5(Vy) + self.q5_z(Vz) - qs1 + qs2 + q_T2 - q_T1
+        q6 = self.q6(Vy) + self.q6_z(Vz) + qs1 + q_T1
 
         ds = self.lsk/self.n_steps
         s = np.arange(0, (self.lsk + ds), ds)
@@ -343,16 +343,16 @@ class Shearcenter:
         plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
         plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
-        plt.plot(s, q3, label = "region 3")
-        plt.plot(s, q4, label = "region 4")
+        #plt.plot(s, q3, label = "region 3")
+        #plt.plot(s, q4, label = "region 4")
         #plt.plot(y2, q2, label = "region 2")
         #plt.plot(y5, q5, label = "region 5")
-        #plt.plot(theta1, q1, label = "region 1")
-        #plt.plot(theta6, q6, label = "region 6")
-        plt.xlabel("s3 / s4 [m]")
+        plt.plot(theta1, q1, label = "region 1")
+        plt.plot(theta6, q6, label = "region 6")
+        plt.xlabel("s1 / s6 [m]")
         plt.ylabel("q [N/m]")
         plt.legend()
         plt.grid()
-        #plt.savefig("q_region34.pdf")
+        #plt.savefig("q_region16.pdf")
         plt.show()
         return 0
