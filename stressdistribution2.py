@@ -6,58 +6,57 @@ import interpolation as inter
 
 class stressdistribution2:
     def __init__(self, **kwargs):
-        self.c_a = kwargs.get("c_a")
-        self.l_a = kwargs.get("l_a")
+        self.c_a = 0.605
+        self.l_a = 2.661
 
-        self.x_1 = kwargs.get("x_1")
-        self.x_2 = kwargs.get("x_2")
-        self.x_3 = kwargs.get("x_3")
+        self.x_1 = 0.172
+        self.x_2 = 1.211
+        self.x_3 = 2.591
 
-        self.x_a = kwargs.get("x_a")
+        self.x_a = 35E-2
 
-        self.h = kwargs.get("h")
-        self.t_sk = kwargs.get("t_sk")
-        self.t_sp = kwargs.get("t_sp")
+        self.h = 20.5E-2
+        self.t_sk = 1.1E-3
+        self.t_sp = 2.8E-3
 
-        self.t_st = kwargs.get("t_st")
-        self.h_st = kwargs.get("h_st")
-        self.w_st = kwargs.get("w_st")
-        self.n_st = kwargs.get("n_st")
+        self.t_st = 1.2E-2
+        self.h_st = 1.6E-2
+        self.w_st = 1.9E-2
+        self.n_st = 15
 
-        self.defl = kwargs.get('max_defl')
-        pass
+        self.defl = np.radians(28)
 
 test = stressdistribution2(**parameters_geometry)
 
-x_hinge1 = 0.125
-x_hinge2 = 0.498
-x_hinge3 = 1.494
-x_actuator1 = 0.3755
-x_actuator2 = 0.6205
+x_hinge1 = 0.172
+x_hinge2 = 1.211
+x_hinge3 = 2.591
+x_actuator1 = test.x_2-test.x_a
+x_actuator2 = test.x_2+test.x_a
 
-Iyy = 4.594369333645184e-05
-Izz = 4.753851442684437e-06
+Iyy = 0.00022365473767655731
+Izz = 2.6037885625395243e-05
 Ixx = 1./12.*test.l_a*test.c_a**3 - 1./12.*(test.l_a-2*test.t_sk)*(test.c_a-2*test.t_sk)**3
 
-P = -49200
+P = -97.4E3
 Py = np.sin(np.radians(30))*P
 Pz = np.cos(np.radians(30))*P
 Mxp = P*test.h/2.*(np.sin(np.radians(30))- np.cos(np.radians(30)))
 
-Rz1 = -240804.32138928352
-Rz2 = 312802.0499279723 
-Rz3 = -82448.55420075239  
+Rz1 = -234374
+Rz2 = 373782 
+Rz3 = -162006  
 
-Ry1 = 31493.90656864783
-Ry2 = -49484.785056661785
-Ry3 = 18142.991298283927
+Ry1 = -234374
+Ry2 = -90838
+Ry3 = 41803
 
-Ra = 61267.574018492516
+Ra = 122994.8
 Rya = Ra*np.sin(np.radians(30))
 Rza = Ra*np.cos(np.radians(30))
 Rxa = 0
 
-cz = 0.203625910851571
+cz = 0.26237799178524684
 
 Mz = Py*abs(test.l_a/2. - x_actuator2)
 Mx = -Py*abs(cz - test.h/2.)
@@ -91,7 +90,7 @@ sigmayP = sigmay + sigmay3
 sigmazP = sigmaz + sigmaz2 + sigmaz3
 
 
-interp = inter.interpolation()
+interp = inter.Interpolation()
 p = 50
 
 l = test.l_a/p
