@@ -295,6 +295,7 @@ class Shearcenter:
         :param Vy: y component of shearforce
         :return: shearstress curve at each region --> for regions see verification model figure 3.1
         """
+        qs1, qs2 = self.q0_redundant(Vy)
         tau1 = (self.q1(Vy) + self.q1_z(Vz) + qs1)/self.t_skin
         tau2 = (self.q2(Vy) + self.q2_z(Vz) + qs1 + qs2)/self.t_spar
         tau3 = (self.q3(Vy) + self.q3_z(Vz) + qs2)/self.t_skin
@@ -329,28 +330,29 @@ class Shearcenter:
         y2 = np.arange(0, (self.h+dy), dy)
         y5 = np.arange(0, (-self.h - dy), -dy)
 
-        SMALL_SIZE = 15
+        SMALL_SIZE = 14
         MEDIUM_SIZE = 15
         BIGGER_SIZE = 20
+        plt.gcf().subplots_adjust(left=0.20)
 
         plt.rc('font', size=SMALL_SIZE)  # controls default text sizes
         plt.rc('axes', titlesize=SMALL_SIZE)  # fontsize of the axes title
         plt.rc('axes', labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
         plt.rc('xtick', labelsize=SMALL_SIZE)  # fontsize of the tick labels
         plt.rc('ytick', labelsize=SMALL_SIZE)  # fontsize of the tick labels
-        plt.rc('legend', fontsize=SMALL_SIZE)  # legend fontsize
+        plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
         plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
-        #plt.plot(s, q3, label = "region 3")
-        #plt.plot(s, q4, label = "region 4")
+        plt.plot(s, q3, label = "region 3")
+        plt.plot(s, q4, label = "region 4")
         #plt.plot(y2, q2, label = "region 2")
         #plt.plot(y5, q5, label = "region 5")
-        # plt.plot(theta1, q1, label = "region 1")
-        # plt.plot(theta6, q6, label = "region 6")
-        # plt.xlabel("s1 / s6 [m]")
-        # plt.ylabel("q [N/m]")
-        # plt.legend()
-        # plt.grid()
-        # #plt.savefig("q_region16.pdf")
-        # plt.show()
+        #plt.plot(theta1, q1, label = "region 1")
+        #plt.plot(theta6, q6, label = "region 6")
+        plt.xlabel("s3 / s4 [m]")
+        plt.ylabel("q [N/m]")
+        plt.legend()
+        plt.grid()
+        #plt.savefig("q_region34.pdf")
+        plt.show()
         return 0

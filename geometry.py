@@ -185,7 +185,6 @@ class Geometry:
 
 
     def MMoI(self):
-        return(4.59435E-5, 4.75385E-6)
         beta = self.beta
         l1 = self.l1
 
@@ -248,6 +247,29 @@ class Geometry:
         J = T/Gx1
 
         return J
+
+    @property
+    def torsionalstiffness(self):
+        A1 = 1. / 2. * np.pi * (self.h / 2.) ** 2
+        A2 = (self.c_a - (self.h / 2.)) * self.h / 2.
+
+        T = 1.
+
+        temp1 = (1. / (2 * A2) * (self.h / self.t_sp + 2. * self.l1 / self.t_sk) + 1. / (2 * A1) * self.h / self.t_sp)
+        temp2 = (1. / (2 * A1) * (self.h / self.t_sp + np.pi * self.h / (2. * self.t_sk)) + 1. / (
+                    2 * A2) * self.h / self.t_sp)
+
+        q01 = temp1 / (temp2 + A1 / A2 * temp1) * T / (2 * A2)
+        q02 = (T - 2 * A1 * q01) / (2 * A2)
+
+        Tcheck = 2 * A1 * q01 + 2 * A2 * q02
+
+        Gx1 = 1. / (2 * A1) * ((q01 - q02) * self.h / self.t_sp + q01 * np.pi * self.h / (2. * self.t_sk))
+        Gx2 = 1. / (2 * A2) * ((q02 - q01) * self.h / self.t_sp + q02 * 2 * self.l1 / (self.t_sk))
+
+        J = T / Gx1
+
+        return q01, q02
 
     @property
     def shearcenter(self):
