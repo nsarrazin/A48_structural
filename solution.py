@@ -55,13 +55,13 @@ class Solution:
 
     def T(self,x):
         sol = self.sol
-        return -1*(sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
+        return (sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=0)\
                   +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=0)\
                   +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=0)\
                   -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=0)\
                   -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=0)\
                   -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=0)\
-                  +self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
+                  -self.case.P*self.case.a_m*step(x,self.case.x_II,power=0)\
                   -self.case.interp.integrate_tau(x,self.case.z_sc,ord=1)[-1])
 
     def v_y_prime(self, x):
@@ -89,7 +89,7 @@ class Solution:
                    -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
                    -sol["Fa"]*self.case.a_m*step(x,self.case.x_I,power=1)\
                    -self.case.P*self.case.a_y*self.case.z_sc*step(x,self.case.x_II,power=1)\
-                   +self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
+                   -self.case.P*self.case.a_m*step(x,self.case.x_II,power=1)\
                    -self.case.interp.integrate_tau(x,z_sc=self.case.z_sc,ord=2)[-1])\
                    *1/(self.case.G*self.geo.J)\
                    +sol["C5"])
@@ -154,6 +154,7 @@ class Solution:
         # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
         #     plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
+        plt.legend((ys_1,ys_2),("v_y'","v_z'"))
         plt.show()
 
     def plot_twist(self):

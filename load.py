@@ -89,7 +89,7 @@ class LoadCase:
                          ])
 
     def T(self, x):
-        return -1*np.array([self.z_sc*step(x,self.geo.x_1,power=0),    #Fy_1
+        return np.array([self.z_sc*step(x,self.geo.x_1,power=0),    #Fy_1
                          0, #Fz_1
                          self.z_sc*step(x,self.geo.x_2,power=0),  #Fy_2
                          0,  #Fz_2
@@ -103,7 +103,7 @@ class LoadCase:
                          0, #C4
                          0, #C5
                          -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=0)\
-                         +self.P*self.a_m*step(x,self.x_II,power=0)\
+                         -self.P*self.a_m*step(x,self.x_II,power=0)\
                          -self.interp.integrate_tau(x,self.z_sc,ord=1)[-1]  #const
                          ])
         
@@ -158,7 +158,7 @@ class LoadCase:
                             0, #C4
                             self.G*self.geo.J, #C5
                             -self.P*self.a_y*self.z_sc*step(x,self.x_II,power=1)\
-                            +self.P*self.a_m*step(x,self.x_II,power=1)\
+                            -self.P*self.a_m*step(x,self.x_II,power=1)\
                             -self.interp.integrate_tau(x,self.z_sc,ord=2)[-1]   #const
                             ])*1/(self.G*self.geo.J)
             
