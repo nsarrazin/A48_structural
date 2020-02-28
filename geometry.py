@@ -185,7 +185,6 @@ class Geometry:
 
 
     def MMoI(self):
-        return(4.59435E-5, 4.75385E-6)
         beta = self.beta
         l1 = self.l1
 
