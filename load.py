@@ -144,7 +144,7 @@ class LoadCase:
         
 
     def theta(self, x):
-        return -1*np.array([self.z_sc*step(x,self.geo.x_1,power=1),    #Fy_1
+        return np.array([self.z_sc*step(x,self.geo.x_1,power=1),    #Fy_1
                             0, #Fz_1
                             self.z_sc*step(x,self.geo.x_2,power=1), #Fy_2
                             0, #Fz_2

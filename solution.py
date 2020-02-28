@@ -83,7 +83,7 @@ class Solution:
 
     def theta(self, x):
         sol = self.sol
-        return -1*((sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
+        return ((sol["Fy'_1"]*self.case.z_sc*step(x,self.geo.x_1,power=1)\
                    +sol["Fy'_2"]*self.case.z_sc*step(x,self.geo.x_2,power=1)\
                    +sol["Fy'_3"]*self.case.z_sc*step(x,self.geo.x_3,power=1)\
                    -sol["Fa"]*self.case.a_y*self.case.z_sc*step(x,self.case.x_I,power=1)\
@@ -154,7 +154,7 @@ class Solution:
         # for n,y in enumerate([self.case.d_1, 0, self.case.d_3]):
         #     plt.axhline(y=y, linestyle="dashed", linewidth=1.2, color=f"C{n}")
 
-        plt.legend((ys_1,ys_2),("v_y'","v_z'"))
+        # plt.legend((ys_1,ys_2),("v_y'","v_z'"))
         plt.show()
 
     def plot_twist(self):
