@@ -92,7 +92,7 @@ class Shearcenter:
         q = self.interp.trapezoidalrule(f, s)
 
         index = 2
-        s_boom = (self.y_stringer[1][index])**2 + (self.h - self.y_stringer[0][index])**2
+        s_boom = np.sqrt((self.y_stringer[1][index])**2 + (self.h - self.y_stringer[0][index])**2)
 
         for i, si in enumerate(s):
             if index == 6:
@@ -100,7 +100,7 @@ class Shearcenter:
             if si > s_boom:
                 q[i:] = q[i:] + self.geometry.Ast*(self.h - self.y_stringer[1][index])
                 index += 1
-                s_boom = (self.y_stringer[1][index]) ** 2 + (self.h - self.y_stringer[0][index])**2
+                s_boom = np.sqrt((self.y_stringer[1][index]) ** 2 + (self.h - self.y_stringer[0][index])**2)
 
         q = q * (-V/self.Izz)
         q = q + self.q1(V)[-1] + self.q2(V)[-1]
@@ -127,8 +127,6 @@ class Shearcenter:
                 index += 1
                 s_boom = np.sqrt((self.y_stringer[1][index]) ** 2 + (self.h - self.y_stringer[0][index])**2)
 
-        for i in range(2, 6):
-            q = q + self.geometry.Ast*(-self.z_bar - self.y_stringer[0][i])
         q = q * (-V/self.Iyy)
         q = q + self.q1_z(V)[-1] + self.q2_z(V)[-1]
         return q
@@ -224,6 +222,7 @@ class Shearcenter:
 
         q = q * (-V/self.Izz)
         q = q + self.q4(V)[-1] - self.q5(V)[-1]
+
         return q
 
     def q6_z(self, V):
@@ -240,6 +239,8 @@ class Shearcenter:
         for i, theta_i in enumerate(theta):
             if theta_i > theta_compare:
                 q[i] = q[i] + (self.geometry.Ast * (-self.z_bar - self.y_stringer[0][-1]))
+
+        q[-1] = q[-1] + (self.geometry.Ast * (-self.z_bar - self.y_stringer[0][0]))
 
         q = q * (-V/self.Iyy)
         q = q + self.q4_z(V)[-1] - self.q5_z(V)[-1]
@@ -316,6 +317,10 @@ class Shearcenter:
         ds = self.lsk/self.n_steps
         s = np.arange(0, (self.lsk + ds), ds)
 
+        print("System check")
+        print(q1[0], qs1)
+        print(q6[-1], qs1)
+
         dtheta = (np.pi/2)/self.n_steps
         theta6 = np.arange((-np.pi/2), (0+dtheta), dtheta)
         theta1 = np.arange(0, ((np.pi / 2) + dtheta), dtheta)
@@ -330,8 +335,9 @@ class Shearcenter:
         #plt.plot(y5, q5, label = "region 5")
         #plt.plot(theta1, q1, label = "region 1")
         #plt.plot(theta6, q6, label = "region 6")
-        plt.xlabel("s")
-        plt.ylabel("q")
+        plt.xlabel("s3 / s4 [m]")
+        plt.ylabel("q [N/m]")
         plt.legend()
+        plt.grid()
         plt.show()
         return 0
