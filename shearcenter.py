@@ -329,15 +329,28 @@ class Shearcenter:
         y2 = np.arange(0, (self.h+dy), dy)
         y5 = np.arange(0, (-self.h - dy), -dy)
 
-        plt.plot(s, q3, label = "region 3")
-        plt.plot(s, q4, label = "region 4")
+        SMALL_SIZE = 15
+        MEDIUM_SIZE = 15
+        BIGGER_SIZE = 20
+
+        plt.rc('font', size=SMALL_SIZE)  # controls default text sizes
+        plt.rc('axes', titlesize=SMALL_SIZE)  # fontsize of the axes title
+        plt.rc('axes', labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
+        plt.rc('xtick', labelsize=SMALL_SIZE)  # fontsize of the tick labels
+        plt.rc('ytick', labelsize=SMALL_SIZE)  # fontsize of the tick labels
+        plt.rc('legend', fontsize=SMALL_SIZE)  # legend fontsize
+        plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
+        #plt.plot(s, q3, label = "region 3")
+        #plt.plot(s, q4, label = "region 4")
         #plt.plot(y2, q2, label = "region 2")
         #plt.plot(y5, q5, label = "region 5")
-        #plt.plot(theta1, q1, label = "region 1")
-        #plt.plot(theta6, q6, label = "region 6")
-        plt.xlabel("s3 / s4 [m]")
-        plt.ylabel("q [N/m]")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        # plt.plot(theta1, q1, label = "region 1")
+        # plt.plot(theta6, q6, label = "region 6")
+        # plt.xlabel("s1 / s6 [m]")
+        # plt.ylabel("q [N/m]")
+        # plt.legend()
+        # plt.grid()
+        # #plt.savefig("q_region16.pdf")
+        # plt.show()
         return 0
