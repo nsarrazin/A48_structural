@@ -228,7 +228,7 @@ class Geometry:
         return Iyy, Izz
 
     @property
-    def torsionalstiffness(self):
+    def J(self):
         A1 = 1./2.*np.pi*(self.h/2.)**2
         A2 = (self.c_a-(self.h/2.))*self.h/2.
 
@@ -248,6 +248,10 @@ class Geometry:
         J = T/Gx1
 
         return J
+
+    @property
+    def shearcenter(self):
+        return 0, -self.shear.shearcenter(1)
 
 
 if __name__ == "__main__": # is called when you run the script

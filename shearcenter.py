@@ -1,4 +1,4 @@
-from interpolation import interpolation
+from interpolation import Interpolation
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -6,7 +6,7 @@ import numpy as np
 class Shearcenter:
     def __init__(self, parent):
         self.geometry = parent
-        self.interp = interpolation()
+        self.interp = Interpolation()
 
         I = self.geometry.MMoI
         self.y_bar, self.z_bar = self.geometry.centroid
